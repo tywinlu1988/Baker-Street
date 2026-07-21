@@ -393,7 +393,7 @@ v0.1 发布门：≥ 4/5 用例通过所有指标。
 **方式一：npx 一键安装（推荐）**
 
 ```bash
-npx @tywinlu1988/baker-street
+npx github:tywinlu1988/Baker-Street
 ```
 
 自动将 skill 复制到 `~/.claude/skills/sherlock/`。重启 Claude Code 后即可使用。
@@ -401,17 +401,10 @@ npx @tywinlu1988/baker-street
 覆盖已有安装：
 
 ```bash
-npx @tywinlu1988/baker-street --force
+npx github:tywinlu1988/Baker-Street --force
 ```
 
-**方式二：Claude Code 插件市场**
-
-```bash
-/plugin marketplace add tywinlu1988/Baker-Street
-/plugin install sherlock@baker-street-marketplace
-```
-
-**方式三：手动克隆**
+**方式二：手动克隆**
 
 ```bash
 git clone https://github.com/tywinlu1988/Baker-Street.git

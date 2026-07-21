@@ -304,15 +304,9 @@ Each test case runs three groups: **A** (raw model, no framework), **B** (framew
 
 **Quick Install (Recommended)**
 ```bash
-npx @tywinlu1988/baker-street
+npx github:tywinlu1988/Baker-Street
 ```
 Copies the skill to `~/.claude/skills/sherlock/`. Overwrite with `--force`.
-
-**Via Plugin Marketplace**
-```bash
-/plugin marketplace add tywinlu1988/Baker-Street
-/plugin install sherlock@baker-street-marketplace
-```
 
 **Manual**
 ```bash
