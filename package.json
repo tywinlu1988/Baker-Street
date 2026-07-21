@@ -1,5 +1,5 @@
 {
-  "name": "baker-street",
+  "name": "@tywinlu1988/baker-street",
   "version": "0.1.0",
   "description": "Sherlock Holmes multi-perspective analysis framework — a Claude Code skill that applies 7 distinct cognitive lenses to any problem, decision, or topic.",
   "type": "module",

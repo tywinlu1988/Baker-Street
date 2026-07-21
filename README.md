@@ -304,7 +304,7 @@ Each test case runs three groups: **A** (raw model, no framework), **B** (framew
 
 **Quick Install (Recommended)**
 ```bash
-npx baker-street
+npx @tywinlu1988/baker-street
 ```
 Copies the skill to `~/.claude/skills/sherlock/`. Overwrite with `--force`.
 

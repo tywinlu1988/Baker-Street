@@ -5,7 +5,7 @@
  * Copies the sherlock skill into ~/.claude/skills/ so Claude Code can use it.
  *
  * Usage:
- *   npx baker-street          # install to ~/.claude/skills/sherlock
+ *   npx @tywinlu1988/baker-street  # install to ~/.claude/skills/sherlock
  *   node install.js           # same as above
  *   node install.js --force   # overwrite existing installation
  */
@@ -22,13 +22,13 @@ const src = join(__dirname, '.claude', 'skills', 'sherlock');
 const dest = join(homedir(), '.claude', 'skills', 'sherlock');
 
 if (!existsSync(src)) {
-  console.error('❌ Source skill directory not found. Are you running from the baker-street package?');
+  console.error('❌ Source skill directory not found. Are you running from the @tywinlu1988/baker-street package?');
   process.exit(1);
 }
 
 if (existsSync(dest) && !force) {
   console.log('⚠️  sherlock skill already installed at ~/.claude/skills/sherlock');
-  console.log('   Use --force to overwrite: npx baker-street --force');
+  console.log('   Use --force to overwrite: npx @tywinlu1988/baker-street --force');
   process.exit(0);
 }
 

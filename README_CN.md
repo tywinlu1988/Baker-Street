@@ -393,7 +393,7 @@ v0.1 发布门：≥ 4/5 用例通过所有指标。
 **方式一：npx 一键安装（推荐）**
 
 ```bash
-npx baker-street
+npx @tywinlu1988/baker-street
 ```
 
 自动将 skill 复制到 `~/.claude/skills/sherlock/`。重启 Claude Code 后即可使用。
@@ -401,7 +401,7 @@ npx baker-street
 覆盖已有安装：
 
 ```bash
-npx baker-street --force
+npx @tywinlu1988/baker-street --force
 ```
 
 **方式二：Claude Code 插件市场**
