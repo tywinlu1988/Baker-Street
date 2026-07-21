@@ -1,7 +1,6 @@
 ---
 name: sherlock
 description: Multi-perspective analysis framework inspired by Sherlock Holmes characters. Use when you need deep, multi-angle analysis of any problem, decision, or topic.
-trigger: sherlock
 ---
 
 # Sherlock Holmes Analytical Framework
@@ -36,19 +35,19 @@ Read the user's query and classify it into ONE of these types:
 
 ### Step 1.2: Select Personas
 
-If the user specified `--personas`, use exactly that list (respect order, use first 2 for quick, all specified for standard/deep).
+If the user specified `--personas`, validate each name against the 7 known personas: holmes, watson, mycroft, moriarty, adler, lestrade, hound. For any unknown name, warn the user and skip that persona. Then use exactly that validated list (respect order, use first 2 for quick, all specified for standard/deep).
 
 Otherwise, select based on problem type and depth:
 
 | Problem Type | quick (2) | standard (3-4) | deep (all 7) |
 |-------------|-----------|----------------|-------------|
 | technical-decision | holmes, lestrade | + moriarty | all 7 |
-| business-strategy | moriarty, adler | + hound, watson | all 7 |
+| business-strategy | moriarty, adler | + hound | all 7 |
 | knowledge-building | watson, holmes | + mycroft | all 7 |
-| interpersonal-ethical | adler, lestrade | + moriarty, hound | all 7 |
+| interpersonal-ethical | adler, lestrade | + moriarty | all 7 |
 | creative-ideation | adler, watson | + holmes | all 7 |
-| risk-assessment | moriarty, hound | + mycroft, lestrade | all 7 |
-| general-mixed | holmes, watson | + moriarty, adler | all 7 |
+| risk-assessment | moriarty, hound | + mycroft | all 7 |
+| general-mixed | holmes, watson | + moriarty | all 7 |
 
 ## Phase 2: Parallel Persona Analysis
 
@@ -103,7 +102,13 @@ Rank all identified conflicts by their impact on the ultimate decision or unders
 
 ### Layer 1.5: Conflict Rebuttal (top-2 only)
 
-For each of the top 2 conflicts, construct a rebuttal prompt:
+For each of the top 2 conflicts, construct a rebuttal prompt and dispatch a fresh agent. Each rebuttal agent MUST receive all three of these context pieces:
+
+(a) **The persona's full prompt file content** (from `.claude/skills/sherlock/personas/{name}.md`) so the agent knows its identity and cognitive stance.
+(b) **The persona's own prior analysis output** (its full structured response from Phase 2) so the agent can defend and extend its position.
+(c) **The other persona's conflicting argument** — the specific claim or reasoning that contradicts this persona's position.
+
+Construct the rebuttal prompt with this structure:
 
 "Earlier, {Persona B}, you argued that {B's position}. However, {Persona A} argued that {A's position}, based on {A's reasoning}. Address {Persona A}'s specific argument. Where does {Persona A}'s reasoning go wrong? What is {Persona A} missing? Be specific and direct — do not politely agree."
 

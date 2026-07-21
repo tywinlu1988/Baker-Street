@@ -102,10 +102,12 @@ Note: The spec calls for embedding-based cosine distance, but for v0.1 this qual
 
 ### Blind Spot Coverage (BSC)
 ```
-BSC = count(unique dimensions identified across all Blind Spot Acknowledgment sections) / total number of personas
+BSC = count(new dimensions in the report not present in the original query) / persona_count
 ```
 
-A "dimension" is a distinct area of concern (e.g., "emotional factors," "technical constraints," "long-term consequences"). Count unique dimensions across all personas' blind spot sections.
+A "dimension" is a distinct area of concern (e.g., "emotional factors," "technical constraints," "long-term consequences"). Identify dimensions that appear in the final report but were not part of the user's original framing or question.
+
+Note: The spec defines this as a quantitative ratio of new dimensions to persona count. For v0.1 this is a qualitative assessment: read the report and judge what fraction of dimensions discussed go beyond the original query scope.
 
 ## Output Format
 
@@ -138,6 +140,7 @@ Return ONLY valid JSON. No commentary, no markdown fences — just the JSON obje
     "framework_gain_pass": <bool>,
     "perspective_dispersion_pass": <bool>,
     "blind_spot_coverage_pass": <bool>,
+    "similarity_check_pass": <bool>,
     "overall_pass": <bool>
   }
 }
@@ -150,5 +153,8 @@ Return ONLY valid JSON. No commentary, no markdown fences — just the JSON obje
 | Framework Gain | >= 1.5 |
 | Perspective Dispersion | >= 0.3 |
 | Blind Spot Coverage | >= 0.5 |
+| Cosine Similarity (any 2 personas) | <= 0.85 (qualitative in v0.1) |
 
-Overall pass = all three metrics pass.
+Overall pass = all four metrics pass.
+
+For v0.1, similarity_check is a qualitative assessment: set `similarity_check_pass` to false if any two persona outputs appear substantially similar (i.e., could swap names without detection), true if all personas are clearly distinguishable and produce distinct analyses.

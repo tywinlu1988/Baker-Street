@@ -19,7 +19,7 @@ description: Understanding quantum computing's impact on cryptography for a non-
 
 ## Expected Dispatch
 
-- Standard depth: watson, holmes, mycroft
+- Standard depth: watson, mycroft, holmes
 - Deep: all 7
 
 ## Evaluation Signals

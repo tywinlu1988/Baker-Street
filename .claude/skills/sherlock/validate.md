@@ -22,6 +22,8 @@ Where primary_persona is the first persona in the expected dispatch list.
 ### Group C: Full Pipeline
 Run `/sherlock --depth standard "{problem_statement}"`
 
+**Exception**: For the `meta-analysis` test case, use `--depth deep` instead of `standard` since meta-analysis requires all 7 personas to critique the framework itself.
+
 ### Scoring
 After each test case, feed all three group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`) with the test case definition.
 
