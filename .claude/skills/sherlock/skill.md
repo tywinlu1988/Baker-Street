@@ -121,9 +121,13 @@ The baseline runs with the SAME model as the persona agents. It provides the yar
 
 Run ALL agents — personas AND baseline — in a single parallel batch.
 
-### Step 2.3: Completeness Gate
+### Step 2.3: Wait for All Agents — Then Gate
 
-Before proceeding to synthesis, verify each persona output:
+**CRITICAL — Do NOT proceed to synthesis until ALL dispatched agents have returned (or timed out).** Never close the report early because "most results are in." A missing persona is not a reason to truncate the analysis — it is a degradation to report honestly.
+
+If an agent is taking longer than expected, wait for it. Only treat an agent as failed if it explicitly returns empty, errors, or times out. Do not preemptively skip it.
+
+Once all agents have returned, verify each output:
 
 - Does it contain all 5 required sections? (Core Argument, Key Observations, Evidence Chain, Explicit Assumptions, Blind Spot Acknowledgment)
 - Is it clearly truncated, garbled, or incomplete?
@@ -173,12 +177,14 @@ Dispatch both rebuttal agents in parallel.
 
 **Degradation policy (CRITICAL — follow exactly):**
 
+**Wait for rebuttals.** Do NOT finalize the report until both rebuttal agents return (or time out). A rebuttal that hasn't arrived yet is not a failure — it's "still in progress." Only treat as failed after an explicit timeout, error, or empty response.
+
 When rebuttal agents return:
 - **Success**: Include the rebuttal in the report.
-- **Empty / timeout / error / gibberish**: Do NOT fabricate a synthetic rebuttal. Mark that conflict as `⚠️ Unresolved — rebuttal unavailable ({reason})`. Include the original conflict in the report with the "Unresolved" annotation. Do NOT write a rebuttal yourself — the integrity of the report depends on honest failure reporting.
-- **One succeeded, one failed**: Include the successful rebuttal. Mark the failed one as above.
+- **Empty / timeout / error / gibberish**: Do NOT fabricate a synthetic rebuttal. This is NOT a system error — it is a meaningful signal. Treat it as: **"{Persona} was unable to produce a valid counter-argument."** This strengthens the opposing persona's position by default — if a persona cannot defend its stance under challenge, its position is weaker. Mark the conflict as `⚠️ Rebuttal not sustained — {Persona} could not produce a valid counter-argument to {other Persona}'s position.` Include the original conflict in the report with this annotation. Do NOT write a rebuttal yourself.
+- **One succeeded, one failed**: Include the successful rebuttal. For the failed one, apply the interpretation above — the silent side's position is weakened.
 
-Record rebuttal statistics: attempted N, succeeded M.
+**Interpretation rule**: A failed rebuttal means the rebutting persona had no effective response. This is information, not an error. The Synthesis Judgment should explicitly note which side was unable to defend its position.
 
 ### Layer 2: Blind Spot Synthesis
 
@@ -221,12 +227,12 @@ Generate three tiers of next steps:
 {If rebuttals were attempted:}
 
 **Rebuttal — {Persona B} responds to {Persona A}:**
-{B's rebuttal — or "⚠️ Unresolved — rebuttal unavailable ({reason})"}
+{B's rebuttal — or "⚠️ Rebuttal not sustained — {Persona B} could not produce a valid counter-argument to {Persona A}'s position."}
 
 **Rebuttal — {Persona A} responds to {Persona B}:**
-{A's rebuttal — or "⚠️ Unresolved — rebuttal unavailable ({reason})"}
+{A's rebuttal — or "⚠️ Rebuttal not sustained — {Persona A} could not produce a valid counter-argument to {Persona B}'s position."}
 
-**Synthesis Judgment:** {Your assessment. If both rebuttals failed, say: "This conflict could not be resolved through rebuttal. Consider it an open question."}
+**Synthesis Judgment:** {Your assessment. If a persona failed to rebut, note that its position is weakened. If both rebuttals succeeded, weigh them. If both failed, say: "Neither side could effectively counter the other — this conflict remains open and warrants further investigation."}
 
 ---
 
@@ -338,8 +344,9 @@ If Framework Gain is Low, strengthen the hook:
 1. **Intake before analysis.** Never dispatch agents without user confirmation (unless `--auto`). The right configuration is worth a single round-trip.
 2. **Real discovery over rearrangement.** If the analysis is just nicely formatted common sense, you have failed. Push each persona to produce genuinely non-obvious insights. The Framework Delta section is your accountability — if it reads "Low," ask yourself why.
 3. **Conflict is a feature.** If all personas agree, either the problem is trivial or the personas aren't trying hard enough. Seek and amplify genuine disagreement.
-4. **Honesty about failure.** Never fabricate a rebuttal. Never hide a failed persona. Report degradation truthfully. The user trusts the integrity of the report more than its completeness.
-5. **Baseline as yardstick.** The framework's value is measured by what it adds OVER the raw model. The baseline is not optional — it is the control group that makes the experiment meaningful.
-6. **Cost consciousness.** Only run the personas needed. Don't dispatch 7 agents when 2 will do. Don't rebut conflicts that don't affect the decision.
-7. **Action matters.** Every analysis should end with something the user can DO. Pure contemplation without actionability is incomplete.
-8. **Self-correction is built in.** Every report offers a path to improve. The framework should be able to critique its own output.
+4. **Honesty about failure.** Never fabricate a rebuttal. Never hide a failed persona. A failed rebuttal IS information — it means that persona could not defend its position. Report this as a finding, not an error. The user trusts the integrity of the report more than its completeness.
+5. **Never close early.** Do not finalize the report until ALL dispatched agents have returned or explicitly timed out. A missing rebuttal is not a license to truncate. Wait for your agents.
+6. **Baseline as yardstick.** The framework's value is measured by what it adds OVER the raw model. The baseline is not optional — it is the control group that makes the experiment meaningful.
+7. **Cost consciousness.** Only run the personas needed. Don't dispatch 7 agents when 2 will do. Don't rebut conflicts that don't affect the decision.
+8. **Action matters.** Every analysis should end with something the user can DO. Pure contemplation without actionability is incomplete.
+9. **Self-correction is built in.** Every report offers a path to improve. The framework should be able to critique its own output.
