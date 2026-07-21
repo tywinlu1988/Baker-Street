@@ -30,7 +30,8 @@
   },
   "files": [
     ".claude/skills/sherlock/",
-    ".claude-plugin/",
+    ".claude-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
     "install.js",
     "LICENSE",
     "README_CN.md"

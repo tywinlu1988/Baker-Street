@@ -404,7 +404,14 @@ npx github:tywinlu1988/Baker-Street
 npx github:tywinlu1988/Baker-Street --force
 ```
 
-**方式二：手动克隆**
+**方式二：Claude Code 插件市场**
+
+```bash
+/plugin marketplace add tywinlu1988/Baker-Street
+/plugin install sherlock@baker-street
+```
+
+**方式三：手动克隆**
 
 ```bash
 git clone https://github.com/tywinlu1988/Baker-Street.git
