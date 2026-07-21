@@ -8,7 +8,10 @@
     "name": "Tywin Lu",
     "email": "tywinlu1988@gmail.com"
   },
-  "repository": "github:tywinlu1988/Baker-Street",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tywinlu1988/Baker-Street.git"
+  },
   "homepage": "https://github.com/tywinlu1988/Baker-Street#readme",
   "keywords": [
     "claude-code",
@@ -23,7 +26,7 @@
     "framework"
   ],
   "bin": {
-    "baker-street": "./install.js"
+    "baker-street": "install.js"
   },
   "files": [
     ".claude/skills/sherlock/",
