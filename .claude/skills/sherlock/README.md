@@ -2,7 +2,9 @@
 
 A Claude Code skill that applies 7 distinct cognitive lenses — each inspired by a character from the Sherlock Holmes canon — to analyze any problem, decision, or topic.
 
-> 📦 **Installation & full documentation:** [github.com/tywinlu1988/Baker-Street](https://github.com/tywinlu1988/Baker-Street)
+> 📦 **Installation & full documentation:**
+> [github.com/tywinlu1988/Baker-Street](https://github.com/tywinlu1988/Baker-Street)
+> — [English](https://github.com/tywinlu1988/Baker-Street/blob/main/README.md) | [中文](https://github.com/tywinlu1988/Baker-Street/blob/main/README_CN.md)
 
 ## Quick Start
 
