@@ -1,0 +1,22 @@
+{
+  "name": "sherlock",
+  "description": "Sherlock Holmes Analytical Framework — multi-perspective analysis with 7 character-inspired cognitive lenses. Mines conflicts and blind spots across independent viewpoints.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Tywin Lu",
+    "email": "tywinlu1988@gmail.com"
+  },
+  "homepage": "https://github.com/tywinlu1988/Baker-Street",
+  "repository": "https://github.com/tywinlu1988/Baker-Street",
+  "license": "MIT",
+  "keywords": [
+    "analysis",
+    "sherlock-holmes",
+    "reasoning",
+    "deduction",
+    "multi-perspective",
+    "critical-thinking",
+    "decision-making"
+  ],
+  "skills": ["./.claude/skills/sherlock"]
+}

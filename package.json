@@ -1,0 +1,34 @@
+{
+  "name": "baker-street",
+  "version": "0.1.0",
+  "description": "Sherlock Holmes multi-perspective analysis framework — a Claude Code skill that applies 7 distinct cognitive lenses to any problem, decision, or topic.",
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "Tywin Lu",
+    "email": "tywinlu1988@gmail.com"
+  },
+  "repository": "github:tywinlu1988/Baker-Street",
+  "homepage": "https://github.com/tywinlu1988/Baker-Street#readme",
+  "keywords": [
+    "claude-code",
+    "skill",
+    "analysis",
+    "sherlock-holmes",
+    "reasoning",
+    "deduction",
+    "multi-perspective",
+    "decision-making",
+    "critical-thinking",
+    "framework"
+  ],
+  "bin": {
+    "baker-street": "./install.js"
+  },
+  "files": [
+    ".claude/skills/sherlock/",
+    ".claude-plugin/",
+    "install.js",
+    "LICENSE"
+  ]
+}
