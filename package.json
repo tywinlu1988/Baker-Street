@@ -29,6 +29,7 @@
     ".claude/skills/sherlock/",
     ".claude-plugin/",
     "install.js",
-    "LICENSE"
+    "LICENSE",
+    "README_CN.md"
   ]
 }
