@@ -433,8 +433,8 @@ cp -r Baker-Street/.claude/skills/sherlock ~/.claude/skills/
 # 只要核心发现 + 行动建议（一屏读完）
 /sherlock --tldr "我们的用户增长为什么停滞了？"
 
-# 对比裸模型回答，看框架到底带来了什么
-/sherlock --baseline "评估这个架构决策"
+# 跳过问询阶段，直接使用默认配置分析
+/sherlock --auto "评估这个架构决策"
 
 # 手动指定角色
 /sherlock --personas holmes,moriarty "帮我对这个商业计划做压力测试"

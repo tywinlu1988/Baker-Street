@@ -256,7 +256,7 @@ User query
 
 ### Output
 
-The report includes **Core Findings** (discoveries, not conclusions), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. Use `--tldr` for core findings + actions only (one screen).
+The report includes **Core Findings** (discoveries, not conclusions), **Framework Delta** (what the framework added over the raw model baseline), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. A baseline comparison runs automatically on every analysis. Use `--tldr` for core findings + delta + actions only (one screen).
 
 ---
 
@@ -327,7 +327,7 @@ cp -r Baker-Street/.claude/skills/sherlock ~/.claude/skills/
 /sherlock --depth quick "Your question"                # Quick (2 personas)
 /sherlock --depth deep "Your question"                 # Deep (all 7)
 /sherlock --tldr "Your question"                       # Core findings + actions
-/sherlock --baseline "Your question"                   # Compare with raw model
+/sherlock --auto "Your question"                       # Skip intake, use defaults
 /sherlock --personas holmes,moriarty "Your question"   # Choose personas
 ```
 

@@ -21,7 +21,7 @@ This runs a standard-depth analysis (3-4 personas) and produces a full report.
 /sherlock --depth quick "Your question"            # Quick (2 personas)
 /sherlock --depth deep "Your question"             # Deep (all 7 personas)
 /sherlock --tldr "Your question"                   # Core findings + actions only
-/sherlock --baseline "Your question"               # Compare with raw model response
+/sherlock --auto "Your question"                    # Skip intake, use defaults
 /sherlock --personas holmes,moriarty "Your question"  # Choose specific personas
 ```
 
