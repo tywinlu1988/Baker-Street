@@ -81,6 +81,8 @@ Dispatch 2-3 research agents in parallel using `.claude/skills/sherlock/research
 
 Research agents have access to: WebFetch, Bash, Read.
 
+**Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target. Each research agent should aim for breadth across the problem domain.
+
 If `--no-research` is set: skip this phase. Use an empty fact base and proceed to Phase 2.
 
 ### Step 1.3: Quality Gate
@@ -140,6 +142,8 @@ Dispatch each selected persona as a full agent. Every persona receives:
 Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.
 
 Run ALL agents in a single parallel batch. Each persona is a full agent — it may choose to use tools or not. Tool usage is observed and recorded (which persona used which tools) for post-hoc behavior analysis.
+
+**Token budget: Lean.** Persona agents already have a comprehensive fact base — their job is reasoning, not research. Output should be concise: each section should be 1-3 paragraphs max. Avoid verbose exposition. The value is in the quality of the reasoning, not the quantity of words. If a persona produces more than ~1500 words, it is probably being wasteful.
 
 ### Step 2.4: Completeness Gate
 

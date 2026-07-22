@@ -51,7 +51,7 @@ function copyDir(srcDir, destDir) {
 copyDir(src, dest);
 
 console.log('');
-console.log('🔍 Baker Street v0.1.3 — Sherlock Holmes Analytical Framework');
+console.log('🔍 Baker Street v0.2.0 — Sherlock Holmes Analytical Framework');
 console.log('');
 console.log('✅ Installed to ~/.claude/skills/sherlock');
 console.log('');
