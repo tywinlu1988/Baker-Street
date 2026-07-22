@@ -347,17 +347,17 @@ baker-street/
 ├── LICENSE                   # MIT
 ├── package.json              # npm metadata
 ├── install.js                # npx installer
+├── .gitignore
 ├── .claude-plugin/
-│   └── plugin.json           # Claude Code plugin manifest
-├── .claude/skills/sherlock/
-│   ├── skill.md              # Main orchestration (5-phase pipeline)
-│   ├── personas/             # 7 character prompt files
-│   ├── test-cases/           # 5 validation test cases
-│   ├── judge.md              # LLM-as-Judge scoring prompt
-│   └── validate.md           # Validation suite runner
-└── docs/superpowers/
-    ├── specs/                # Design spec
-    └── plans/                # Implementation plan
+│   ├── plugin.json           # Claude Code plugin manifest
+│   └── marketplace.json      # Claude Code marketplace registry
+└── .claude/skills/sherlock/
+    ├── skill.md              # Main orchestration (5-phase pipeline)
+    ├── README.md             # Skill reference card
+    ├── personas/             # 7 character prompt files
+    ├── test-cases/           # 5 validation test cases
+    ├── judge.md              # LLM-as-Judge scoring prompt
+    └── validate.md           # Validation suite runner
 ```
 
 ---

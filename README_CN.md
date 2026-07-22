@@ -472,30 +472,29 @@ baker-street/
 ├── LICENSE                   # MIT
 ├── package.json              # npm 包元数据
 ├── install.js                # npx 安装脚本
+├── .gitignore
 ├── .claude-plugin/
-│   └── plugin.json           # Claude Code 插件清单
-├── .claude/skills/sherlock/
-│   ├── skill.md              # 主编排 skill（5 阶段流水线）
-│   ├── README.md             # Skill 参考卡
-│   ├── personas/             # 7 个角色 prompt 文件
-│   │   ├── holmes.md
-│   │   ├── watson.md
-│   │   ├── mycroft.md
-│   │   ├── moriarty.md
-│   │   ├── adler.md
-│   │   ├── lestrade.md
-│   │   └── hound.md
-│   ├── test-cases/           # 5 个标准化测试用例
-│   │   ├── tech-decision.md
-│   │   ├── business-strategy.md
-│   │   ├── knowledge-building.md
-│   │   ├── ethical-dilemma.md
-│   │   └── meta-analysis.md
-│   ├── judge.md              # LLM-as-Judge 评分 prompt
-│   └── validate.md           # 验证套件运行指南
-└── docs/superpowers/
-    ├── specs/                # 设计 spec
-    └── plans/                # 实现计划
+│   ├── plugin.json           # Claude Code 插件清单
+│   └── marketplace.json      # Claude Code 市场注册表
+└── .claude/skills/sherlock/
+    ├── skill.md              # 主编排 skill（5 阶段流水线）
+    ├── README.md             # Skill 参考卡
+    ├── personas/             # 7 个角色 prompt 文件
+    │   ├── holmes.md
+    │   ├── watson.md
+    │   ├── mycroft.md
+    │   ├── moriarty.md
+    │   ├── adler.md
+    │   ├── lestrade.md
+    │   └── hound.md
+    ├── test-cases/           # 5 个标准化测试用例
+    │   ├── tech-decision.md
+    │   ├── business-strategy.md
+    │   ├── knowledge-building.md
+    │   ├── ethical-dilemma.md
+    │   └── meta-analysis.md
+    ├── judge.md              # LLM-as-Judge 评分 prompt
+    └── validate.md           # 验证套件运行指南
 ```
 
 ---
