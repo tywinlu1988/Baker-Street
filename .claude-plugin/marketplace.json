@@ -9,7 +9,7 @@
     {
       "name": "sherlock",
       "description": "Multi-perspective analysis with 7 character-inspired cognitive lenses (Holmes, Watson, Mycroft, Moriarty, Adler, Lestrade, Hound). Three-layer synthesis engine with conflict mining and blind spot detection.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "source": "./",
       "author": {
         "name": "Tywin Lu",
