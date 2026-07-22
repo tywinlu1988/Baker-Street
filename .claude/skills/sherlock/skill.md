@@ -16,74 +16,99 @@ Parse these flags from the user's message:
 - `--personas holmes,watson,...` — comma-separated override of auto-selection
 - `--tldr` — output only Core Findings + Action Recommendations + Delta Assessment
 - `--auto` — skip the intake dialogue, proceed directly to analysis with defaults
+- `--no-research` — skip the research phase, use model's built-in knowledge only (legacy mode)
 
-## Phase 0: Intake Dialogue (skip if --auto)
+## Phase 0: Dual-Track Intake (skip if --auto)
 
-**DO NOT proceed to Phase 1 without completing this phase.** The intake dialogue ensures the user's intent is understood and the analysis configuration is confirmed before agents are dispatched.
+**DO NOT proceed to Phase 1 without completing this phase.** Two things happen in parallel:
 
-### Step 0.1: Acknowledge & Paraphrase
+### Track A: Dialogue (conversation)
 
-Restate the user's query in your own words. If the query is ambiguous, note the ambiguity and your best interpretation.
-
-### Step 0.2: Classify & Suggest Configuration
-
-Classify the problem into one of the 7 types (see Phase 1 for the table). Based on the classification, suggest:
-
-- **Depth level** with a one-line rationale. Default to `standard` unless the problem is trivial (suggest `quick`) or deeply complex (suggest `deep`).
-- **Persona roster** — list each persona you plan to dispatch and WHY this persona is relevant to this specific query. Do not just list names — give a one-sentence justification per persona.
-
-### Step 0.3: Clarify if Needed
-
-If the query is vague, underspecified, or could be interpreted multiple ways, ask 1-2 targeted clarifying questions. Do not ask more than 2. Prefer specific multiple-choice questions over open-ended ones.
-
-### Step 0.4: Present & Wait
-
-Output the intake summary in this format:
+Acknowledge the query, classify the problem type, suggest depth and personas with one-line justifications. If the query is vague, ask 1-2 clarifying questions. Present the standard intake summary:
 
 ```
 🔍 **Sherlock Analysis — Intake**
 
-**Your question:** {paraphrased understanding}
+**Your question:** {paraphrased}
 
-**Suggested depth:** {quick/standard/deep} — {one-line rationale}
+**Suggested depth:** {quick/standard/deep} — {rationale}
 **Personas to dispatch:**
-- {emoji} **{Name}** — {one-line relevance justification}
+- {emoji} **{Name}** — {relevance}
 - ...
 
-{If clarification needed: "Before I proceed — {clarifying question}"}
+{If clarification needed: ask here}
 
 Proceed with this configuration?
   - Reply **yes** or **go** to start
   - Reply **deep** or **quick** to change depth
-  - Reply with persona names to adjust the roster
-  - Reply with more detail if I misunderstood your question
+  - Reply with persona names to adjust
 ```
 
-**Do not dispatch any agents until the user confirms.** If the user says "yes", "go", "proceed", or provides the requested clarification, move to Phase 1.
+### Track B: Scout Agent (runs in parallel)
 
-If the user provided `--depth` or `--personas` flags in their original message, use those values — do not override them. Still present the intake summary but skip the clarification step.
+Simultaneously dispatch ONE scout agent using the prompt file `.claude/skills/sherlock/scout-prompt.md`. The scout does NOT wait for user confirmation — it starts immediately. Its output is a problem decomposition map: sub-questions, key unknowns, suggested angles.
 
-## Phase 1: Problem Classification & Persona Selection
+### Step 0.5: Merge and Present
 
-### Step 1.1: Classify the Problem
+When BOTH the user confirms AND the scout returns, present the merged summary:
 
-Classify the user's query into ONE of these types:
+```
+🗺️ **Problem Map**
 
-| Problem Type | Key Signals |
-|-------------|-------------|
-| technical-decision | Technology choices, architecture, tools, languages, infrastructure |
-| business-strategy | Market, growth, competition, revenue, positioning, team dynamics |
-| knowledge-building | Learning, understanding a domain, making sense of complex topics |
-| interpersonal-ethical | Relationships, moral dilemmas, trust, conflict between people |
-| creative-ideation | Generating ideas, content creation, brainstorming, design |
-| risk-assessment | Threats, vulnerabilities, what-if analysis, security, compliance |
-| general-mixed | Doesn't clearly fit one category, or spans multiple |
+{Scout's problem decomposition — sub-questions, key unknowns, suggested angles}
 
-### Step 1.2: Select Personas
+Based on this map, {adjust or confirm the suggested depth and personas if needed}.
+Proceed? Reply **yes** to begin research.
+```
 
-If the user specified `--personas`, validate each name against the 7 known personas: holmes, watson, mycroft, moriarty, adler, lestrade, hound. For any unknown name, warn the user and skip that persona. Then use exactly that validated list.
+If the user says "no" or wants changes, adjust and re-confirm. Then proceed to Phase 1.
 
-Otherwise, use the configuration confirmed in Phase 0. If the user changed depth during intake, use the new depth. Select based on problem type and depth:
+If `--auto` is set: skip the dialogue entirely. Dispatch the scout. Proceed to Phase 1 immediately with default depth and auto-selected personas. Include the scout's output in the research brief.
+
+## Phase 1: Research Layer
+
+### Step 1.1: Define Research Scope
+
+Based on the scout's problem map and any user clarification, identify the factual domains that need coverage. Write a one-paragraph research brief listing the specific areas to investigate.
+
+### Step 1.2: Dispatch Research Agents
+
+Dispatch 2-3 research agents in parallel using `.claude/skills/sherlock/research-prompt.md`. Each agent receives:
+- The research brief
+- The user's original query
+- The scout's problem map
+- Instruction: "Produce a JSON fact base. 15-30 facts. Cite sources. Assign confidence. No advice."
+
+Research agents have access to: WebFetch, Bash, Read.
+
+If `--no-research` is set: skip this phase. Use an empty fact base and proceed to Phase 2.
+
+### Step 1.3: Quality Gate
+
+Once all research agents return, validate their outputs:
+
+| Check | Standard |
+|-------|----------|
+| Valid JSON array? | Must parse cleanly |
+| Claim count | ≥ 5 per agent |
+| Source coverage | ≥ 60% of claims have a cited source |
+| Avg confidence | ≥ 0.5 |
+
+If the combined fact base meets ALL standards → proceed to Phase 2.
+
+If it fails:
+- If ≥ 50% of agents succeeded: merge the usable output, discard the rest, flag the gap in the report metadata
+- If < 50% of agents succeeded: re-dispatch the failed research (max 1 retry). If retry also fails, proceed with `--no-research` fallback and note in metadata
+
+### Step 1.4: Compile Shared Fact Base
+
+Merge all research agent outputs into a single JSON array. Deduplicate claims (semantic equivalence check, same standard as CUR). This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
+
+## Phase 2: Reasoning Layer
+
+### Step 2.1: Classify & Select Personas
+
+Problem classification and persona selection logic unchanged. Use the dispatch table:
 
 | Problem Type | quick (2) | standard (3) | deep (all 7) |
 |-------------|-----------|-------------|-------------|
@@ -95,52 +120,30 @@ Otherwise, use the configuration confirmed in Phase 0. If the user changed depth
 | risk-assessment | moriarty, hound | + mycroft | all 7 |
 | general-mixed | holmes, watson | + moriarty | all 7 |
 
-## Phase 2: Parallel Analysis (Personas + Baseline)
-
-### Step 2.1: Load Persona Prompts
+### Step 2.2: Load Persona Prompts
 
 For each selected persona, read the corresponding file:
 - `.claude/skills/sherlock/personas/{name}.md`
 
-### Step 2.2: Dispatch Agents
+**CRITICAL — Full prompts only.** You MUST pass the COMPLETE persona file content to each agent. Never truncate, summarize, or shorten. Shortened prompts cause persona collapse — the agent reverts to generic behavior.
 
-You will dispatch TWO types of agents in parallel:
+### Step 2.3: Dispatch Persona Agents
 
-**Persona agents (one per selected persona):**
-Each receives:
-- The persona's full prompt (from the file)
-- The user's original query
-- Instruction: "Analyze the following problem from your specific cognitive stance. Follow your output format exactly. Return ONLY your structured analysis — do not address the user directly."
+Dispatch each selected persona as a full agent. Every persona receives:
 
-**Baseline agent (ALWAYS dispatch exactly one):**
-Receives:
-- Instruction: "Analyze the following problem directly, without any persona framework, role-playing, or character perspective. Give your best single-perspective analysis as a direct model response. Structure your response as: (1) Core Argument — your central thesis, (2) Key Observations — bullet points, (3) Recommendations — what to do next."
-- The user's original query
+1. **The persona's full prompt** (from file)
+2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
+3. **The user's original query**
+4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (WebFetch, Bash, Read, Write) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis."
+5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
 
-The baseline runs with the SAME model as the persona agents. It provides the yardstick against which the framework's added value is measured.
+Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.
 
-Run ALL agents — personas AND baseline — in a single parallel batch.
+Run ALL agents in a single parallel batch. Each persona is a full agent — it may choose to use tools or not. Tool usage is observed and recorded (which persona used which tools) for post-hoc behavior analysis.
 
-### Step 2.3: Wait for All Agents — Then Gate
+### Step 2.4: Completeness Gate
 
-**CRITICAL — Do NOT proceed to synthesis until ALL dispatched agents have returned (or timed out).** Never close the report early because "most results are in." A missing persona is not a reason to truncate the analysis — it is a degradation to report honestly.
-
-If an agent is taking longer than expected, wait for it. Only treat an agent as failed if it explicitly returns empty, errors, or times out. Do not preemptively skip it.
-
-Once all agents have returned, verify each output:
-
-- Does it contain all 5 required sections? (Core Argument, Key Observations, Evidence Chain, Explicit Assumptions, Blind Spot Acknowledgment)
-- Is it clearly truncated, garbled, or incomplete?
-- Did any agent fail to return output?
-
-Record the results:
-- **Complete**: all 5 sections present and substantive
-- **Partial**: missing 1-2 sections or clearly truncated
-- **Failed**: empty, error, or nonsensical output
-
-If a persona output is `Partial`, include it in synthesis but flag it. If `Failed`, exclude it from conflict mining and flag it. In both cases, record the degradation.
-
-The baseline agent must also be checked: is its output substantive? If the baseline fails, note it — the Framework Delta section will be less useful without a baseline comparison, but the report can still proceed.
+Same as v0.1.x: verify all 6 sections present. Flag Partial/Failed outputs. Wait for ALL agents before proceeding.
 
 ## Phase 3: Three-Layer Synthesis
 
@@ -350,10 +353,13 @@ Generate three tiers of next steps:
 
 | Field | Value |
 |-------|-------|
+| Research mode | {full / scout-only / skipped (--no-research)} |
+| Fact base | {N} claims, avg confidence {0.0-1.0} |
 | Personas dispatched | {comma-separated list} |
 | Depth | {quick/standard/deep} |
 | Baseline | Ran successfully / ⚠️ Failed |
 | Personas complete | {N}/{total} |
+| Personas used tools | {N}/{total} (Bash: N, Web: N, File: N) |
 | Conflicts detected | {N} |
 | Conflicts rebutted | {N attempted, M succeeded} |
 | Silent dimensions found | {N} |
