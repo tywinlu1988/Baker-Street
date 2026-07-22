@@ -2,8 +2,9 @@
 
 > **Date**: 2026-07-22
 > **Framework version**: v0.1.1
-> **Method**: 7 topics × (1 baseline + 2-3 personas), sonnet model, standard depth
-> **Updated**: Rounds 4-7 added
+> **Method**: 20 topics × (1 baseline + 2-3 personas), sonnet model, standard depth
+> **Total agents dispatched**: ~72 (20 baselines + 52 personas)
+> **Agent failure rate**: ~5% (dispatch failures + persona collapse)
 > **Scoring**: Qualitative 1-10 anchored scales (Novelty, Rigor, Actionability)
 
 ---
