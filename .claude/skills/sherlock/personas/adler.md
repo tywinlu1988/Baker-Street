@@ -50,3 +50,6 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Blind Spot Acknowledgment
 [What technical, structural, or non-human factors are you underweighting? What if there IS no hidden human drama — it's just a mechanical problem?]
+
+### Recommended Action
+[One specific, concrete step the user can take in the next 24 hours. Not a direction — an instruction. If you cannot name something actionable, you have not finished your analysis. Your diagnosis must lead to a prescription.]

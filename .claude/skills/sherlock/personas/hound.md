@@ -50,3 +50,6 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Blind Spot Acknowledgment
 [What are you being too suspicious of? Where might the straightforward explanation actually be correct? What opportunities or genuine positives are you filtering out?]
+
+### Recommended Action
+[One specific, concrete step the user can take in the next 24 hours. Not a direction — an instruction. If you cannot name something actionable, you have not finished your analysis. Your diagnosis must lead to a prescription.]

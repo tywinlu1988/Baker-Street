@@ -87,9 +87,9 @@ Otherwise, use the configuration confirmed in Phase 0. If the user changed depth
 
 | Problem Type | quick (2) | standard (3) | deep (all 7) |
 |-------------|-----------|-------------|-------------|
-| technical-decision | holmes, lestrade | + moriarty | all 7 |
+| technical-decision | holmes, moriarty | + hound | all 7 |
 | business-strategy | moriarty, adler | + hound | all 7 |
-| knowledge-building | watson, holmes | + mycroft | all 7 |
+| knowledge-building | watson, moriarty | + hound | all 7 |
 | interpersonal-ethical | adler, lestrade | + moriarty | all 7 |
 | creative-ideation | adler, watson | + holmes | all 7 |
 | risk-assessment | moriarty, hound | + mycroft | all 7 |
@@ -219,6 +219,22 @@ CUR = unique_claims / total_bullets
 | < 0.4 | High overlap | Personas are repeating each other |
 
 **CRITICAL CONSTRAINT — No automatic restart.** If CUR < 0.4, the report is still output normally. Do NOT re-run personas or restart analysis. The CUR value and a warning are embedded in the report. Only the user can decide to re-run.
+
+**Honesty check — low controversy topics.** After CUR is computed AND conflict mining is complete, check this compound condition:
+
+```
+If CUR > 0.8 AND zero conflicts found (all three conflict types = 0):
+  The personas are not disagreeing because there is likely a clear
+  consensus answer. Add this flag to the Key Divergences section:
+  
+  "⚠️ This topic produced near-complete agreement (CUR = {value},
+  0 conflicts detected). Multi-perspective analysis may not add
+  significant value here — the answer appears uncontroversial.
+  Consider reframing your question to surface genuine disagreement,
+  or accept that a direct model response may be sufficient."
+```
+
+This is an honesty mechanism — it tells the user when the framework's core value proposition (conflict → insight) is not firing, rather than silently producing a report that looks comprehensive but adds nothing.
 
 ### Layer 2: Blind Spot Synthesis
 
