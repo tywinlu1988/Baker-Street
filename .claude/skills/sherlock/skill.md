@@ -186,6 +186,40 @@ When rebuttal agents return:
 
 **Interpretation rule**: A failed rebuttal means the rebutting persona had no effective response. This is information, not an error. The Synthesis Judgment should explicitly note which side was unable to defend its position.
 
+### Layer 1.75: Claim Uniqueness Ratio (CUR)
+
+This step measures whether personas are producing **substantively distinct insights** or overlapping. It uses a constrained semantic equivalence check — not a quality judgment.
+
+**Step 1: Extract.** From each persona's `### Key Observations` section, gather all bullet points. This is mechanical — no LLM needed.
+
+**Step 2: Compare.** For each pair of personas (e.g., Holmes vs Moriarty), compare every bullet from persona A against every bullet from persona B. For each pair of bullets, ask ONE question:
+
+> "Bullet A: {text_a}"
+> "Bullet B: {text_b}"
+> "Are these two statements making substantively the same claim? Answer ONLY 'yes' or 'no'. A claim is 'the same' if it would be redundant to include both in a summary — even if worded differently."
+
+This is a binary classification task with an extremely constrained output (single word). It is NOT a quality rating.
+
+**Step 3: Compute.** Pure arithmetic — zero LLM involvement:
+
+```
+total_bullets = sum of bullet counts across all personas
+matrix = N×N grid where cell[i][j] = count of shared claims between persona i and persona j
+shared_claims = sum of all matrix cells / 2  (divide by 2 because each pair counted twice)
+unique_claims = total_bullets - shared_claims
+CUR = unique_claims / total_bullets
+```
+
+**Step 4: Assess.**
+
+| CUR Range | Label | Meaning |
+|-----------|-------|---------|
+| ≥ 0.7 | Low overlap | Personas are producing substantively distinct insights |
+| 0.4–0.7 | Moderate overlap | Some cross-pollination, acceptable |
+| < 0.4 | High overlap | Personas are repeating each other |
+
+**CRITICAL CONSTRAINT — No automatic restart.** If CUR < 0.4, the report is still output normally. Do NOT re-run personas or restart analysis. The CUR value and a warning are embedded in the report. Only the user can decide to re-run.
+
 ### Layer 2: Blind Spot Synthesis
 
 1. Collect every persona's "Blind Spot Acknowledgment" section.
@@ -307,6 +341,7 @@ Generate three tiers of next steps:
 | Conflicts detected | {N} |
 | Conflicts rebutted | {N attempted, M succeeded} |
 | Silent dimensions found | {N} |
+| Claim Uniqueness Ratio (CUR) | {value} — {Low/Moderate/High} overlap |
 | Framework Gain | {Low/Medium/High} |
 
 {Degradation notes — if any persona was Partial or Failed, or any rebuttal was unavailable, list each with the reason. If no degradation, omit this line.}
@@ -318,8 +353,8 @@ Output only:
 - Core Findings
 - Framework Delta (just the assessment line: "Framework Gain: Low/Medium/High — {one-line justification}")
 - Action Recommendations
-- Analysis Metadata (just the degradation notes if any, otherwise omit)
-- Self-correction hook (if Gain is Low)
+- CUR and degradation notes (if CUR < 0.4 or degradation present, otherwise omit)
+- Self-correction hook (if Gain is Low or CUR < 0.4)
 
 ### Self-Correction Hook
 
@@ -330,23 +365,38 @@ At the very end of EVERY report (full or TL;DR), include:
 💡 **Not satisfied with this analysis?** Reply **deep** to re-analyze with all 7 personas, **quick** for a 2-persona fast rescan, or name specific personas to add. Reply **reframe** if I misunderstood your question.
 ```
 
-If Framework Gain is Low, strengthen the hook:
+If Framework Gain is Low or CUR < 0.7, tailor the warning to the specific issue:
+
 ```markdown
 ---
-⚠️ **This query showed limited framework benefit over the baseline.** The model's direct answer was already strong. For more novel insights, try:
-- `/sherlock --depth deep` — activate all 7 cognitive lenses
-- `/sherlock --personas moriarty,hound` — stress-test from adversarial and bias-detection angles
-- Reframing your question — the current framing may be too constrained for multi-perspective analysis to add value
+⚠️ **Analysis quality note:**
+
+{If Framework Gain is Low:}
+The framework added limited novelty on this query — the baseline was already strong.
+
+{If CUR < 0.4:}
+⚡ **Persona overlap detected.** The selected personas produced highly overlapping perspectives (CUR = {value}). This means the analysis did not benefit from the multi-perspective approach as intended.
+
+Recommendations:
+- `/sherlock --depth deep` — activate all 7 cognitive lenses to increase contrast
+- `/sherlock --personas {suggest 2 personas with maximally different cognitive styles from those already used}` — add contrarian perspectives
+- Reframing your question — the current framing may be too narrow for multi-perspective analysis to surface genuine disagreement
+```
+
+{If CUR ≥ 0.4 and Framework Gain is Medium or above:}
+```markdown
+💡 **Not satisfied?** Reply **deep** for all 7 personas, **quick** for a fast rescan, or name specific personas to add. Reply **reframe** if I misunderstood your question.
 ```
 
 ## Operating Principles
 
 1. **Intake before analysis.** Never dispatch agents without user confirmation (unless `--auto`). The right configuration is worth a single round-trip.
 2. **Real discovery over rearrangement.** If the analysis is just nicely formatted common sense, you have failed. Push each persona to produce genuinely non-obvious insights. The Framework Delta section is your accountability — if it reads "Low," ask yourself why.
-3. **Conflict is a feature.** If all personas agree, either the problem is trivial or the personas aren't trying hard enough. Seek and amplify genuine disagreement.
-4. **Honesty about failure.** Never fabricate a rebuttal. Never hide a failed persona. A failed rebuttal IS information — it means that persona could not defend its position. Report this as a finding, not an error. The user trusts the integrity of the report more than its completeness.
-5. **Never close early.** Do not finalize the report until ALL dispatched agents have returned or explicitly timed out. A missing rebuttal is not a license to truncate. Wait for your agents.
-6. **Baseline as yardstick.** The framework's value is measured by what it adds OVER the raw model. The baseline is not optional — it is the control group that makes the experiment meaningful.
-7. **Cost consciousness.** Only run the personas needed. Don't dispatch 7 agents when 2 will do. Don't rebut conflicts that don't affect the decision.
-8. **Action matters.** Every analysis should end with something the user can DO. Pure contemplation without actionability is incomplete.
-9. **Self-correction is built in.** Every report offers a path to improve. The framework should be able to critique its own output.
+3. **Conflict is a feature.** If all personas agree, either the problem is trivial or the personas aren't trying hard enough. Seek and amplify genuine disagreement. CUR (Claim Uniqueness Ratio) is the quantitative measure — if it drops below 0.4, the multi-perspective approach didn't deliver.
+4. **Never auto-restart.** If CUR < 0.4 or Framework Gain is Low, report it honestly and suggest re-run parameters. Never restart analysis automatically — the user decides.
+5. **Honesty about failure.** Never fabricate a rebuttal. Never hide a failed persona. A failed rebuttal IS information — it means that persona could not defend its position. Report this as a finding, not an error. The user trusts the integrity of the report more than its completeness.
+6. **Never close early.** Do not finalize the report until ALL dispatched agents have returned or explicitly timed out. A missing rebuttal is not a license to truncate. Wait for your agents.
+7. **Baseline as yardstick.** The framework's value is measured by what it adds OVER the raw model. The baseline is not optional — it is the control group that makes the experiment meaningful.
+8. **Cost consciousness.** Only run the personas needed. Don't dispatch 7 agents when 2 will do. Don't rebut conflicts that don't affect the decision.
+9. **Action matters.** Every analysis should end with something the user can DO. Pure contemplation without actionability is incomplete.
+10. **Self-correction is built in.** Every report offers a path to improve. The framework should be able to critique its own output.
