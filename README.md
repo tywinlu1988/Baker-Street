@@ -256,7 +256,7 @@ User query
 
 ### Output
 
-The report includes **Core Findings** (discoveries, not conclusions), **Framework Delta** (what the framework added over the raw model baseline), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. A baseline comparison runs automatically on every analysis. Use `--tldr` for core findings + delta + actions only (one screen).
+The report includes **Core Findings** (discoveries, not conclusions), **Framework Delta** (what the framework added over the raw model baseline), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. Every report also includes a **Claim Uniqueness Ratio (CUR)** — a quantitative measure of whether personas produced distinct insights or overlapped. A baseline comparison runs automatically on every analysis. Use `--tldr` for core findings + delta + actions only (one screen).
 
 ---
 
@@ -280,6 +280,7 @@ The framework isn't just asserted to work — it's tested.
 |--------|---------|:-------------:|
 | **Framework Gain** | mean(Framework Novelty) / Baseline Novelty | ≥ 1.5 |
 | **Perspective Dispersion** | Qualitative divergence assessment | ≥ 0.3 |
+| **Claim Uniqueness Ratio (CUR)** | Unique claims / total claims (v0.1.2) | ≥ 0.7 |
 | **Blind Spot Coverage** | New dimensions surfaced / persona count | ≥ 0.5 |
 
 ### Baseline Methodology
