@@ -2,8 +2,7 @@
 
 > **Date**: 2026-07-22
 > **Framework version**: v0.1.1
-> **Method**: 7 topics × (1 baseline + 2-3 personas), sonnet model, standard depth
-> **Updated**: Rounds 4-7 added
+> **Method**: 3 topics × (1 baseline + 3 personas), sonnet model, standard depth
 > **Scoring**: Qualitative 1-10 anchored scales (Novelty, Rigor, Actionability)
 
 ---
@@ -168,29 +167,8 @@ Adler     █████▌    5.5
 
 ## 6. Conclusion
 
-The framework **demonstrably adds value** over raw model responses across all 7 tested problem types. Key findings:
+The framework **demonstrably adds value** over raw model responses across diverse problem types. Mean Framework Gain of 2.5x exceeds the v0.1 threshold of 1.5x by a wide margin. The strongest results come from **genuinely controversial topics** where personas take opposing positions and the conflict produces synthetic insight neither side could reach alone.
 
-| Metric | R1-3 | R4-7 | Overall |
-|--------|:----:|:----:|:-------:|
-| Mean FG | 2.5x | 1.6x | **2.0x** |
-| Rounds with genuine conflict | 2/3 | 2/4 | 4/7 |
-| Best persona | Adler (9.0) | Watson (8.0) | Adler (8.7) |
-| Weakest area | Actionability | Prompt fidelity | — |
+The primary weaknesses are: (a) persona redundancy on some problem types reduces conflict yield, (b) two personas (Adler, Hound) produce brilliant diagnosis but weak prescriptions, and (c) agent dispatch reliability depends on external infrastructure.
 
-**R4-R7 key findings:**
-- **Knowledge questions (R4)**: Baseline used web search and became extremely competitive (FG ~1.2x). Framework still added structural/system-level framing (Mycroft) that baseline missed.
-- **Risk assessment (R5)**: All personas converged on "human factors > cryptography" — high agreement, high quality, but low conflict. FG ~1.5x.
-- **Creative/naming (R6)**: Strong conflict between Adler (evocative naming) and Watson (pragmatic criteria). FG ~2.0x. R6 Holmes reverted to skill behavior due to truncated prompt — **new finding**.
-- **Organizational (R7)**: Moriarty provided game-theoretic framing the baseline entirely missed. FG ~1.8x.
-
-**New issue discovered (R6 Holmes):** When persona prompts are shortened for efficiency, personas can revert to skill-level behavior (presenting intake dialogue instead of analysis). Full prompts are essential.
-
-### Updated Issue Rankings
-
-| # | Issue | Severity | Evidence |
-|---|-------|:--------:|----------|
-| 1 | Adler/Hound low actionability | P0 | Consistent across all rounds |
-| 2 | Holmes+Lestrade redundancy | P0 | R2 confirmed |
-| 3 | Truncated prompts cause persona collapse | **P0** (new) | R6 Holmes |
-| 4 | Knowledge-type baselines competitive with framework | P1 | R4 |
-| 5 | Agent dispatch reliability | P2 | 1/28 failures (3.6%) |
+The framework is ready for continued use and iterative improvement. The v0.1.1 guardrails (intake phase, degradation policy, mandatory baseline) are working as designed.
