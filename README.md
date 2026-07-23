@@ -416,7 +416,9 @@ baker-street/
 | **v0.2.x** | Research layer + fact base architecture, full agent tool access, per-persona tool directives, dual-track intake | ✅ Released |
 | **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
 | **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, platform-agnostic tool names, cross-platform installer | ✅ Released |
-| **v0.5.x** | Agent swarm orchestration, persistent persona memory, persona specialization by domain | 📅 Planned |
+| **v0.5.x** | Quantitative Research Layer — shared analysis package, persona data demands, statistical analysis agent | 📅 Planned |
+| **v0.6.x** | Quantitative Reasoning — evidence-backed claims, p-value constraint, Quantitative Support Ratio | 📅 Planned |
+| **v0.7.x** | Champion Mode — winning persona deep investigation, persona-specific deep capabilities | 📅 Planned |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
 
 ---
