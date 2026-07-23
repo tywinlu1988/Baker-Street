@@ -19,3 +19,4 @@ research-output*.json
 *-payoff*.md
 saas_fact_base.json
 tmp/
+docs/
