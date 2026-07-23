@@ -69,15 +69,23 @@ If `--auto` is set: skip the dialogue entirely. Dispatch the scout. Proceed to P
 
 ### Step 1.1: Define Research Scope
 
-Based on the scout's problem map and any user clarification, identify the factual domains that need coverage. Write a one-paragraph research brief listing the specific areas to investigate.
+Based on the scout's problem map and any user clarification, identify the factual domains that need coverage. Synthesize the scout's sub-questions, key unknowns, and suggested angles into a one-paragraph research brief. Include:
+
+1. **What to investigate** — the 2-4 highest-priority domains from the scout's analysis
+2. **Specific questions** — concrete factual questions each research agent should answer
+3. **Expected coverage** — guidance on breadth (how many angles) vs depth (how much detail per angle)
+
+Do NOT pass the scout's raw output to research agents — synthesize it into a focused brief. The scout produces a map; the research brief is the mission order.
 
 ### Step 1.2: Dispatch Research Agents
 
 Dispatch 2-3 research agents in parallel using `.claude/skills/sherlock/research-prompt.md`. Each agent receives:
-- The research brief
+- The research brief (synthesized from scout output)
 - The user's original query
-- The scout's problem map
 - Instruction: "Produce a JSON fact base. 15-30 facts. Cite sources. Assign confidence. No advice."
+- Output instruction: "Save your JSON output to `.claude/skills/sherlock/research-output-{N}.json` where {N} is your agent number (1, 2, or 3)."
+
+Do NOT pass the scout's raw output. Pass only the synthesized brief.
 
 Research agents have access to: WebFetch, Bash, Read.
 
@@ -104,7 +112,14 @@ If it fails:
 
 ### Step 1.4: Compile Shared Fact Base
 
-Merge all research agent outputs into a single JSON array. Deduplicate claims (semantic equivalence check, same standard as CUR). This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
+1. Read all research output files (`.claude/skills/sherlock/research-output-*.json`).
+2. Merge into a single JSON array — concatenate all arrays.
+3. Deduplicate claims using the same semantic equivalence check as CUR (if two claims say substantively the same thing, keep the one with higher confidence).
+4. Sort by confidence (highest first).
+5. This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
+6. Pass the COMPLETE fact base (all claims) to every persona agent. Do not truncate.
+
+If compilation fails (corrupted JSON, empty file), use whatever valid output exists. If all files are invalid, fall back to `--no-research` mode and proceed with an empty fact base.
 
 ## Phase 2: Reasoning Layer
 
