@@ -2,3 +2,9 @@ node_modules/
 .superpowers/
 docs/evaluation/
 docs/superpowers/
+*-analysis.md
+*-research-notes.md
+*-fact-base.json
+*-findings.json
+*_analysis.md
+*-verification-checklist.md
