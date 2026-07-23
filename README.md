@@ -389,6 +389,7 @@ baker-street/
 ├── README.md                 # English docs
 ├── README_CN.md              # Chinese docs
 ├── LICENSE                   # MIT
+├── CROSS_PLATFORM.md         # Multi-platform guide
 ├── package.json              # npm metadata
 ├── install.js                # npx installer
 ├── .gitignore
@@ -396,13 +397,17 @@ baker-street/
 │   ├── plugin.json           # Claude Code plugin manifest
 │   └── marketplace.json      # Claude Code marketplace registry
 └── .claude/skills/sherlock/
-    ├── skill.md              # Main orchestration (4-phase pipeline)
-    ├── README.md             # Skill reference card
-    ├── research-prompt.md    # Research agent specification
-    ├── scout-prompt.md       # Scout agent specification
+    ├── skill.md              # Main orchestration
+    ├── ROADMAP.md            # v0.5-v0.7 roadmap
+    ├── research-prompt.md    # Research agent spec
+    ├── scout-prompt.md       # Scout agent spec
+    ├── quantitative-agent-prompt.md  # Quantitative analysis spec
+    ├── tool-map.json         # Cross-platform tool names
     ├── personas/             # 7 character prompt files
+    ├── tools/analysis/       # Shared tool library (stats, simulation)
+    ├── platforms/            # Platform manifests (codex, antigravity, cursor)
     ├── test-cases/           # 5 validation test cases
-    ├── judge.md              # LLM-as-Judge scoring prompt
+    ├── judge.md              # LLM-as-Judge scoring
     └── validate.md           # Validation suite runner
 ```
 
@@ -416,7 +421,7 @@ baker-street/
 | **v0.2.x** | Research layer + fact base architecture, full agent tool access, per-persona tool directives, dual-track intake | ✅ Released |
 | **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
 | **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, platform-agnostic tool names, cross-platform installer | ✅ Released |
-| **v0.5.x** | Quantitative Research Layer — shared analysis package, persona data demands, statistical analysis agent | 📅 Planned |
+| **v0.5.x** | Quantitative Research Layer — shared analysis package, persona data demands, statistical analysis agent | 🚧 Current |
 | **v0.6.x** | Quantitative Reasoning — evidence-backed claims, p-value constraint, Quantitative Support Ratio | 📅 Planned |
 | **v0.7.x** | Champion Mode — winning persona deep investigation, persona-specific deep capabilities | 📅 Planned |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |

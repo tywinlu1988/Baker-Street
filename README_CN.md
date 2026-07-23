@@ -513,6 +513,7 @@ cp -r Baker-Street/.claude/skills/sherlock ~/.claude/skills/
 baker-street/
 ├── README.md                 # 英文文档
 ├── README_CN.md              # 中文文档（本文件）
+├── CROSS_PLATFORM.md         # 跨平台指南
 ├── LICENSE                   # MIT
 ├── package.json              # npm 包元数据
 ├── install.js                # npx 安装脚本
@@ -521,25 +522,17 @@ baker-street/
 │   ├── plugin.json           # Claude Code 插件清单
 │   └── marketplace.json      # Claude Code 市场注册表
 └── .claude/skills/sherlock/
-    ├── skill.md              # 主编排 skill（4 阶段流水线）
-    ├── README.md             # Skill 参考卡
+    ├── skill.md              # 主编排 skill
+    ├── ROADMAP.md            # v0.5-v0.7 路线图
     ├── research-prompt.md    # 调研 agent 规格
     ├── scout-prompt.md       # 侦察 agent 规格
+    ├── quantitative-agent-prompt.md  # 定量分析 agent 规格
+    ├── tool-map.json         # 跨平台工具名映射
     ├── personas/             # 7 个角色 prompt 文件
-    │   ├── holmes.md
-    │   ├── watson.md
-    │   ├── mycroft.md
-    │   ├── moriarty.md
-    │   ├── adler.md
-    │   ├── lestrade.md
-    │   └── hound.md
-    ├── test-cases/           # 5 个标准化测试用例
-    │   ├── tech-decision.md
-    │   ├── business-strategy.md
-    │   ├── knowledge-building.md
-    │   ├── ethical-dilemma.md
-    │   └── meta-analysis.md
-    ├── judge.md              # LLM-as-Judge 评分 prompt
+    ├── tools/analysis/       # 共享工具库（stats, simulation）
+    ├── platforms/            # 平台清单（codex, antigravity, cursor）
+    ├── test-cases/           # 5 个测试用例
+    ├── judge.md              # LLM-as-Judge 评分
     └── validate.md           # 验证套件运行指南
 ```
 
@@ -553,7 +546,7 @@ baker-street/
 | **v0.2.x** | 调研层 + 事实库架构、完整 agent 工具权限、按角色工具指令、双轨摄入、E2E 管道验证 | ✅ 已发布 |
 | **v0.3.x** | 反迎合引擎、可配置研究深度、自动反证 agent、Bash 工具指引、Scout 覆盖率验证、Agent 超时处理 | ✅ 已发布 |
 | **v0.4.x** | 跨平台适配（Codex、Antigravity、Cursor）、共享工具库、平台无关工具名、跨平台安装器 | ✅ 已发布 |
-| **v0.5.x** | 定量研究层——共享分析包、角色数据需求、统计分析 Agent | 📅 计划 |
+| **v0.5.x** | 定量研究层——共享分析包、角色数据需求、统计分析 Agent | 🚧 当前 |
 | **v0.6.x** | 定量推理——证据支撑的结论、p 值约束、量化支撑率 | 📅 计划 |
 | **v0.7.x** | 冠军模式——获胜角色深度调研、角色专属深度能力 | 📅 计划 |
 | **v1.0** | 生产级可靠性——SLA 保障分析、流式输出、企业集成模式 | 📅 计划 |
