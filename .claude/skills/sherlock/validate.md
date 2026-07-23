@@ -5,27 +5,26 @@ description: Validation runner for the Sherlock Holmes Analytical Framework. Exe
 
 # Sherlock Framework — Validation Runner
 
-Run the full v0.1 validation suite.
+Run the v0.3.x validation suite.
 
 ## Procedure
 
-For EACH test case in `.claude/skills/sherlock/test-cases/`, run three groups:
+For EACH test case in `.claude/skills/sherlock/test-cases/`, run four groups:
 
-### Group A: Baseline
-Ask the model directly (no framework):
-"Analyze the following problem directly, without any persona framework. Give your best analysis: {problem_statement}"
+### Group A: Baseline (raw model)
+Ask the model directly: "Analyze the following problem directly, without any persona framework. Give your best analysis: {problem_statement}"
 
-### Group B: Single Persona
-Run `/sherlock --depth quick --personas <primary_persona> "{problem_statement}"`
-Where primary_persona is the first persona in the expected dispatch list.
+### Group B: Monolithic Multi-Perspective (comparison, added v0.3.0)
+Give the model all 7 persona definitions + the problem in a single prompt. This is the **critical comparison** — measuring whether the pipeline adds value over a well-crafted flat prompt.
 
-### Group C: Full Pipeline
+### Group C: Full Pipeline (standard)
 Run `/sherlock --depth standard "{problem_statement}"`
 
-**Exception**: For the `meta-analysis` test case, use `--depth deep` instead of `standard` since meta-analysis requires all 7 personas to critique the framework itself.
+### Group D: Full Pipeline (deep research)
+Run `/sherlock --depth deep --research-depth deep "{problem_statement}"`
 
 ### Scoring
-After each test case, feed all three group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`) with the test case definition.
+After each test case, feed all four group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`). Score on all 7 v0.3.x dimensions: FG, PD, BSC, CUR, Anti-Sycophancy Score, Tool Usage Effectiveness, Persona Distinctiveness.
 
 ## Test Case Execution Order
 
@@ -40,36 +39,49 @@ After each test case, feed all three group outputs to the judge prompt (`.claude
 After all 5 test cases complete, produce a summary table:
 
 ```markdown
-# Sherlock Framework v0.1 — Validation Results
+# Sherlock Framework v0.3.x — Validation Results
 
-| Test Case | FG | FG Pass | PD | PD Pass | BSC | BSC Pass | Overall |
-|-----------|----|---------|----|---------|----|----|---------|
-| tech-decision | {x} | {✓/✗} | {x} | {✓/✗} | {x} | {✓/✗} | {PASS/FAIL} |
-| business-strategy | {x} | {✓/✗} | {x} | {✓/✗} | {x} | {✓/✗} | {PASS/FAIL} |
-| knowledge-building | {x} | {✓/✗} | {x} | {✓/✗} | {x} | {✓/✗} | {PASS/FAIL} |
-| ethical-dilemma | {x} | {✓/✗} | {x} | {✓/✗} | {x} | {✓/✗} | {PASS/FAIL} |
-| meta-analysis | {x} | {✓/✗} | {x} | {✓/✗} | {x} | {✓/✗} | {PASS/FAIL} |
+| Test Case | FG | PD | CUR | AS% | TUE | Distinct | Overall |
+|-----------|:--:|:--:|:--:|:--:|:--:|:--------:|:-------:|
+| tech-decision | {x} | {x} | {x} | {x}% | {x} | {N}/7 | {PASS/FAIL} |
+| business-strategy | {x} | {x} | {x} | {x}% | {x} | {N}/7 | {PASS/FAIL} |
+| knowledge-building | {x} | {x} | {x} | {x}% | {x} | {N}/7 | {PASS/FAIL} |
+| ethical-dilemma | {x} | {x} | {x} | {x}% | {x} | {N}/7 | {PASS/FAIL} |
+| meta-analysis | {x} | {x} | {x} | {x}% | {x} | {N}/7 | {PASS/FAIL} |
 
-**Aggregate Pass Rate:** {X}/5
+**Aggregate Pass Rate:** {X}/5 (v0.3.x: ≥ 4/5 for provisional, ≥ 5/5 for full)
+
+### A/B Delta (Pipeline vs Monolithic)
+
+| Test Case | Pipeline Gain | Worth the tokens? |
+|-----------|:------------:|:-----------------:|
+| tech-decision | {x} | {yes/no} |
+| ... | | |
 
 ## Failing Metrics Diagnosis
 
 {For any metric below threshold, explain what went wrong and suggest remediation}
 
-## v0.1 Readiness Assessment
+## v0.3.x Readiness Assessment
 
-{PASS if ≥4/5 test cases pass overall. Otherwise FAIL — framework needs iteration before release.}
+{PASS if ≥4/5 test cases pass overall AND pipeline shows measurable gain over Group B in ≥3/5 cases.}
 ```
 
-## Pass Thresholds (from spec v0.1)
+## Pass Thresholds (v0.3.x)
 
 | Metric | Threshold |
 |--------|-----------|
 | Framework Gain (FG) | ≥ 1.5 |
 | Perspective Dispersion (PD) | ≥ 0.3 |
+| Claim Uniqueness Ratio (CUR) | ≥ 0.5 |
+| Anti-Sycophancy Score (AS) | ≥ 8% |
+| Tool Usage Effectiveness (TUE) | ≥ 5 |
+| Persona Distinctiveness | ≥ 3/7 distinguishable |
 | Blind Spot Coverage (BSC) | ≥ 0.5 |
-| Any two persona cosine similarity | ≤ 0.85 (qualitative in v0.1) |
 
-## v0.1 Release Gate
+## v0.3.x Release Gate
 
-Framework is ready for v0.1 tag when ≥4/5 test cases pass overall.
+Framework is ready for v0.3.x tag when:
+- ≥ 4/5 test cases pass overall (provisional)
+- ≥ 5/5 for full release
+- Pipeline shows measurable anti-sycophancy gain over Group B (monolithic) in ≥ 3/5 cases

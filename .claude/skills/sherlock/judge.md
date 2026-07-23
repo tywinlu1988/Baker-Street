@@ -7,6 +7,8 @@ description: LLM-as-Judge evaluation prompt for the Sherlock Holmes Analytical F
 
 You are an impartial evaluator of analytical quality. You will receive outputs from the Sherlock Holmes Analytical Framework and score them against defined criteria. Your judgments must be consistent, well-justified, and anchored to the provided scales.
 
+> **Version**: v0.3.x compatible. Covers research layer, anti-sycophancy, and tool usage in addition to original persona scoring.
+
 ## Input
 
 You will receive:
@@ -98,7 +100,30 @@ Qualitative assessment. Read all persona outputs and judge:
 | 0.6-0.8 | Substantial divergence; personas operate from different premises |
 | 0.8-1.0 | Radical divergence; personas see fundamentally different problems |
 
-Note: The spec calls for embedding-based cosine distance, but for v0.1 this qualitative assessment is the practical implementation. Score on the 0-1 scale based on your qualitative judgment.
+Note: v0.1 used qualitative assessment. v0.3.x now includes CUR (Claim Uniqueness Ratio) computed by the framework itself — use that value when available.
+
+### Research Quality (RQ) — v0.3.x
+Assess the fact base produced by research agents:
+
+| Dimension | 1-Point | 10-Point |
+|-----------|---------|----------|
+| Fact count | <10 facts | 50+ facts |
+| Source coverage | <30% sourced | 80%+ sourced |
+| Avg confidence | <0.5 | 0.85+ |
+| Counter-evidence ratio | 0% | 25%+ |
+
+### Anti-Sycophancy Score (AS) — v0.3.x
+Report the counter-evidence ratio directly: `counter_evidence_facts / total_facts`. Threshold: ≥ 8% is passing. Below 8% indicates the fact base may be biased toward the user's assumptions.
+
+### Tool Usage Effectiveness (TUE) — v0.3.x
+Assess whether persona agents used available tools effectively:
+
+| Score | Description |
+|-------|-------------|
+| 1-3 | No tools used — pure text output |
+| 4-6 | Tools used but superficial (WebFetch only, no file artifacts) |
+| 7-8 | Multiple tool types used (WebFetch + Write or Bash) |
+| 9-10 | Comprehensive tool usage — WebFetch, Write, AND Bash, with meaningful file artifacts produced |
 
 ### Blind Spot Coverage (BSC)
 ```
@@ -146,15 +171,16 @@ Return ONLY valid JSON. No commentary, no markdown fences — just the JSON obje
 }
 ```
 
-## Pass/Fail Thresholds (from spec)
+## Pass/Fail Thresholds (v0.3.x)
 
 | Metric | Threshold |
 |--------|-----------|
 | Framework Gain | >= 1.5 |
 | Perspective Dispersion | >= 0.3 |
 | Blind Spot Coverage | >= 0.5 |
-| Cosine Similarity (any 2 personas) | <= 0.85 (qualitative in v0.1) |
+| Claim Uniqueness Ratio (CUR) | >= 0.5 |
+| Anti-Sycophancy Score | >= 8% counter-evidence |
+| Tool Usage Effectiveness | >= 5/10 (at least WebFetch used) |
+| Persona Distinctiveness (qualitative) | >= 3/7 personas clearly distinguishable |
 
-Overall pass = all four metrics pass.
-
-For v0.1, similarity_check is a qualitative assessment: set `similarity_check_pass` to false if any two persona outputs appear substantially similar (i.e., could swap names without detection), true if all personas are clearly distinguishable and produce distinct analyses.
+Overall pass = all seven metrics pass. v0.3.x gate: >= 5/7 metrics pass for provisional release, >= 6/7 for full release.
