@@ -15,3 +15,7 @@ research-output*.json
 *-stakeholder*.md
 *-week-analysis*.md
 *-day-week-*.md
+*-simulation.py
+*-payoff*.md
+saas_fact_base.json
+tmp/
