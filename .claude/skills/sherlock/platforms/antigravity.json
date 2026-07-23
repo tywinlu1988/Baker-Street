@@ -1,0 +1,24 @@
+{
+  "name": "sherlock",
+  "displayName": "Sherlock — Multi-Perspective Analysis",
+  "version": "0.4.3",
+  "description": "7 cognitive archetypes for multi-perspective analysis with anti-sycophancy research layer, configurable depth, and shared tool library.",
+  "author": "Tywin Lu",
+  "license": "MIT",
+  "homepage": "https://github.com/tywinlu1988/Baker-Street",
+  "type": "skill",
+  "entrypoint": "skill.md",
+  "invocation": "/analyze --skill sherlock \"<query>\"",
+  "flags": {
+    "--depth": "quick|standard|deep (persona count)",
+    "--research-depth": "light|standard|deep (research agent count)",
+    "--tldr": "core findings + actions only",
+    "--auto": "skip intake dialogue",
+    "--no-research": "legacy mode, model knowledge only"
+  },
+  "tools": {
+    "required": ["fetch", "exec", "read", "write"],
+    "mapped_from": ["web_search", "run_command", "read_file", "write_file"]
+  },
+  "platform_notes": "Install via npx github:tywinlu1988/Baker-Street --platform antigravity, or manually copy .claude/skills/sherlock/ to ~/.antigravity/skills/sherlock/"
+}
