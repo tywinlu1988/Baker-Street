@@ -8,7 +8,7 @@
 这不是一个"列出优缺点"的提示词模板，而是一个**思维引擎** —— 它的价值不在于输出格式有多漂亮，而在于能否让用户看到自己（以及模型）原本看不到的东西。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.2-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)](package.json)
 
 [English](README.md) | 中文
 
@@ -329,7 +329,8 @@ v0.1 的目标值是 ≥ 1.5 —— 即框架至少比裸模型多产出 50% 的
 | 风险评估 | Moriarty + Hound | + Mycroft | 全部 7 个 |
 | 通用/混合 | Holmes + Watson | + Moriarty | 全部 7 个 |
 
-使用 `--no-research` 跳过调研阶段（传统模式，仅使用模型内置知识）。
+- `--research-depth light|standard|deep` — 研究 agent 数量（1/2/3，默认 2）
+- `--no-research` — 跳过调研阶段（传统模式，仅使用模型内置知识）
 
 ### 三层合成引擎
 

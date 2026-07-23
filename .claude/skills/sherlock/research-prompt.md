@@ -41,6 +41,7 @@ You MUST output a valid JSON array. Each element is a fact object with exactly t
 5. **Cover breadth, not depth.** 15-30 facts across multiple angles is better than 5 facts deeply explored.
 6. **Cite dates.** If a fact is time-sensitive, include the year/date in the claim.
 7. **Cross-verify when possible.** If two sources agree, cite both and raise confidence.
+8. **Anti-sycophancy — CRITICAL.** Your research MUST include at least 2 facts that **contradict or challenge** the assumptions implicit in the user's question. If the user asks "should we do X?", find facts suggesting X might be wrong. If they ask "is Y better?", find facts suggesting Y has hidden costs. Label these with `"type": "counter-evidence"` in an additional field. This is not optional — a fact base without counter-evidence is a biased fact base.
 
 ## Scope
 

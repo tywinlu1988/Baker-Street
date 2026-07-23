@@ -1,0 +1,117 @@
+[
+  {
+    "claim": "Buffer adopted a permanent 4-day workweek (32 hours, full pay) in 2021 and as of July 2025 had not reverted; CEO Joel Gascoigne reported record-high ARR and profitability under the policy.",
+    "source": "https://joel.is/posts/1753671833/ (July 2025); https://buffer.com/resources/four-day-workweek-at-buffer/ (2022)",
+    "confidence": 0.9
+  },
+  {
+    "claim": "Buffer's 2022 internal survey found 91% of employees reported being happier and more productive under the 4-day week, but 16% said they could NOT complete all work in 4 days, and some employees reported feeling disconnected from colleagues due to reduced meeting time.",
+    "source": "https://buffer.com/resources/four-day-workweek-at-buffer/ (2022)",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Alter Agents, a Los Angeles market research firm, abandoned its 10-week 4-day workweek trial after employee satisfaction declined; staff struggled to set boundaries and worked on their day off, and the team voted to end the experiment.",
+    "source": "https://www.fastcompany.com/90775215/why-this-company-ditched-its-four-day-workweek; https://alteragents.com/our-experiment-with-a-four-day-work-week/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Bolt, a $14 billion US fintech, quietly removed its 4-day workweek policy in 2024 after CEO Ryan Breslow had previously declared the company was 'never going back' to a 5-day week.",
+    "source": "https://www.fastcompany.com/91370026/bolts-ceo-on-why-hes-axing-progressive-workplace-policies",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Power Within Training, a UK client-facing consultancy serving construction industry leaders, ended its 4-day workweek trial because leads went unanswered from Thursday afternoon to Monday, causing client loss to 5-day competitors.",
+    "source": "https://thepowerwithintraining.com/leadership-hub/why-we-ended-our-4-day-working-week-trial/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Thrive, a UK e-learning company, abandoned its 4-day week because client-facing teams could not take the day off while clients worked 5 days; internal tension grew between creative teams who loved the policy and sales teams who felt pressure to stay always-on.",
+    "source": "Cited via Fast Company and CFIB articles (see CFIB-FCEI.ca tools-resources/4-day-work-week)",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Krystal, a London-based tech company, canceled its 4-day week trial after 4 months (it was supposed to be 6 weeks) due to increased stress among staff; the founder said the extra recovery time did not compensate for the 20% increase in output required.",
+    "source": "Search results from startups.co.uk people/management/four-day-work-week-trials/",
+    "confidence": 0.6
+  },
+  {
+    "claim": "Allcap, a Gloucester engineering and industrial supplies firm, withdrew from the UK 4-day week trial 2 months early at its main trade sites because employees experienced 'nine intense workdays' in a cycle instead of a genuine compressed schedule.",
+    "source": "UK 4 Day Week Global pilot reporting; cited in multiple news outlets",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Bell Canada moved 12,000 technicians to a 4-day week (four 9-hour days) in 1994 but abandoned it after 1 year due to scheduling mismatches (Mondays/Fridays off on busiest days), low manager buy-in, unproductive 9th hours, and dramatically increased overtime costs.",
+    "source": "https://www.irpp.org/po/archive/apr98/white.pdf (IRPP study); https://www.theglobeandmail.com/report-on-business/careers/the-four-day-work-week-it-sounded-good-but/article4101704/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Morrisons, a UK supermarket chain, scrapped its 4-day workweek trial for head office staff in 2020 after employees were required to work one Saturday every four weeks, undermining the work-life balance the policy was meant to provide.",
+    "source": "https://www.thegrocer.co.uk/morrisons/morrisons-calls-time-on-four-day-working-week/660457",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Treehouse, a US online learning platform, reverted to a 5-day week in September 2016 after laying off 22 employees; the CEO felt it was inappropriate to maintain the 4-day policy amid job cuts.",
+    "source": "Original Treehouse blog; cited in startups.co.uk four-day-work-week-trials/",
+    "confidence": 0.6
+  },
+  {
+    "claim": "Launceston City Council in Tasmania, Australia, proposed a 4-day, 30.4-hour week with no pay cut in January 2026 but shelved the plan one month later following intense criticism; documents revealed no standalone business case existed for the proposal.",
+    "source": "https://www.abc.net.au/news/2026-04-30/tas-four-day-week-proposal-no-business-case-launceston/106619590",
+    "confidence": 0.9
+  },
+  {
+    "claim": "Asda, a UK supermarket chain, scrapped its compressed 4-day workweek after employees complained that longer shifts were 'physically demanding' and left them 'exhausted.'",
+    "source": "https://www.forbes.com/sites/benjaminlaker/2024/10/03/the-hidden-costs-of-the-4-day-workweek-and-its-true-impact/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Unilever called the 4-day workweek model 'rigid' and stated 'there is no one-size-fits-all approach to flexibility' when declining to adopt it company-wide. Bupa similarly said a 'one-size-fits-all approach will not suit our workforce.'",
+    "source": "https://www.forbes.com/sites/benjaminlaker/2024/10/03/the-hidden-costs-of-the-4-day-workweek-and-its-true-impact/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "A 2025 study of IKEA Belgium's compressed schedule, published in BMC Public Health, found that while workers experienced increased psychological detachment, this did NOT translate into reduced work-related exhaustion or burnout risk.",
+    "source": "https://link.springer.com/article/10.1186/s12889-025-21323-4 ('Time Tetris: a longitudinal study on compressed schedules and workplace well-being at IKEA', 2025)",
+    "confidence": 0.9
+  },
+  {
+    "claim": "Working 12 hours per day is associated with a 37% increased risk of injury compared with 8-hour shifts; accident risk in the 10th hour of work is 90% higher than in the first 8 hours.",
+    "source": "http://threesixtysafety.com/compressed-workdays-and-injury-risk/ (synthesis of occupational health research)",
+    "confidence": 0.8
+  },
+  {
+    "claim": "The UK 4-day week trial (2022, 61 organizations) was not peer-reviewed, was coordinated by advocacy group 4 Day Week Global, had 9 of 70 initial companies drop out before starting, achieved only a 7% reduction in days worked (4.86 to 4.52) not the advertised 20%, and relied on self-reported data with ~58% survey response rate.",
+    "source": "https://joint-research-centre.ec.europa.eu/system/files/2023-04/JRC133008_jrc133008_dclass_wp_assessing_four-day_week_pilots_final.pdf (European Commission Joint Research Centre analysis, 2023); https://www.lexology.com/library/detail.aspx?g=a72c0109-9f95-4bc6-910b-2558f45a342f",
+    "confidence": 0.9
+  },
+  {
+    "claim": "The Iceland trials (2015-2019, 2,500 public-sector workers) were widely misreported as '4-day week' successes; the actual reduction was only 1-3 hours per week (to 35-36 hours), and 61 of 66 workplaces reduced by only 1-3 hours. Final negotiated agreements resulted in just 35 minutes less per week in the private sector and 65 minutes in the public sector.",
+    "source": "https://theconversation.com/the-success-of-icelands-four-day-week-trial-has-been-greatly-overstated-164083; https://joint-research-centre.ec.europa.eu/system/files/2023-04/JRC133008_jrc133008_dclass_wp_assessing_four-day_week_pilots_final.pdf",
+    "confidence": 0.9
+  },
+  {
+    "claim": "The European Commission Joint Research Centre (2023) identified multiple methodological flaws in 4-day week pilot studies including: no pre-registration or pre-analysis plans, no balance checks between treatment and comparison groups, multiple outcomes analyzed without adjusting for multiple comparisons, and survey response rates as low as 50%.",
+    "source": "https://joint-research-centre.ec.europa.eu/system/files/2023-04/JRC133008_jrc133008_dclass_wp_assessing_four-day_week_pilots_final.pdf",
+    "confidence": 0.9
+  },
+  {
+    "claim": "When Japan shortened its workweek from 46 to 30 hours in 1988, productivity did not increase enough to compensate, and economic output was 20% lower over the following eight years.",
+    "source": "https://www.aph.gov.au/About_Parliament/Parliamentary_departments/Parliamentary_Library/Research/Issues_and_Insights/2026/FourDayWorkWeek; https://www.weforum.org/stories/2022/08/four-day-weeks-wont-work-reasons/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Research led by Juliet Schor (Boston College) for 4 Day Week Global across 245 businesses and nonprofits found that approximately 8% (20 companies) returned to a 5-day schedule one year after their pilot.",
+    "source": "4 Day Week Global research cited via FOX 10 and SIOP reports",
+    "confidence": 0.7
+  },
+  {
+    "claim": "According to MIT Sloan Management Review, work does not disappear under a 4-day week; it 'compresses into longer individual days, spills into the fifth day unofficially, or accumulates into a backlog that erodes productivity gains.' The review notes that 'for every success story, there is a quieter failure.'",
+    "source": "https://sloanreview.mit.edu/article/four-day-workweek-make-it-stick/ (MIT Sloan Management Review)",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Client-facing businesses (consulting, agencies, law firms, market research) face structural challenges with 4-day weeks: their clients and suppliers operate on 5-day schedules, creating coverage gaps, response delays, and competitive disadvantages that several companies (Thrive, Power Within Training, Alter Agents, KLA) cited as reasons for reverting.",
+    "source": "Multiple company case studies aggregated from Fast Company, Forbes, and Autonomy research",
+    "confidence": 0.8
+  }
+]

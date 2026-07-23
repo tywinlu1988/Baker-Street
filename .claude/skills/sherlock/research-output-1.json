@@ -1,0 +1,147 @@
+[
+  {
+    "claim": "The UK 4 Day Week Global pilot (2022, 61 companies, ~3,000 employees) found 92% of companies continued the 4-day week afterward, and only 4% definitively ruled it out.",
+    "source": "https://www.entrepreneur.com/business-news/4-day-workweeks-lead-to-more-revenue-less-burnout-study/492612",
+    "confidence": 0.8
+  },
+  {
+    "claim": "In the UK 2022 pilot, company revenue rose 35% on average compared with the same period from previous years, and grew 1.4% on average during the six-month trial itself.",
+    "source": "https://www.entrepreneur.com/business-news/4-day-workweeks-lead-to-more-revenue-less-burnout-study/492612",
+    "confidence": 0.7
+  },
+  {
+    "claim": "In the UK 2022 pilot, employee turnover dropped 57% and absenteeism (sick days) fell 65% across participating companies.",
+    "source": "https://bmmagazine.co.uk/news/four-day-week-trial-success-uk/?amp",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Iceland conducted two large-scale public-sector 4-day workweek pilots between 2015 and 2019 involving approximately 2,500 workers, reducing weekly hours from 40 to 35-36 with no pay cut.",
+    "source": "https://www.cnn.com/2024/10/25/business/iceland-shorter-working-week-economy/index.html",
+    "confidence": 0.8
+  },
+  {
+    "claim": "After Iceland's trials, trade unions negotiated reduced hours across the workforce; by 2019 approximately 86-90% of Iceland's workforce had shifted to shorter schedules (35-36 hours per week).",
+    "source": "https://www.thedailystar.net/tech-startup/news/icelands-four-day-work-week-success-story-3737681",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Iceland's economy grew 5% in 2023 (second highest among wealthy European economies) and GDP grew a further 1.3% in 2025, with unemployment at 3.4-3.6% in 2023 — roughly half the European average.",
+    "source": "https://ukranews.com/en/news/1153325-four-day-week-experiment-success-iceland-records-1-3-gdp-growth",
+    "confidence": 0.7
+  },
+  {
+    "claim": "In Iceland's trials, 62% of workers on reduced hours reported being more satisfied with their schedules and 97% believed shorter hours made it easier to balance work with personal life.",
+    "source": "https://hr.asia/top-news/icelands-4-day-work-week-proves-to-be-a-game-changer/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Buffer (social media SaaS) implemented a 4-day workweek in May 2020 and made it permanent; 91% of employees reported being happier and more productive, 99.1% reported less stress, and only 7% felt less productive.",
+    "source": "https://buffer.com/resources/four-day-work-week-update/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Buffer found 84% of employees could complete their work within four days, while 40.4% felt they could not finish everything; 61.6% used the fifth day as an overflow day at least some of the time.",
+    "source": "https://buffer.com/resources/four-day-work-week-update/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Bolt (fintech, $14B valuation) piloted a 4-day workweek in late 2021: 84% of employees reported improved work-life balance, 84% said they were more productive, and the company saw a 200% increase in job applicants.",
+    "source": "https://www.greatplacetowork.com/resources/blog/bolt%e2%80%99s-4-day-workweek-boosts-employee-happiness-and-well-being",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Bolt quietly eliminated its 4-day workweek after CEO Ryan Breslow returned and cited 'significant gaps in execution'; the policy was removed despite initial positive results.",
+    "source": "https://www.efinancialcareers.de/en/news/bolt-4-day-workweek",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Kickstarter piloted a 4-day, 32-hour workweek in April 2022 under the '100-80-100' model; goal achievement jumped from 62% to 95% and employee retention rose from 82% to 98%.",
+    "source": "https://www.icmrindia.org/case-study-details?casecode=HROB285",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Kickstarter's employee engagement surged 50% and work-life balance satisfaction increased from 48% to 81% after adopting the 4-day workweek.",
+    "source": "https://updates.kickstarter.com/kickstarters-four-day-work-week/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Kickstarter CEO Everette Taylor stated the 4-day model is 'not all good' — it attracts some applicants who just want the perk, and 'the level of intensity, intention and velocity that you have to bring in everything that you do is extreme.'",
+    "source": "https://fortune.com/2026/03/03/kickstarter-ceo-pros-cons-four-day-work-week-sometimes-backfires/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "In 2025, after a 42-day strike, the Kickstarter United union secured contractual protections for the 4-day workweek, preventing management from unilaterally changing the schedule.",
+    "source": "https://www.comicsbeat.com/kickstarter-strike-ends/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Weglot (SaaS translation platform) tested a 32-hour 4-day workweek in Q4 2023-Q1 2024; 100% of the team was satisfied, well-being survey scores rose from 82% to 92%, and 100% retention was maintained during probation for three consecutive years.",
+    "source": "https://www.weglot.com/blog/weglot-4-day-workweek",
+    "confidence": 0.7
+  },
+  {
+    "claim": "SOAX (SaaS proxy platform) piloted a 4-day workweek under the 100-80-100 model; 80% of employees reported lower stress, 98% wanted to continue permanently, and 44% reported getting even more work done.",
+    "source": "https://soax.com/blog/4-day-work-week",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Loka (tech consultancy) implemented every-other-Friday off starting January 2022; through 2024 they nearly tripled project launches per year, achieved 95% employee retention, and gained 7,000-10,000 more job applicants annually.",
+    "source": "https://www.loka.com/blog/the-four-day-workweek-three-years-later",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Microsoft Japan trialed a 4-day workweek with 2,300 employees and reported a 40% productivity boost; employees also took 25% less time off during the trial.",
+    "source": "https://bmmagazine.co.uk/news/four-day-week-trial-success-uk/?amp",
+    "confidence": 0.7
+  },
+  {
+    "claim": "A global 18-month study by 4 Day Week Global covering the US, Canada, UK, and Ireland found participating employers reported a 15% increase in revenue over the course of the trial.",
+    "source": "https://www.entrepreneur.com/business-news/4-day-workweeks-lead-to-more-revenue-less-burnout-study/492612",
+    "confidence": 0.7
+  },
+  {
+    "claim": "A South Africa 4-day workweek pilot found company revenue grew by an average of 10.5% among participating firms.",
+    "source": "https://www.entrepreneur.com/business-news/4-day-workweeks-lead-to-more-revenue-less-burnout-study/492612",
+    "confidence": 0.6
+  },
+  {
+    "claim": "YLaw (Vancouver law firm) reported revenues increased 30% within three months of implementing a 4-day workweek pilot; the firm tripled in size in two years and did not lose a single person to a competitor.",
+    "source": "https://www.entrepreneur.com/business-news/4-day-workweeks-lead-to-more-revenue-less-burnout-study/492612",
+    "confidence": 0.7
+  },
+  {
+    "claim": "There are two primary 4-day workweek models: the compressed model (same 40 hours over 4 days, typically 10-hour shifts) and the reduced-hours model (32 hours, 80% time, full pay, known as the '100-80-100' model).",
+    "source": "https://www.irisglobal.com/blog/four-day-workweek-movement/",
+    "confidence": 0.9
+  },
+  {
+    "claim": "Belgium introduced legislation in 2022 allowing employees to compress their standard workweek into four days, but only about 1% of workers chose this option.",
+    "source": "https://www.irisglobal.com/blog/four-day-workweek-movement/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Juliet Schor's multi-year research across 400+ companies and roughly 13,000 employees found that approximately 90% of organizations retained the 4-day schedule after trialing it, with a roughly 13% average productivity increase.",
+    "source": "https://journals.aom.org/doi/10.5465/AMPROC.2025.163bp",
+    "confidence": 0.7
+  },
+  {
+    "claim": "A Boston College cross-national trial (211+ businesses, 7,200+ employees) found over 95% of employees preferred the 4-day week after the trial; the median pay raise required to return to a 5-day week was 26-50%.",
+    "source": "https://www.forbes.com/sites/bryanrobinson/2025/07/30/latest-4-day-workweek-study-shows-mental-health-benefits-but-will-it-catch-on-where-you-work/",
+    "confidence": 0.7
+  },
+  {
+    "claim": "The UK's second 4-day week trial (November 2024 - April 2025, 17 companies, ~1,000 employees) was declared '100% success' with every company opting to continue; 12 adopted permanent 4-day weeks and 5 moved to a nine-day fortnight.",
+    "source": "https://www.research-live.com/article/news/fourday-working-week-pilot-100-success/id/5140673",
+    "confidence": 0.8
+  },
+  {
+    "claim": "In the UK's second trial (2024-2025), 54% of employees reported increased 'working smart' (greater focus and efficiency), 62% experienced burnout less frequently, and 41% reported improvements in mental health.",
+    "source": "https://bmmagazine.co.uk/news/four-day-week-trial-success-uk/?amp",
+    "confidence": 0.7
+  },
+  {
+    "claim": "The 4 Day Week Foundation has accredited over 235 UK companies that permanently adopted a 4-day week without salary cuts as of 2025, representing over 6,000 workers.",
+    "source": "https://bmmagazine.co.uk/news/four-day-week-trial-success-uk/?amp",
+    "confidence": 0.8
+  }
+]

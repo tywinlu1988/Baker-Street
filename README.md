@@ -6,7 +6,7 @@
 **Baker Street** is a Claude Code skill that applies **7 distinct cognitive archetypes** — each inspired by a character from the Sherlock Holmes canon — to analyze any problem, decision, or topic. It works as a **thinking engine**, not a templated answer generator: independent persona agents analyze in parallel, then a synthesis layer mines their conflicts and blind spots to produce insights no single model response can achieve.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.2-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.3.0-blue.svg)](package.json)
 
 English | [中文](README_CN.md)
 
@@ -267,7 +267,9 @@ Personas are constrained to reason from a shared JSON fact base (`{claim, source
 | risk-assessment | moriarty, hound | + mycroft | all 7 |
 | general-mixed | holmes, watson | + moriarty | all 7 |
 
-`--depth deep` uses all 7 personas regardless of type. Use `--no-research` to skip the research phase (legacy mode, model knowledge only).
+`--depth deep` uses all 7 personas regardless of type.
+- `--research-depth light|standard|deep` — number of research agents (1/2/3, default: 2)
+- `--no-research` — skip the research phase (legacy mode, model knowledge only)
 
 ### The Synthesis Engine
 

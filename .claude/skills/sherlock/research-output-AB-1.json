@@ -1,0 +1,127 @@
+[
+  {
+    "claim": "AWS held approximately 31% of global cloud infrastructure market share in Q4 2024, while GCP held approximately 12%, according to Synergy Research Group quarterly data.",
+    "source": "https://www.srgresearch.com/articles/cloud-market-keeps-growing-ai-demand",
+    "confidence": 0.75
+  },
+  {
+    "claim": "GCP's sustained-use discounts automatically apply to compute workloads running more than 25% of a month, providing up to 30% reduction compared to AWS's required 1-year or 3-year commitment for Reserved Instances equivalent pricing.",
+    "source": "https://cloud.google.com/compute/docs/sustained-use-discounts",
+    "confidence": 0.70
+  },
+  {
+    "claim": "AWS Lambda (128MB, 1M requests/month) costs approximately $0.20/month while GCP Cloud Functions equivalent costs approximately $0.10/month at low volume, though pricing structures differ significantly at scale with AWS charging per request and GCP per invocation and compute time.",
+    "source": "Cloud provider pricing pages as of 2024",
+    "confidence": 0.70
+  },
+  {
+    "claim": "GCP's per-second billing for compute instances (introduced 2017, minimum 1 minute) typically yields 30-40% savings over AWS's per-hour billing for short-running workloads, though the gap narrows for 24/7 workloads.",
+    "source": "https://cloud.google.com/compute/pricing",
+    "confidence": 0.75
+  },
+  {
+    "claim": "AWS egress (data transfer out to internet) costs $0.09/GB for the first 10TB/month, while GCP charges $0.12/GB for the first 10TB/month — GCP is 33% more expensive at tier 1, but GCP offers $0.08/GB for tiers 2-10TB making it competitive at higher volumes.",
+    "source": "AWS and GCP published pricing pages (2024)",
+    "confidence": 0.70
+  },
+  {
+    "claim": "GCP offers $0.01/GB/month for Archive storage class for long-term cold data, compared to AWS S3 Glacier Deep Archive at $0.00099/GB/month — effectively equivalent pricing within $0.00001/GB/month.",
+    "source": "GCP Cloud Storage and AWS S3 pricing pages (2024)",
+    "confidence": 0.70
+  },
+  {
+    "claim": "CloudHealth by VMware and other third-party TCO analysis firms consistently find that for standardized VM-based workloads with 1-year commitments, AWS and GCP pricing differ by less than 5-10% for equivalent configurations when all discount programs are applied.",
+    "source": "Industry analyst reports (IDC, Gartner) and CloudHealth benchmark data 2023-2024",
+    "confidence": 0.65
+  },
+  {
+    "claim": "Dropbox migrated from AWS to its own infrastructure between 2015-2017, reporting approximately $75 million in savings over two years, though this was a build-your-own-infrastructure migration not a cloud-to-cloud move.",
+    "source": "https://www.technologyreview.com/2018/08/08/139900/dropbox-dropped-aws-and-saved-75-million-heres-why-more-companies-might-follow/",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Snapchat committed to spending $2 billion annually on GCP in a 5-year deal signed 2017, with an additional $1 billion AWS commitment, demonstrating a multi-cloud strategy for a large-scale social platform running on both providers simultaneously.",
+    "source": "https://www.cnbc.com/2017/02/02/snap-google-cloud-deal-worth-2-billion-aws-worth-1-billion.html",
+    "confidence": 0.80
+  },
+  {
+    "claim": "HSBC, a global bank with 250,000+ employees, signed a multi-cloud deal with both AWS and GCP in 2020, using AWS for infrastructure and GCP for data analytics and machine learning workloads, indicating large fintechs adopt multi-cloud by workload segmentation rather than single-provider.",
+    "source": "https://www.cloudcomputing-news.net/news/2020/dec/08/hsbc-signs-multi-year-cloud-deals-with-google-and-aws/",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Plaid, a major fintech platform processing connections to 12,000+ financial institutions, runs on AWS as its primary infrastructure provider, achieving SOC2 Type II certification on AWS infrastructure.",
+    "source": "Plaid security documentation and engineering blog (2023-2024)",
+    "confidence": 0.70
+  },
+  {
+    "claim": "AWS holds roughly 78 compliance certifications including SOC 1/2/3, PCI DSS Level 1, ISO 27001/27017/27018, FedRAMP, and GDPR — the broadest compliance portfolio of any cloud provider as of 2024.",
+    "source": "https://aws.amazon.com/compliance/programs/",
+    "confidence": 0.75
+  },
+  {
+    "claim": "GCP holds approximately 65+ compliance certifications including SOC 1/2/3, PCI DSS, ISO 27001/27017/27018, FedRAMP, and GDPR — covering all major fintech-required compliance frameworks as of 2024.",
+    "source": "https://cloud.google.com/security/compliance",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Both AWS and GCP offer shared responsibility models where the provider secures the infrastructure while the customer secures their data, applications, and configurations — meaning the compliance burden for SOC2 and GDPR data handling is primarily the customer's responsibility on both platforms.",
+    "source": "AWS Shared Responsibility Model and GCP Shared Responsibility Model documentation",
+    "confidence": 0.80
+  },
+  {
+    "claim": "GCP offers the Assured Workloads program which provides FedRAMP, CJIS, and ITAR-controlled data boundary controls for regulated industries, while AWS offers GovCloud for similar regulated workloads.",
+    "source": "Google Cloud Assured Workloads and AWS GovCloud documentation (2024)",
+    "confidence": 0.70
+  },
+  {
+    "claim": "AWS has approximately 200+ service categories (EC2, S3, Lambda, RDS, DynamoDB, etc.) while GCP offers approximately 100+ service categories, meaning AWS offers roughly twice as many distinct services, increasing potential lock-in surface area.",
+    "source": "Gartner Cloud Infrastructure and Platform Services Magic Quadrant 2024",
+    "confidence": 0.60
+  },
+  {
+    "claim": "GCP's Kubernetes Engine (GKE) is built on upstream Kubernetes and is considered the most standards-compliant managed Kubernetes offering, while AWS EKS has several proprietary extensions that make workload portability between clouds partially constrained — though both are CNCF-certified Kubernetes distributions.",
+    "source": "CNCF certified Kubernetes conformance program and cloud provider documentation",
+    "confidence": 0.75
+  },
+  {
+    "claim": "AWS's proprietary database services (DynamoDB, Aurora, Redshift) have no direct functional equivalent on GCP, requiring application-level rewrites for migration — DynamoDB to Cloud Spanner or Firestore is not a drop-in replacement and requires significant code changes.",
+    "source": "AWS to GCP service comparison documentation and migration guides",
+    "confidence": 0.75
+  },
+  {
+    "claim": "For a 50-person company, cloud migration costs typically range from $100,000-$500,000 including assessment, proof-of-concept, migration tooling, and cutover, with timelines of 3-9 months depending on workload complexity according to consulting firms specializing in SMB migrations.",
+    "source": "Cloud migration consulting estimates from firms like DoiT, Rackspace, and Mission (2023-2024 published estimates)",
+    "confidence": 0.60
+  },
+  {
+    "claim": "CloudFix and other optimization platforms report that typical companies waste 25-35% of cloud spend on over-provisioned resources, and a migration provides an opportunity to right-size — potentially offsetting 20-30% of the new provider's costs through architecture optimization during migration.",
+    "source": "CloudFix, CloudZero, and Flexera State of the Cloud reports (2023-2024)",
+    "confidence": 0.60
+  },
+  {
+    "claim": "Capital One, a top-10 US bank, completed a full migration from on-premises data centers to AWS in 2020, becoming the first major US bank to go all-in on public cloud — demonstrating that large regulated fintechs can achieve full compliance on AWS.",
+    "source": "Capital One engineering blog and AWS re:Invent presentations (2020-2021)",
+    "confidence": 0.80
+  },
+  {
+    "claim": "Etsy migrated from on-premises to GCP between 2019-2021, citing GCP's BigQuery and data analytics capabilities as a primary driver, and reported improved ML model deployment velocity and reduced data warehouse costs compared to their previous on-premises Hadoop setup — though specific dollar savings were not publicly disclosed.",
+    "source": "Etsy engineering blog and Google Cloud Next presentations (2021-2022)",
+    "confidence": 0.70
+  },
+  {
+    "claim": "Transferring 10TB of data out of AWS to internet costs approximately $900/month at $0.09/GB, while transferring 10TB out of GCP to internet costs approximately $1,200/month at $0.12/GB for the first 10TB — GCP is 33% more expensive for egress at that volume, making data gravity a significant factor in multi-cloud cost calculations.",
+    "source": "AWS and GCP published egress pricing (2024)",
+    "confidence": 0.75
+  },
+  {
+    "claim": "GCP's Custom Machine Types allow creating VMs with arbitrary vCPU-to-memory ratios, while AWS requires selecting from fixed instance families — this flexibility can reduce over-provisioning waste by 10-20% for non-standard workload profiles according to cloud cost optimization consultants.",
+    "source": "GCP Custom Machine Types documentation and cloud optimization best practice guides (2024)",
+    "confidence": 0.65
+  },
+  {
+    "claim": "A 2023-2024 Flexera State of the Cloud report found that 87% of enterprises have a multi-cloud strategy, with the average enterprise running across 4.9 clouds, indicating that full single-vendor lock-in is increasingly rare even where a primary cloud provider dominates.",
+    "source": "https://info.flexera.com/CM-REPORT-State-of-the-Cloud",
+    "confidence": 0.70
+  }
+]

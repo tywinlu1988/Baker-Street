@@ -17,6 +17,7 @@ Parse these flags from the user's message:
 - `--tldr` — output only Core Findings + Action Recommendations + Delta Assessment
 - `--auto` — skip the intake dialogue, proceed directly to analysis with defaults
 - `--no-research` — skip the research phase, use model's built-in knowledge only (legacy mode)
+- `--research-depth light|standard|deep` — number of research agents: 1/2/3 (default: standard=2)
 
 ## Phase 0: Dual-Track Intake (skip if --auto)
 
@@ -79,7 +80,12 @@ Do NOT pass the scout's raw output to research agents — synthesize it into a f
 
 ### Step 1.2: Dispatch Research Agents
 
-Dispatch 2-3 research agents in parallel using `.claude/skills/sherlock/research-prompt.md`. Each agent receives:
+Dispatch research agents based on `--research-depth`:
+- `light` (or `--depth quick`): 1 agent — fast, lower coverage
+- `standard` (default): 2 agents — balanced coverage with counter-evidence
+- `deep`: 3 agents — maximum breadth, includes a dedicated counter-evidence agent
+
+Use `.claude/skills/sherlock/research-prompt.md`. Each agent receives:
 - The research brief (synthesized from scout output)
 - The user's original query
 - Instruction: "Produce a JSON fact base. 15-30 facts. Cite sources. Assign confidence. No advice."
@@ -116,8 +122,9 @@ If it fails:
 2. Merge into a single JSON array — concatenate all arrays.
 3. Deduplicate claims using the same semantic equivalence check as CUR (if two claims say substantively the same thing, keep the one with higher confidence).
 4. Sort by confidence (highest first).
-5. This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
-6. Pass the COMPLETE fact base (all claims) to every persona agent. Do not truncate.
+5. Count counter-evidence facts (those with `"type": "counter-evidence"`). Compute: `anti_sycophancy_ratio = counter_evidence_count / total_facts`. If ratio < 0.08 (fewer than 8% counter-facts), flag: `⚠️ Low counter-evidence — fact base may be biased toward user's assumptions.`
+6. This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
+7. Pass the COMPLETE fact base (all claims) to every persona agent. Do not truncate.
 
 If compilation fails (corrupted JSON, empty file), use whatever valid output exists. If all files are invalid, fall back to `--no-research` mode and proceed with an empty fact base.
 
@@ -372,8 +379,10 @@ Generate three tiers of next steps:
 
 | Field | Value |
 |-------|-------|
-| Research mode | {full / scout-only / skipped (--no-research)} |
+| Research mode | {full / scout-only / skipped} |
+| Research depth | {light/standard/deep} ({N} agents) |
 | Fact base | {N} claims, avg confidence {0.0-1.0} |
+| Anti-sycophancy | {N} counter-facts / {N} total facts = {X%} |
 | Personas dispatched | {comma-separated list} |
 | Depth | {quick/standard/deep} |
 | Baseline | Ran successfully / ⚠️ Failed |
