@@ -11,7 +11,9 @@
       "web_search": "WebFetch",
       "run_command": "Bash",
       "read_file": "Read",
-      "write_file": "Write"
+      "write_file": "Write",
+      "_python": "python3",
+      "_note": "Use python3 for Python scripts. If python3 is broken (Windows Store stub), try 'python' or full path."
     },
     "codex": {
       "web_search": "web_search",
