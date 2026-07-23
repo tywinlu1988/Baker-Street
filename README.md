@@ -50,7 +50,7 @@ The key word is **independent**. Each persona agent analyzes without knowing wha
 - These contradictions are not noise — they are the framework's primary value source, exposing the complexity masked by any single perspective
 - The synthesis layer doesn't average or harmonize — it **amplifies conflict** so the user can see the full picture
 
-### Three Structural Advantages (v0.3.x)
+### Three Structural Advantages
 
 A/B testing proved that multi-agent pipeline analysis does not outperform monolithic prompts on raw reasoning quality. But it uniquely solves three problems inherent to single-prompt analysis:
 
@@ -250,7 +250,7 @@ User query
 └──────────────────────────────────────────┘
 ```
 
-### Persona Capabilities (v0.3.x)
+### Persona Capabilities
 
 Each persona is a **full agent** — not just a text generator. They have access to:
 
@@ -342,7 +342,14 @@ The framework is validated against 5 standardized test cases. Release gate: ≥ 
 ```bash
 npx github:tywinlu1988/Baker-Street
 ```
-Copies the skill to `~/.claude/skills/sherlock/`. Overwrite with `--force`.
+Default: Claude Code. See [cross-platform guide](CROSS_PLATFORM.md).
+
+**Other Platforms**
+```bash
+npx github:tywinlu1988/Baker-Street --platform codex       # Codex CLI
+npx github:tywinlu1988/Baker-Street --platform antigravity # Antigravity
+npx github:tywinlu1988/Baker-Street --platform cursor      # Cursor
+```
 
 **Via Plugin Marketplace**
 ```bash
