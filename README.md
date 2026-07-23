@@ -199,50 +199,75 @@ The framework doesn't deploy all 7 personas by default. v0.1 cost controls:
 
 ## 4. How It Works
 
-### Two-Phase Architecture
+### Three-Phase Architecture
 
 ```
 User query
     │
     ▼
-┌──────────────────────────────────────┐
-│ Phase 1: Dispatch (low cost)          │
-│                                      │
-│ Problem classifier → auto-select     │
-│ 2-4 personas (overridable)           │
-└──────────────┬───────────────────────┘
+┌──────────────────────────────────────────┐
+│ Phase 0: Dual-Track Intake               │
+│                                          │
+│ Track A: Dialogue → clarify intent        │
+│ Track B: Scout agent → problem map       │
+│ (runs in parallel, zero added latency)    │
+└──────────────┬───────────────────────────┘
                │
                ▼
-┌──────────────────────────────────────┐
-│ Phase 2: Analysis (precision spend)   │
-│                                      │
-│ Selected personas → parallel run     │
-│     │                                │
-│     ▼                                │
-│ Three-Layer Synthesis:               │
-│   ① Conflict Mining                   │
-│   ② Targeted Rebuttal (top-2)        │
-│   ③ Blind Spot Detection              │
-│   ④ Action Pathway Generation        │
-│     │                                │
-│     ▼                                │
-│ Output: Full report / TL;DR          │
-└──────────────────────────────────────┘
+┌──────────────────────────────────────────┐
+│ Phase 1: Research Layer                  │
+│                                          │
+│ 2-3 research agents → structured fact    │
+│ base (JSON {claim, source, confidence})  │
+│ Quality gate → shared fact base          │
+│ Agents use: WebFetch, Bash, Read         │
+└──────────────┬───────────────────────────┘
+               │ Shared Fact Base
+               ▼
+┌──────────────────────────────────────────┐
+│ Phase 2: Reasoning Layer                 │
+│                                          │
+│ Selected personas + baseline (parallel)  │
+│ Full tool access: WebFetch, Bash, Write  │
+│ Constrained to fact base (no invention)  │
+│ → 6-section structured output            │
+└──────────────┬───────────────────────────┘
+               │
+               ▼
+┌──────────────────────────────────────────┐
+│ Phase 3: Synthesis                       │
+│                                          │
+│ Conflict Mining → CUR → Blind Spot       │
+│ Detection → Action Pathway → Report      │
+└──────────────────────────────────────────┘
 ```
 
-### Problem Classification
+### Persona Capabilities (v0.2.x)
 
-| Problem Type | Quick (2) | Standard (3) |
-|-------------|:---------:|:-----------:|
-| Technical Decision | Holmes + Lestrade | + Moriarty |
-| Business Strategy | Moriarty + Adler | + Hound |
-| Knowledge Building | Watson + Holmes | + Mycroft |
-| Interpersonal/Ethical | Adler + Lestrade | + Moriarty |
-| Creative/Ideation | Adler + Watson | + Holmes |
-| Risk Assessment | Moriarty + Hound | + Mycroft |
-| General/Mixed | Holmes + Watson | + Moriarty |
+Each persona is a **full agent** — not just a text generator. They have access to:
 
-`--depth deep` uses all 7 personas regardless of type.
+| Tool | Purpose |
+|------|---------|
+| **WebFetch** | Research facts, verify claims, find counter-evidence |
+| **Bash** | Run scripts, process data, stress-test assumptions |
+| **Write** | Produce file artifacts (reports, checklists, matrices) |
+| **Read** | Access project files and shared resources |
+
+Personas are constrained to reason from a shared JSON fact base (`{claim, source, confidence}`) produced by dedicated research agents. They may NOT invent facts from training data — gaps must be flagged honestly in Blind Spot Acknowledgment.
+
+### Problem Classification & Persona Dispatch
+
+| Problem Type | quick (2) | standard (3) | deep (all 7) |
+|-------------|-----------|-------------|-------------|
+| technical-decision | holmes, moriarty | + hound | all 7 |
+| business-strategy | moriarty, adler | + hound | all 7 |
+| knowledge-building | watson, moriarty | + hound | all 7 |
+| interpersonal-ethical | adler, lestrade | + moriarty | all 7 |
+| creative-ideation | adler, watson | + holmes | all 7 |
+| risk-assessment | moriarty, hound | + mycroft | all 7 |
+| general-mixed | holmes, watson | + moriarty | all 7 |
+
+`--depth deep` uses all 7 personas regardless of type. Use `--no-research` to skip the research phase (legacy mode, model knowledge only).
 
 ### The Synthesis Engine
 
@@ -352,8 +377,10 @@ baker-street/
 │   ├── plugin.json           # Claude Code plugin manifest
 │   └── marketplace.json      # Claude Code marketplace registry
 └── .claude/skills/sherlock/
-    ├── skill.md              # Main orchestration (5-phase pipeline)
+    ├── skill.md              # Main orchestration (4-phase pipeline)
     ├── README.md             # Skill reference card
+    ├── research-prompt.md    # Research agent specification
+    ├── scout-prompt.md       # Scout agent specification
     ├── personas/             # 7 character prompt files
     ├── test-cases/           # 5 validation test cases
     ├── judge.md              # LLM-as-Judge scoring prompt
@@ -364,11 +391,18 @@ baker-street/
 
 ## 8. Roadmap
 
-| Version | Scope |
-|---------|-------|
-| **v0.1** (current) | 7 personas, 3-layer synthesis, LLM-as-Judge validation, npx install |
-| **v0.2** (planned) | Custom personas, persistent persona memory, domain-specific extensions |
-| **v1.0** (planned) | Visual output (diagrams), streaming, fine-tuned evaluation models |
+| Version | Focus | Status |
+|---------|-------|:------:|
+| **v0.1.x** | 7 personas, 3-layer synthesis, LLM-as-Judge validation, npx install, CUR metric, intake phase | ✅ Released |
+| **v0.2.x** | Research layer + fact base architecture, full agent tool access, per-persona tool directives, dual-track intake | ✅ Released |
+| **v0.3.x** | Deep tool integration — personas create reusable scripts, data pipelines, and verification suites. Cross-platform adaptation for Codex, Antigravity, and other agent frameworks. Tool discovery and self-provisioning. | 🚧 Current |
+| **v0.4.x** | Agent swarm orchestration — multi-step collaborative workflows, shared memory across sessions, persona specialization by domain | 📅 Planned |
+| **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
+
+### v0.3 Focus Areas
+- **Tool creation**: Personas can write and execute custom analysis scripts, not just consume existing tools
+- **Cross-platform**: Adapt persona prompts and orchestration for Codex, Antigravity, Cursor, and other agent frameworks
+- **Platform-specific optimizations**: Leverage unique capabilities of each agent runtime (sandboxing, long-running tasks, multi-agent coordination)
 
 ---
 
