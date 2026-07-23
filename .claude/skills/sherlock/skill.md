@@ -95,7 +95,11 @@ Do NOT pass the scout's raw output. Pass only the synthesized brief.
 
 Research agents have access to: WebFetch, Bash, Read.
 
-**Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target. Each research agent should aim for breadth across the problem domain.
+**Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target.
+
+**Timeout handling:** If a research agent is unresponsive for >120 seconds or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (network timeout)`.
+
+If `--no-research` is set: skip this phase entirely. Proceed with empty fact base.
 
 If `--no-research` is set: skip this phase. Use an empty fact base and proceed to Phase 2.
 

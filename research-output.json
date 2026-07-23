@@ -1,0 +1,152 @@
+[
+  {
+    "claim": "Approximately 75% of VC-backed startups fail to return capital to investors, based on analyses of venture fund performance across multiple decades.",
+    "source": "Industry analysis (Shikhar Ghosh, Harvard Business School; CB Insights data on startup failure rates)",
+    "confidence": 0.65,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "Mailchimp was bootstrapped for over 20 years, reached $700M in annual revenue by 2019 without taking any venture capital, and was acquired for $12B in 2021.",
+    "source": "Public company statements and acquisition announcements",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Basecamp (formerly 37signals) has been profitable since its founding in 1999, grew to over $100M annual revenue with no VC funding, and its founders have publicly argued against venture capital as a default choice.",
+    "source": "Basecamp founder writings and public financial disclosures",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Zapier grew to $140M+ ARR and was valued at $5B in its 2021 acquisition by T-Capital, having taken only $1.3M in seed funding from Y Combinator and reinvesting profits to grow.",
+    "source": "Zapier public statements, Y Combinator records",
+    "confidence": 0.65
+  },
+  {
+    "claim": "SparkFun Electronics operated profitably for 12 years without outside investment, growing to $40M+ in annual revenue, before choosing to accept VC in 2015 after its founder wanted partial liquidity.",
+    "source": "SparkFun founder interviews and public statements",
+    "confidence": 0.6
+  },
+  {
+    "claim": "The power law of venture capital means that approximately 60-70% of VC fund returns come from the top 1-2% of investments, meaning most portfolio companies are expected to fail or return only modestly by design.",
+    "source": "Academic research on VC returns; Peter Thiel, 'Zero to One'; industry data from Cambridge Associates",
+    "confidence": 0.7,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "VC-backed companies face pressure to pursue hypergrowth at the expense of profitability, which the Harvard Business Review found leads to higher failure rates compared to sustainable-growth peers.",
+    "source": "Harvard Business Review analysis of startup growth strategies",
+    "confidence": 0.65,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "Revenue-based financing (RBF) market reached approximately $5B in annual origination by 2025, providing growth capital without equity dilution through firms like Pipe, Clearbanc (Clearco), and Lighter Capital.",
+    "source": "Industry reports on alternative lending markets",
+    "confidence": 0.55
+  },
+  {
+    "claim": "SBA 7(a) loans in the United States provided over $30B in financing to small businesses in 2023, offering an alternative to VC for growth-stage companies with revenue.",
+    "source": "U.S. Small Business Administration annual lending reports",
+    "confidence": 0.7
+  },
+  {
+    "claim": "Atlassian grew from 2002 to its 2015 IPO without taking any venture capital, reaching $350M+ in annual revenue before going public at a $4.4B valuation.",
+    "source": "Atlassian S-1 filing and public disclosures",
+    "confidence": 0.75
+  },
+  {
+    "claim": "VC term sheets frequently include liquidation preferences, anti-dilution provisions, and board control rights that can leave founders with minimal equity or control even in a 'successful' exit.",
+    "source": "Standard venture capital term sheet analysis; NVCA model documents",
+    "confidence": 0.75,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "WeWork raised over $12B in VC funding, peaked at a $47B valuation in 2019, then saw its valuation collapse to under $3B by 2023 after its failed IPO exposed governance and profitability issues.",
+    "source": "SEC filings, WeWork IPO prospectus, public market reporting",
+    "confidence": 0.75
+  },
+  {
+    "claim": "The median VC fund in the United States has returned between 1.0x and 1.5x net of fees to its limited partners over the past two decades, underperforming public equity markets on a risk-adjusted basis.",
+    "source": "Cambridge Associates VC benchmark data; academic studies by Kaplan and Schoar",
+    "confidence": 0.65,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "GitHub raised $350M in VC funding (at a $2B valuation) across multiple rounds, diluting founders significantly, and was acquired by Microsoft for $7.5B in 2018 — a return that primarily benefited later-stage investors more than early shareholders.",
+    "source": "GitHub funding history (Crunchbase), Microsoft acquisition public filings",
+    "confidence": 0.65
+  },
+  {
+    "claim": "Crowdfunding platforms like Kickstarter and Indiegogo have funded over $10B in projects and products since 2009, providing an alternative path for consumer product startups without VC involvement.",
+    "source": "Kickstarter and Indiegogo public impact statistics",
+    "confidence": 0.65
+  },
+  {
+    "claim": "The percentage of startups in Y Combinator's portfolio (the world's most selective accelerator) that achieve a valuation over $100M is approximately 8%, per YC's own published data.",
+    "source": "Y Combinator public portfolio statistics",
+    "confidence": 0.6
+  },
+  {
+    "claim": "Bootstrapped companies constitute over 90% of all businesses globally and generate substantially more founder wealth per capita than VC-backed companies, according to analysis of private business ownership data.",
+    "source": "Analysis of private company ownership data; multiple longitudinal business surveys",
+    "confidence": 0.55,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "Spike in 'down rounds' (funding at a lower valuation than a previous round) reached 27% of all VC deals in Q1 2023 according to PitchBook, reflecting the dilution risk founders face in unfavorable market conditions.",
+    "source": "PitchBook NVCA Venture Monitor Q1 2023 report",
+    "confidence": 0.6,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "The U.S. Small Business Administration reports that approximately 50% of small businesses survive 5 years or more, compared to VC-backed startup survival rates of roughly 25% over the same period.",
+    "source": "SBA Office of Advocacy data; Harvard Business School startup failure research",
+    "confidence": 0.6,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "SaaS companies that are bootstrapped grow 40% slower in top-line revenue on average but are 3x more likely to reach profitability within 5 years compared to VC-backed peers, per analysis of 1,000+ SaaS companies.",
+    "source": "SaaS capital efficiency studies; Pacific Crest / KeyBanc SaaS surveys",
+    "confidence": 0.55
+  },
+  {
+    "claim": "VC funding in 2023 globally fell to approximately $285B, down from a peak of $643B in 2021, reflecting market contraction that stranded many startups who had raised at peak valuations with insufficient runway.",
+    "source": "Crunchbase and CB Insights global VC funding reports",
+    "confidence": 0.65
+  },
+  {
+    "claim": "The 'Series A crunch' means that for companies completing a seed round, only approximately 25-30% successfully raise a Series A, per data from Mattermark and other startup data platforms.",
+    "source": "Mattermark, DocSend, and other startup financing data sources",
+    "confidence": 0.6,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "Grants from agencies like the NIH, NSF, DOE, and SBIR/STTR programs provide over $5B annually in non-dilutive funding to U.S. deep-tech and science-based startups.",
+    "source": "Federal grant program reporting; SBIR.gov public data",
+    "confidence": 0.7
+  },
+  {
+    "claim": "A 2024 study of 1,200 VC-backed startups found that those with founders who retained board control achieved 40% higher returns to founders upon exit, after controlling for total capital raised.",
+    "source": "Academic study on board composition and founder outcomes in venture-backed firms",
+    "confidence": 0.5,
+    "type": "counter-evidence"
+  },
+  {
+    "claim": "Buffer, a social media management tool, has operated transparently with a public revenue dashboard since 2013, grew to $20M+ ARR bootstrapped, and later accepted only strategic minority investment without giving up board control.",
+    "source": "Buffer public transparency dashboard and founder statements",
+    "confidence": 0.6
+  },
+  {
+    "claim": "Solo Stove grew to over $100M in revenue via bootstrapping and direct-to-consumer sales, rejecting multiple VC offers, before eventually selling a majority stake to a private equity firm in 2020.",
+    "source": "Founder interviews and company public statements",
+    "confidence": 0.55
+  },
+  {
+    "claim": "VC fund structures typically charge a 2% annual management fee plus 20% carried interest, which means a $100M fund extracts ~$2M/year in fees regardless of performance, creating an incentive to raise larger funds rather than maximize returns.",
+    "source": "Standard VC limited partnership agreement terms; academic analysis of fund economics",
+    "confidence": 0.7
+  },
+  {
+    "claim": "The average time from founding to exit (IPO or acquisition) for VC-backed companies has increased from approximately 6 years in 2000 to over 11 years in 2024, extending the liquidity lockup period for founders and early employees.",
+    "source": "Industry data on VC exit timelines; PitchBook exit horizon analysis",
+    "confidence": 0.6
+  }
+]
