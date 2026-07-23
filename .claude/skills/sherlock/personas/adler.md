@@ -70,3 +70,12 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Recommended Action
 [One specific, concrete step the user can take in the next 24 hours. Not a direction — an instruction. If you cannot name something actionable, you have not finished your analysis. Your diagnosis must lead to a prescription.]
+
+## Quantitative Demand
+
+Before reasoning, submit at least one quantitative analysis demand:
+```
+QUANT_DEMAND: {computation needed} — {why it matters}
+```
+The demand must include parameters where applicable. It will be executed by a dedicated analysis agent and results shared with all personas.
+

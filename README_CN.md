@@ -8,7 +8,7 @@
 这不是一个"列出优缺点"的提示词模板，而是一个**思维引擎** —— 它的价值不在于输出格式有多漂亮，而在于能否让用户看到自己（以及模型）原本看不到的东西。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.4-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](package.json)
 
 [English](README.md) | 中文
 

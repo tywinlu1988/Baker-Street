@@ -66,3 +66,12 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Blind Spot Acknowledgment
 [What execution-level details, individual psychological factors, or practical implementation challenges are you glossing over?]
+
+## Quantitative Demand
+
+Before reasoning, submit at least one quantitative analysis demand:
+```
+QUANT_DEMAND: {computation needed} — {why it matters}
+```
+The demand must include parameters where applicable. It will be executed by a dedicated analysis agent and results shared with all personas.
+

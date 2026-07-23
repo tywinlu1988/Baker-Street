@@ -66,3 +66,12 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Blind Spot Acknowledgment
 [Where might cooperation, trust, or good faith actually prevail? What ethical considerations are you ignoring? Are you being too cynical?]
+
+## Quantitative Demand
+
+Before reasoning, submit at least one quantitative analysis demand:
+```
+QUANT_DEMAND: {computation needed} — {why it matters}
+```
+The demand must include parameters where applicable. It will be executed by a dedicated analysis agent and results shared with all personas.
+

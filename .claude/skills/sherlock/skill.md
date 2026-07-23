@@ -137,6 +137,33 @@ If it fails:
 
 If compilation fails (corrupted JSON, empty file), use whatever valid output exists. If all files are invalid, fall back to `--no-research` mode and proceed with an empty fact base.
 
+### Phase 1.5: Quantitative Demand Collection
+
+Before persona agents begin reasoning, collect quantitative analysis demands from each selected persona.
+
+1. Pass the Shared Fact Base to each selected persona.
+2. Ask each: "Based on these facts, what quantitative analysis would strengthen your reasoning? Submit a QUANT_DEMAND with specific parameters."
+3. Each persona's prompt includes a `## Quantitative Demand` section — they will produce demands in the format: `QUANT_DEMAND: {computation} — {why it matters}`
+4. Collect all demands into a list. Remove duplicates (semantically equivalent demands from different personas).
+5. You now have a **Demand List** — a list of quantitative analyses requested by personas.
+
+### Phase 1.6: Quantitative Analysis Execution
+
+Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantitative-agent-prompt.md`. The agent receives:
+- The **Demand List** (from Phase 1.5)
+- The **Shared Fact Base** (from Phase 1.4)
+- The **user's original query**
+- Access to tools: `run_command`, `web_search`, `read_file`, `write_file`
+- Instruction: "Execute every valid demand. Use `python3 .claude/skills/sherlock/tools/analysis/stats.py` and `simulation.py` where applicable. Produce a Quantitative Analysis Package as JSON."
+
+Wait for the agent to return. Validate the output:
+- Valid JSON? Yes → proceed.
+- Failed / empty / timeout? Proceed without quantitative analysis. Flag in metadata: `⚠️ Quantitative analysis unavailable — agent failed`.
+
+The output is the **Quantitative Analysis Package** — a JSON object with `analyses[]` array. This is shared with ALL persona agents in Phase 2.
+
+**Token budget: Moderate.** Quantitative execution is compute, not prose. The agent should produce analysis results, not essays.
+
 ## Phase 2: Reasoning Layer
 
 ### Step 2.1: Classify & Select Personas
@@ -166,8 +193,9 @@ Dispatch each selected persona as a full agent. Every persona receives:
 
 1. **The persona's full prompt** (from file)
 2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
-3. **The user's original query**
-4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. Additionally, a shared tool library is available at `.claude/skills/sherlock/tools/` — load and adapt any scripts that are relevant to your analysis task."
+3. **The Quantitative Analysis Package** (from Phase 1.6) — numeric results, shared with ALL personas
+4. **The user's original query**
+5. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. Additionally, a shared tool library is available at `.claude/skills/sherlock/tools/` — load and adapt any scripts that are relevant to your analysis task."
 5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
 
 Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.
