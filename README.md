@@ -66,7 +66,7 @@ We quantify this with **Framework Gain**:
 Framework Gain = mean novelty of framework output / novelty of raw model output
 ```
 
-The v0.1 target is ≥ 1.5 — the framework should produce at least 50% more novel insights than asking the model directly. This is validated through 5 standardized test cases with LLM-as-Judge scoring.
+The baseline target is ≥ 1.5 — the framework should produce at least 50% more novel insights than asking the model directly. This is validated through 5 standardized test cases with LLM-as-Judge scoring.
 
 ---
 
@@ -98,7 +98,7 @@ Every persona has a **Blind Spot Declaration** — what it knows it overlooks. N
 
 ### Cost Consciousness
 
-The framework doesn't deploy all 7 personas by default. v0.1 cost controls:
+The framework doesn't deploy all 7 personas by default. Cost controls:
 - **Needs-based selection**: 2-4 most relevant personas matched to problem type
 - **Depth tiers**: `--depth quick` (2), `standard` (3), `deep` (7)
 - **Rebuttal cap**: At most 2 conflict pairs get the back-and-forth treatment
@@ -250,7 +250,7 @@ User query
 └──────────────────────────────────────────┘
 ```
 
-### Persona Capabilities (v0.2.x)
+### Persona Capabilities (v0.3.x)
 
 Each persona is a **full agent** — not just a text generator. They have access to:
 
@@ -311,11 +311,11 @@ The framework isn't just asserted to work — it's tested.
 
 ### Aggregate Metrics
 
-| Metric | Formula | v0.1 Threshold |
+| Metric | Formula | Threshold |
 |--------|---------|:-------------:|
 | **Framework Gain** | mean(Framework Novelty) / Baseline Novelty | ≥ 1.5 |
 | **Perspective Dispersion** | Qualitative divergence assessment | ≥ 0.3 |
-| **Claim Uniqueness Ratio (CUR)** | Unique claims / total claims (v0.1.2) | ≥ 0.7 |
+| **Claim Uniqueness Ratio (CUR)** | Unique claims / total claims (v0.1.2+) | ≥ 0.7 |
 | **Blind Spot Coverage** | New dimensions surfaced / persona count | ≥ 0.5 |
 
 ### Baseline Methodology
@@ -330,7 +330,7 @@ Each test case runs three groups: **A** (raw model, no framework), **B** (framew
 4. **Ethical Dilemma**: Co-founder concealed legal risk during fundraising
 5. **Meta-Analysis**: Framework critiques its own design
 
-**v0.1 gate**: ≥ 4/5 cases must pass all metrics.
+The framework is validated against 5 standardized test cases. Release gate: ≥ 4/5 cases must pass all metrics.
 
 ---
 
@@ -371,7 +371,7 @@ cp -r Baker-Street/.claude/skills/sherlock ~/.claude/skills/
 
 ### Cost
 
-Each persona is an independent agent. Standard depth uses 3-4 agents; deep uses all 7. Use `--depth quick` (2 agents) for cost-sensitive scenarios. v0.1 uses the session's default model for all personas.
+Each persona is an independent agent. Standard depth uses 3-4 personas; deep uses all 7. Research depth is independently configurable via `--research-depth`. Use `--depth quick` for cost-sensitive scenarios.
 
 ---
 
@@ -407,14 +407,9 @@ baker-street/
 |---------|-------|:------:|
 | **v0.1.x** | 7 personas, 3-layer synthesis, LLM-as-Judge validation, npx install, CUR metric, intake phase | ✅ Released |
 | **v0.2.x** | Research layer + fact base architecture, full agent tool access, per-persona tool directives, dual-track intake | ✅ Released |
-| **v0.3.x** | Deep tool integration — personas create reusable scripts, data pipelines, and verification suites. Cross-platform adaptation for Codex, Antigravity, and other agent frameworks. Tool discovery and self-provisioning. | 🚧 Current |
-| **v0.4.x** | Agent swarm orchestration — multi-step collaborative workflows, shared memory across sessions, persona specialization by domain | 📅 Planned |
+| **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
+| **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, agent swarm orchestration, persistent persona memory | 🚧 Current |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
-
-### v0.3 Focus Areas
-- **Tool creation**: Personas can write and execute custom analysis scripts, not just consume existing tools
-- **Cross-platform**: Adapt persona prompts and orchestration for Codex, Antigravity, Cursor, and other agent frameworks
-- **Platform-specific optimizations**: Leverage unique capabilities of each agent runtime (sandboxing, long-running tasks, multi-agent coordination)
 
 ---
 
