@@ -1,7 +1,7 @@
 {
   "name": "sherlock",
   "description": "Sherlock Holmes Analytical Framework — multi-perspective analysis with 7 character-inspired cognitive lenses. Mines conflicts and blind spots across independent viewpoints.",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": {
     "name": "Tywin Lu",
     "email": "tywinlu1988@gmail.com"
