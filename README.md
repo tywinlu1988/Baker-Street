@@ -50,6 +50,14 @@ The key word is **independent**. Each persona agent analyzes without knowing wha
 - These contradictions are not noise — they are the framework's primary value source, exposing the complexity masked by any single perspective
 - The synthesis layer doesn't average or harmonize — it **amplifies conflict** so the user can see the full picture
 
+### Three Structural Advantages (v0.3.x)
+
+A/B testing proved that multi-agent pipeline analysis does not outperform monolithic prompts on raw reasoning quality. But it uniquely solves three problems inherent to single-prompt analysis:
+
+1. **Anti-Sycophancy** — LLMs are trained to agree with users. Research agents **must** find counter-evidence: at least 2 facts that contradict the user's implicit assumptions. A typical fact base contains 20-35% counter-facts. Reported as Anti-Sycophancy Score.
+2. **Context Expansion** — A single prompt is limited to one context window. Multi-agent research scales beyond: 2-3 research agents each produce 15-30 facts → merged fact base of 30-60+ verifiable claims. `--research-depth` controls breadth.
+3. **Perspective Divergence** — Monolithic prompts simulate 7 perspectives in one context — cognitive smoothing occurs. Independent agents produce genuinely divergent outputs, measurable via Claim Uniqueness Ratio (CUR).
+
 ### Measuring It
 
 We quantify this with **Framework Gain**:
@@ -357,6 +365,8 @@ cp -r Baker-Street/.claude/skills/sherlock ~/.claude/skills/
 /sherlock --tldr "Your question"                       # Core findings + actions
 /sherlock --auto "Your question"                       # Skip intake, use defaults
 /sherlock --personas holmes,moriarty "Your question"   # Choose personas
+/sherlock --research-depth deep "Your question"        # 3 research agents (max fact breadth)
+/sherlock --no-research "Your question"                # Legacy mode, model knowledge only
 ```
 
 ### Cost
