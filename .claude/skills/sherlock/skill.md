@@ -76,6 +76,8 @@ Based on the scout's problem map and any user clarification, identify the factua
 2. **Specific questions** — concrete factual questions each research agent should answer
 3. **Expected coverage** — guidance on breadth (how many angles) vs depth (how much detail per angle)
 
+**Coverage check:** Before dispatching research agents, verify the brief explicitly addresses ALL of the scout's sub-questions. If a sub-question is not covered, either add it to the brief or note it as `⚠️ Not researched: {sub-question}` in the report metadata. An incomplete brief produces an incomplete fact base.
+
 Do NOT pass the scout's raw output to research agents — synthesize it into a focused brief. The scout produces a map; the research brief is the mission order.
 
 ### Step 1.2: Dispatch Research Agents
@@ -126,7 +128,10 @@ If it fails:
 2. Merge into a single JSON array — concatenate all arrays.
 3. Deduplicate claims using the same semantic equivalence check as CUR (if two claims say substantively the same thing, keep the one with higher confidence).
 4. Sort by confidence (highest first).
-5. Count counter-evidence facts (those with `"type": "counter-evidence"`). Compute: `anti_sycophancy_ratio = counter_evidence_count / total_facts`. If ratio < 0.08 (fewer than 8% counter-facts), flag: `⚠️ Low counter-evidence — fact base may be biased toward user's assumptions.`
+5. Count counter-evidence facts (those with `"type": "counter-evidence"`). Compute: `anti_sycophancy_ratio = counter_evidence_count / total_facts`.
+   - If ratio ≥ 0.08: Proceed normally.
+   - If ratio < 0.08: **Dispatch ONE additional research agent** with an explicit instruction: "Your sole task is to find counter-evidence. Produce 5-10 facts that challenge or contradict the assumptions in: {user query}. Label ALL facts with \"type\": \"counter-evidence\"." This is a single agent dispatch — do NOT re-run the entire research phase. Merge the new facts into the fact base before proceeding.
+   - If after the additional agent the ratio is STILL < 0.08: Proceed anyway and flag in metadata: `⚠️ Low counter-evidence even after dedicated agent — this topic may genuinely lack contrary evidence.`
 6. This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
 7. Pass the COMPLETE fact base (all claims) to every persona agent. Do not truncate.
 
