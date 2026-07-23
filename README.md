@@ -6,7 +6,7 @@
 **Baker Street** is a Claude Code skill that applies **7 distinct cognitive archetypes** — each inspired by a character from the Sherlock Holmes canon — to analyze any problem, decision, or topic. It works as a **thinking engine**, not a templated answer generator: independent persona agents analyze in parallel, then a synthesis layer mines their conflicts and blind spots to produce insights no single model response can achieve.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.3-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](package.json)
 
 English | [中文](README_CN.md)
 
@@ -408,7 +408,8 @@ baker-street/
 | **v0.1.x** | 7 personas, 3-layer synthesis, LLM-as-Judge validation, npx install, CUR metric, intake phase | ✅ Released |
 | **v0.2.x** | Research layer + fact base architecture, full agent tool access, per-persona tool directives, dual-track intake | ✅ Released |
 | **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
-| **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, agent swarm orchestration, persistent persona memory | 🚧 Current |
+| **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, platform-agnostic tool names, cross-platform installer | ✅ Released |
+| **v0.5.x** | Agent swarm orchestration, persistent persona memory, persona specialization by domain | 🚧 Current |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
 
 ---

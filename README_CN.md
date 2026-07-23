@@ -8,7 +8,7 @@
 这不是一个"列出优缺点"的提示词模板，而是一个**思维引擎** —— 它的价值不在于输出格式有多漂亮，而在于能否让用户看到自己（以及模型）原本看不到的东西。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.3-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.5.0-blue.svg)](package.json)
 
 [English](README.md) | 中文
 
@@ -546,7 +546,8 @@ baker-street/
 | **v0.1.x** | 7 角色、三层合成、LLM-as-Judge 验证、npx 安装、CUR 指标、摄入对话 | ✅ 已发布 |
 | **v0.2.x** | 调研层 + 事实库架构、完整 agent 工具权限、按角色工具指令、双轨摄入、E2E 管道验证 | ✅ 已发布 |
 | **v0.3.x** | 反迎合引擎、可配置研究深度、自动反证 agent、Bash 工具指引、Scout 覆盖率验证、Agent 超时处理 | ✅ 已发布 |
-| **v0.4.x** | 跨平台适配（Codex、Antigravity、Cursor）、共享工具库、Agent 集群编排、持久化角色记忆 | 🚧 当前 |
+| **v0.4.x** | 跨平台适配（Codex、Antigravity、Cursor）、共享工具库、平台无关工具名、跨平台安装器 | ✅ 已发布 |
+| **v0.5.x** | Agent 集群编排、持久化角色记忆、领域角色专业化 | 🚧 当前 |
 | **v1.0** | 生产级可靠性——SLA 保障分析、流式输出、企业集成模式 | 📅 计划 |
 
 ---
