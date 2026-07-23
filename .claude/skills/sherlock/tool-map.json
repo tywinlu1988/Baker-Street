@@ -1,0 +1,35 @@
+{
+  "_description": "Platform-agnostic tool name mappings. Generic names are used in all persona/research/scout files. The platform runtime resolves generic → platform-specific at dispatch time.",
+  "generic": {
+    "web_search": "Search the web for information",
+    "run_command": "Execute shell commands and scripts",
+    "read_file": "Read files from the filesystem",
+    "write_file": "Write files to the filesystem"
+  },
+  "platforms": {
+    "claude": {
+      "web_search": "WebFetch",
+      "run_command": "Bash",
+      "read_file": "Read",
+      "write_file": "Write"
+    },
+    "codex": {
+      "web_search": "web_search",
+      "run_command": "run_command",
+      "read_file": "read_file",
+      "write_file": "write_file"
+    },
+    "antigravity": {
+      "web_search": "fetch",
+      "run_command": "exec",
+      "read_file": "read",
+      "write_file": "write"
+    },
+    "cursor": {
+      "web_search": "web_search",
+      "run_command": "terminal",
+      "read_file": "read_file",
+      "write_file": "save_file"
+    }
+  }
+}

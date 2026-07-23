@@ -95,7 +95,7 @@ Use `.claude/skills/sherlock/research-prompt.md`. Each agent receives:
 
 Do NOT pass the scout's raw output. Pass only the synthesized brief.
 
-Research agents have access to: WebFetch, Bash, Read.
+Research agents have access to: web_search, run_command, read_file.
 
 **Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target.
 
@@ -167,7 +167,7 @@ Dispatch each selected persona as a full agent. Every persona receives:
 1. **The persona's full prompt** (from file)
 2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
 3. **The user's original query**
-4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (WebFetch, Bash, Read, Write) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis."
+4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, Write) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis."
 5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
 
 Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.

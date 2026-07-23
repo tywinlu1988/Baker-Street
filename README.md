@@ -6,7 +6,7 @@
 **Baker Street** is a Claude Code skill that applies **7 distinct cognitive archetypes** — each inspired by a character from the Sherlock Holmes canon — to analyze any problem, decision, or topic. It works as a **thinking engine**, not a templated answer generator: independent persona agents analyze in parallel, then a synthesis layer mines their conflicts and blind spots to produce insights no single model response can achieve.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.4.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.4.1-blue.svg)](package.json)
 
 English | [中文](README_CN.md)
 
