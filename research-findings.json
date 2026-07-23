@@ -1,0 +1,142 @@
+[
+  {
+    "claim": "TSMC held 69.9% of the global semiconductor foundry market in full-year 2025, with Samsung trailing at 7.2% (TrendForce data).",
+    "source": "https://www.eetasia.com/rethinking-foundry-dominance-three-critical-misconceptions-in-the-402b-semiconductor-manufacturing-landscape/",
+    "confidence": 0.85
+  },
+  {
+    "claim": "TSMC controls approximately 95% of the leading-edge (3nm-class) semiconductor market as of 2025-2026, with Samsung unable to match yields at that node (Yole Group).",
+    "source": "https://counterpointresearch.com/en/insights/advanced-nodes-shipment-to-capture-60-percent-in-2026",
+    "confidence": 0.8
+  },
+  {
+    "claim": "US Treasury Secretary Scott Bessent stated in January 2026 that 97% of the world's most advanced chips are manufactured in Taiwan, calling it 'the single biggest point of single failure in the global economy.'",
+    "source": "https://readers.ctee.com.tw/CM/20260122/a01aa1/1382231/share",
+    "confidence": 0.9
+  },
+  {
+    "claim": "The US Intelligence Community's 2026 Annual Threat Assessment stated China 'does not currently plan to invade Taiwan in 2027, nor do they have a fixed timeline for achieving reunification.'",
+    "source": "https://www.fakti.bg/en/world/1042628-us-intelligence-china-will-not-attack-taiwan-in-2027",
+    "confidence": 0.85
+  },
+  {
+    "claim": "In February 2026, reports confirmed that CIA Director William Burns and DNI Avril Haines held a classified 2023 briefing with Apple, Nvidia, AMD, and Qualcomm CEOs warning of potential Chinese action on Taiwan as early as 2027.",
+    "source": "https://www.benzinga.com/markets/prediction-markets/26/02/50837217/tim-cook-sleeps-with-one-eye-open-after-cia-taiwan-warning-but-do-prediction-markets-a",
+    "confidence": 0.85
+  },
+  {
+    "claim": "Bloomberg Economics estimated in February 2026 that a full-scale Taiwan conflict could cost the global economy $10.6 trillion in the first year, approximately 9.6% of global GDP.",
+    "source": "https://hk.crntt.com/doc/1602/0/5/7/160205728.html?coluid=7&kindid=0&docid=160205728&mdate=0212162310",
+    "confidence": 0.8
+  },
+  {
+    "claim": "A 2022 Semiconductor Industry Association report warned that cutting off Taiwan's chip supply would trigger 'the worst economic crisis since the Great Depression,' with US GDP falling 11% and China's economy contracting 16%.",
+    "source": "https://www.stonex.com/en/insights/semiconductor-supply-risks-rise-as-u-s-china-tensions-build/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Former Intel CEO Pat Gelsinger warned that Taiwan has less than three weeks of energy reserves, and that a prolonged blockade could halt chip production without military action; Taiwan imports 95.4% of its energy.",
+    "source": "https://it.benzinga.com/news/usa/stocks/intel-tsmc-taiwan-crisi-energetica-semiconduttori-chips-act-pat-gelsinger/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "The US and Taiwan signed a 'Silicon Pact' trade agreement in January 2026, under which Taiwan committed to at least $250 billion in direct TSMC US investments plus $250 billion in credit guarantees, totaling $500 billion, with a goal to relocate 40% of Taiwan's semiconductor supply chain to US soil.",
+    "source": "https://digitalcommons.dartmouth.edu/masters_theses/286/",
+    "confidence": 0.85
+  },
+  {
+    "claim": "A 2026 Dartmouth College master's thesis identified 2027-2030 as a 'vulnerability window' for Taiwan, finding that the 'Silicon Shield' (semiconductor monopoly as deterrence) is eroding due to US security commitments shifting from unconditional to conditional.",
+    "source": "https://digitalcommons.dartmouth.edu/masters_theses/286/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "TSMC's Arizona fab 1 (4nm) entered volume production in Q4 2024 with yields comparable to Taiwan; fab 2 (3nm) targets production in 2H 2027; up to 12 fabs planned on the campus with total investment increased to $165 billion.",
+    "source": "https://www.techpowerup.com/345226/tsmc-expecting-to-start-3-nm-production-in-arizona-in-2h-2027",
+    "confidence": 0.85
+  },
+  {
+    "claim": "TSMC's Arizona fab posted NT$188.07 billion profit in Q1 2026, surpassing its full-year 2025 profit, indicating rapid operational improvement.",
+    "source": "http://cdn-i.businessweekly.com.tw/Industnews/article/1489658550.html",
+    "confidence": 0.8
+  },
+  {
+    "claim": "TSMC Japan Kumamoto Fab 1 (22nm/28nm) has been in volume production since late 2024 and turned profitable in Q1 2026 (NT$9.51 billion profit); Fab 2 has been upgraded to 3nm with operations expected by end of 2027.",
+    "source": "http://cdn-i.businessweekly.com.tw/Industnews/article/1489658550.html",
+    "confidence": 0.8
+  },
+  {
+    "claim": "TSMC Dresden, Germany (ESMC joint venture with Bosch, Infineon, NXP) is still in construction phase for 28nm/22nm and reported a NT$278 million loss in Q1 2026; full output expected by 2029.",
+    "source": "http://cdn-i.businessweekly.com.tw/Industnews/article/1489658550.html",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Samsung's second-generation 3nm GAA process yields were approximately 20% as of early 2025, far below commercially viable thresholds; its 2nm GAA yields reached approximately 50% by January 2026, still below TSMC's typical 60%+ standard.",
+    "source": "https://www.techpowerup.com/328680/samsungs-second-gen-3-nm-gaa-process-shows-20-yields-missing-production-goals",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Samsung Foundry's market share dropped from 16% in 2019 to approximately 10-13% by 2024, and its foundry division operated at a loss narrowed to approximately $680 million by late 2025.",
+    "source": "https://wccftech.com/samsung-foundry-business-operating-rate-climbs-to-60-percent-deficit-also-reduced-in-q3-and-q4-2025/",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Intel's 18A (1.8nm-class) process reached high-volume manufacturing in the second half of 2025 and yields climbed to 85% by mid-2026; however, Intel Foundry still posted a $2.4 billion operating loss in Q1 2026 with external foundry revenue of only $174 million.",
+    "source": "https://www.tipranks.com/news/intel-foundry-yields-rise-to-85-as-tech-giants-like-nvidia-and-openai-join-client-roster",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Building a semiconductor fab in the US takes approximately 38 months (permitting to production) versus approximately 20 months in Taiwan, and construction costs in the US are approximately double those in Taiwan (Semiconductor Digest).",
+    "source": "https://www.semiconductor-digest.com/building-fabs-in-the-u-s-vs-taiwan-twice-as-long-twice-as-much/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Global spending on 300mm wafer fab equipment was $107 billion in 2025 and is projected at $116 billion in 2026, with a total of $374 billion forecast for 2026-2028 (SEMI).",
+    "source": "https://www.semi.org/en/semi-press-release/semi-reports-global-300mm-fab-equipment-spending-expected-to-total-374-billion-dollars-over-next-three-years",
+    "confidence": 0.85
+  },
+  {
+    "claim": "TSMC's capital expenditure was $40.9 billion in 2025 and is projected at $52-56 billion in 2026 (Electronics Weekly); total semiconductor industry capex was $166 billion in 2025 and projected at $200 billion in 2026.",
+    "source": "https://www.electronicsweekly.com/news/business/semiconductor-capex-2026-04/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "The US produces approximately 10% of global semiconductor output as of 2026, the same share as before the CHIPS Act was passed; analysts project it may still be only 10% by 2030.",
+    "source": "https://investor.wedbush.com/wedbush/article/tokenring-2026-2-5-silicon-sovereignty-us-chips-act-reaches-finality-amidst-2026-administrative-re-audits",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Apple is contracting Intel's 18A-P process for M7-series chips and reportedly moving some lower-end M-series processors to Intel, while testing Samsung Foundry for less critical chips -- its first significant foundry diversification away from sole TSMC dependency.",
+    "source": "https://www.digitimes.com/news/a20260518VL200/digitimes-asia-weekly-news-roundup-apple-intel-samsung-tsmc.html",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Qualcomm confirmed plans to return to a dual-sourcing strategy in 2026, splitting SoC chip production between TSMC and Samsung Electronics, driven by rising TSMC 2nm costs and concentration risk mitigation.",
+    "source": "https://www.digitimes.com.tw/tech/dt/n/shwnws.asp?CnlId=1&id=0000744842_E3I7U7H65HGDUT1SN9TBW&wpidx=5",
+    "confidence": 0.75
+  },
+  {
+    "claim": "AMD has secured foundry contracts with Samsung for future EPYC server CPUs using Samsung's second-generation 2nm node (SF2), driven by TSMC's advanced-node capacity being fully pre-booked by Apple and Nvidia.",
+    "source": "https://wccftech.com/tsmc-supply-constraints-are-now-forcing-fabless-manufacturers-to-look-for-alternatives/",
+    "confidence": 0.75
+  },
+  {
+    "claim": "Nvidia made a $5 billion investment in Intel in 2025 and is evaluating Intel's 18A node and advanced packaging, while also exploring Samsung as a backup foundry supplier for AI chips.",
+    "source": "https://www.tipranks.com/news/intel-foundry-yields-rise-to-85-as-tech-giants-like-nvidia-and-openai-join-client-roster",
+    "confidence": 0.75
+  },
+  {
+    "claim": "The US Department of Commerce awarded up to $30.7 billion in direct CHIPS Act funding plus $5.5 billion in loans to 19 semiconductor companies for 40 projects by January 2025, with 59% allocated to leading-edge logic chips.",
+    "source": "https://www.everycrsreport.com/reports/R49031.html",
+    "confidence": 0.85
+  },
+  {
+    "claim": "Taiwan accounts for over 40% of global automotive semiconductors; UMC is building a 12-inch fab in Singapore expected to enter mass production in 2026 specifically to provide non-China, non-US chip supply for automotive customers.",
+    "source": "https://www.trendforce.com/news/2025/12/30/news-china-diversification-reportedly-lifts-mature-node-foundries-umc-vis-psmc-despite-tariff-delay/",
+    "confidence": 0.8
+  },
+  {
+    "claim": "Advanced nodes (7nm and below) accounted for 74% of TSMC's total wafer revenue in 2025, up from 69% in 2024; within that, 5nm contributed 36% and 3nm contributed 24% of wafer revenue.",
+    "source": "https://www.quantumrun.com/consulting/tsmc-statistics/",
+    "confidence": 0.8
+  }
+]
