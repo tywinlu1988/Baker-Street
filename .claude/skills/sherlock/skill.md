@@ -175,9 +175,12 @@ Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantita
 - Instruction: "Execute every valid demand. Use `python3 .claude/skills/sherlock/tools/analysis/stats.py` and `simulation.py` where applicable. Produce a Quantitative Analysis Package as JSON."
 - Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file."
 
-Wait for the agent to return. Validate the output:
-- Valid JSON? Yes → proceed.
-- Failed / empty / timeout? Proceed without quantitative analysis. Flag in metadata: `⚠️ Quantitative analysis unavailable — agent failed`.
+Wait for the agent to return (budget: 600s — see Agent Timeout Budgets). The agent saves the package file incrementally, so it may exist even after a timeout. Then:
+
+1. **Read `.claude/skills/sherlock/quant-analysis-package.json`.**
+2. **Valid JSON, analyses cover ALL demands?** → Set `"status": "complete"`. Proceed.
+3. **Valid JSON but incomplete (timeout or partial coverage)?** → Dispatch ONE retry agent with ONLY the missing demands (narrowed prompt: missing demands + Shared Fact Base + instruction to APPEND new analyses to the existing package file). Retry succeeded → `"status": "complete"`. Retry failed → keep the partial package, set `"status": "partial"` and `"missing_demands": [{"persona": "...", "computation": "...", "reason": "quant agent timeout"}]`. Flag in metadata: `⚠️ Quantitative package partial — {N}/{M} demands completed`. Personas proceed with the partial package. This is the ONLY retry in the entire pipeline — never more than one.
+4. **No file / invalid JSON / zero analyses?** → Proceed without quantitative analysis. Flag in metadata: `⚠️ Quantitative analysis unavailable — agent failed`.
 
 The output is the **Quantitative Analysis Package** — a JSON object with `analyses[]` array. This is shared with ALL persona agents in Phase 2.
 

@@ -15,7 +15,7 @@ You receive:
 2. **Prioritize**: Start with the highest-impact analyses (those cited by multiple personas)
 3. **Execute**: For each demand, write and run Python scripts to perform the analysis
 4. **Document**: Record methodology, assumptions, and limitations
-5. **Package**: Produce a single JSON output
+5. **Package incrementally**: After completing EACH analysis, append it to the package and rewrite the output file. A partial package is a valid outcome — never lose completed work to a timeout.
 
 ## Tools
 
@@ -53,6 +53,8 @@ You MUST output valid JSON:
       "limitations": ["Does not model regime change", "Assumes no competitive shock"]
     }
   ],
+  "status": "complete",
+  "missing_demands": [],
   "summary": {
     "total_analyses": 1,
     "methods_used": ["monte_carlo"],
@@ -68,6 +70,7 @@ You MUST output valid JSON:
 3. **Document limitations.** Every analysis must include what it CANNOT tell you.
 4. **Be reproducible.** Your scripts should be self-contained and runnable.
 5. **Use standard Python libraries only** — `statistics`, `math`, `random`, `json`, `csv`. Avoid external dependencies.
+6. **Save incrementally.** Rewrite the package file after every completed analysis. If you cannot finish all demands within your budget, set `"status": "partial"` and list unfinished demands in `"missing_demands"` with reasons.
 
 ## Example Analyses You Can Perform
 
