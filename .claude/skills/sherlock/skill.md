@@ -146,6 +146,10 @@ Before persona agents begin reasoning, collect quantitative analysis demands fro
 3. Each persona's prompt includes a `## Quantitative Demand` section — they will produce demands in the format: `QUANT_DEMAND: {computation} — {why it matters}`
 4. Collect all demands into a list. Remove duplicates (semantically equivalent demands from different personas).
 5. You now have a **Demand List** — a list of quantitative analyses requested by personas.
+6. Save the Demand List to `.claude/skills/sherlock/quant-demands.json` in this exact format:
+   ```json
+   {"demands": [{"persona": "{name}", "computation": "{what to compute}", "rationale": "{why it matters}", "raw": "{the original QUANT_DEMAND line}"}]}
+   ```
 
 ### Phase 1.6: Quantitative Analysis Execution
 
@@ -155,6 +159,7 @@ Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantita
 - The **user's original query**
 - Access to tools: `run_command`, `web_search`, `read_file`, `write_file`
 - Instruction: "Execute every valid demand. Use `python3 .claude/skills/sherlock/tools/analysis/stats.py` and `simulation.py` where applicable. Produce a Quantitative Analysis Package as JSON."
+- Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file."
 
 Wait for the agent to return. Validate the output:
 - Valid JSON? Yes → proceed.
@@ -197,10 +202,19 @@ Dispatch each selected persona as a full agent. Every persona receives:
 4. **The user's original query**
 5. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. Additionally, a shared tool library is available at `.claude/skills/sherlock/tools/` — load and adapt any scripts that are relevant to your analysis task."
 5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
+6. **Output persistence:** Each persona MUST save its complete output to `.claude/skills/sherlock/persona-output-{name}.md` using write_file (e.g., `persona-output-moriarty.md`).
 
 Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.
 
 Run ALL agents in a single parallel batch. Each persona is a full agent — it may choose to use tools or not. Tool usage is observed and recorded (which persona used which tools) for post-hoc behavior analysis.
+
+**Run logging:** After ALL agents (research, quantitative, persona, baseline) have returned or timed out, write `.claude/skills/sherlock/run-log.json` recording EVERY agent dispatched this run:
+
+```json
+{"test_case": "{short slug of the query}", "date": "YYYY-MM-DD", "agents": [{"name": "{agent name}", "role": "persona|quantitative|research|baseline", "outcome": "success|timeout|empty|error", "duration_s": 0}]}
+```
+
+`outcome`: `success` = returned usable output; `timeout` = unresponsive >120s; `empty` = returned zero output; `error` = explicit error. Record failures honestly — this log is the reliability baseline data source.
 
 **Token budget: Lean.** Persona agents already have a comprehensive fact base — their job is reasoning, not research. Output should be concise: each section should be 1-3 paragraphs max. Avoid verbose exposition. The value is in the quality of the reasoning, not the quantity of words. If a persona produces more than ~1500 words, it is probably being wasteful.
 
