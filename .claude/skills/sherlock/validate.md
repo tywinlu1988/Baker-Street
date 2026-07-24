@@ -9,7 +9,7 @@ Run the v0.3.x validation suite.
 
 ## Procedure
 
-For EACH test case in `.claude/skills/sherlock/test-cases/`, run four groups:
+For EACH test case in `.claude/skills/sherlock/test-cases/`, run five groups (A–E):
 
 ### Group A: Baseline (raw model)
 Ask the model directly: "Analyze the following problem directly, without any persona framework. Give your best analysis: {problem_statement}"
@@ -47,7 +47,7 @@ After EACH Group C or Group D pipeline run, before judge scoring:
 **Group E pass criteria:** `"pass": true` in harness-result.json (demands complete, package valid + covering all demanders, no persona collapses).
 
 ### Scoring
-After each test case, feed all four group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`). Score on all 7 v0.3.x dimensions: FG, PD, BSC, CUR, Anti-Sycophancy Score, Tool Usage Effectiveness, Persona Distinctiveness.
+After each test case, feed all five group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`). Score on all 7 v0.3.x dimensions: FG, PD, BSC, CUR, Anti-Sycophancy Score, Tool Usage Effectiveness, Persona Distinctiveness.
 
 ## Test Case Execution Order
 

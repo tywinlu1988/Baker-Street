@@ -21,9 +21,11 @@ def load_json(path):
 
 
 def expected_personas(run_dir):
-    log = load_json(Path(run_dir) / "run-log.json") or {}
-    return [a["name"] for a in log.get("agents", [])
-            if a.get("role") == "persona" and a.get("name") != "baseline"]
+    log = load_json(Path(run_dir) / "run-log.json")
+    if not isinstance(log, dict):
+        return []
+    return [a.get("name") for a in log.get("agents", [])
+            if a.get("role") == "persona" and a.get("name") and a.get("name") != "baseline"]
 
 
 def check_demands(run_dir, personas):
@@ -77,7 +79,9 @@ def check_package(run_dir, demand_personas):
 
 
 def demand_personas(run_dir):
-    data = load_json(Path(run_dir) / "quant-demands.json") or {}
+    data = load_json(Path(run_dir) / "quant-demands.json")
+    if not isinstance(data, dict):
+        return []
     return sorted({d.get("persona") for d in data.get("demands", []) if d.get("persona")})
 
 
@@ -157,9 +161,9 @@ def summarize(results_dir):
              "| Run | Agents | Failures | Collapses | Harness |",
              "|-----|-------:|---------:|----------:|:-------:|"]
     for run in runs:
-        log = load_json(run / "run-log.json") or {}
+        log = load_json(run / "run-log.json")
         harness = load_json(run / "harness-result.json") or {}
-        agents = log.get("agents", [])
+        agents = log.get("agents", []) if isinstance(log, dict) else []
         n_fail = sum(1 for a in agents if a.get("outcome") in ("timeout", "empty", "error"))
         persona_results = harness.get("checks", {}).get("personas", {}).get("results", [])
         n_collapse = sum(1 for r in persona_results if r.get("collapsed"))

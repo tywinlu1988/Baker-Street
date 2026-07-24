@@ -36,6 +36,10 @@ class DemandsCheckTest(unittest.TestCase):
     def test_expected_personas_excludes_baseline(self):
         self.assertEqual(ph.expected_personas(self.run), ["holmes", "moriarty"])
 
+    def test_expected_personas_wrong_shape_json_returns_empty(self):
+        write(self.run / "run-log.json", json.dumps([1, 2, 3]))
+        self.assertEqual(ph.expected_personas(self.run), [])
+
     def test_missing_demands_file_fails(self):
         r = ph.check_demands(self.run, ["holmes", "moriarty"])
         self.assertFalse(r["pass"])
@@ -167,6 +171,10 @@ class PersonaCheckTest(unittest.TestCase):
         self.assertIn("1.5", nums)
         self.assertIn("0.042", nums)
 
+    def test_demand_personas_wrong_shape_json_returns_empty(self):
+        write(self.run / "quant-demands.json", json.dumps([1, 2, 3]))
+        self.assertEqual(ph.demand_personas(self.run), [])
+
 
 class SummarizeTest(unittest.TestCase):
     def setUp(self):
@@ -193,6 +201,14 @@ class SummarizeTest(unittest.TestCase):
         self.assertIn("**Harness pass rate:** 1/2", md)
         self.assertIn("| run-1 |", md)
         self.assertIn("| run-2 |", md)
+
+    def test_summarize_wrong_shape_run_log_treated_as_zero_agents(self):
+        run = self.root / "run-3"
+        run.mkdir(parents=True)
+        write(run / "run-log.json", json.dumps([1, 2, 3]))
+        md = ph.summarize(self.root)
+        self.assertIn("| run-3 | 0 | 0 | 0 | FAIL |", md)
+        self.assertIn("25.0% (2/8)", md)
 
 
 if __name__ == "__main__":
