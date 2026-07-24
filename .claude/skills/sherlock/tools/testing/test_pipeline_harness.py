@@ -211,5 +211,56 @@ class SummarizeTest(unittest.TestCase):
         self.assertIn("25.0% (2/8)", md)
 
 
+class PartialPackageTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def test_partial_package_with_uncovered_passes(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({
+            "analyses": [
+                {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}},
+            ],
+            "status": "partial",
+            "missing_demands": [{"persona": "moriarty", "computation": "monte carlo", "reason": "quant agent timeout"}],
+        }))
+        r = ph.check_package(self.run, ["holmes", "moriarty"])
+        self.assertTrue(r["pass"])
+        self.assertTrue(r["partial"])
+        self.assertEqual(r["status"], "partial")
+
+    def test_complete_package_with_uncovered_still_fails(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({
+            "analyses": [
+                {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}},
+            ],
+            "status": "complete",
+        }))
+        r = ph.check_package(self.run, ["holmes", "moriarty"])
+        self.assertFalse(r["pass"])
+        self.assertFalse(r["partial"])
+
+    def test_package_without_status_defaults_to_complete(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}},
+        ]}))
+        r = ph.check_package(self.run, ["holmes"])
+        self.assertTrue(r["pass"])
+        self.assertEqual(r["status"], "complete")
+        self.assertFalse(r["partial"])
+
+    def test_summarize_counts_partial_packages(self):
+        root = self.run.parent
+        write(self.run / "run-log.json", json.dumps({"agents": [
+            {"name": "a0", "role": "persona", "outcome": "success", "duration_s": 60}]}))
+        write(self.run / "harness-result.json", json.dumps({
+            "pass": True,
+            "checks": {"package": {"partial": True}, "personas": {"results": []}}}))
+        md = ph.summarize(root)
+        self.assertIn("**Partial packages:** 1", md)
+
+
 if __name__ == "__main__":
     unittest.main()

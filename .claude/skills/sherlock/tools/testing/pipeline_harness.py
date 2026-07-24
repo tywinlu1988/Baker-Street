@@ -56,7 +56,8 @@ def check_package(run_dir, demand_personas):
     path = Path(run_dir) / "quant-analysis-package.json"
     data = load_json(path)
     result = {"pass": False, "exists": path.exists(), "valid_json": data is not None,
-              "analyses_count": 0, "schema_errors": [], "uncovered_personas": []}
+              "analyses_count": 0, "schema_errors": [], "uncovered_personas": [],
+              "status": "missing", "partial": False}
     if data is None:
         return result
     analyses = data.get("analyses", []) if isinstance(data, dict) else []
@@ -72,9 +73,14 @@ def check_package(run_dir, demand_personas):
         if a.get("requested_by"):
             covered.add(a["requested_by"])
     result["uncovered_personas"] = [p for p in demand_personas if p not in covered]
+    status = data.get("status", "complete") if isinstance(data, dict) else "complete"
+    if status not in ("complete", "partial"):
+        status = "complete"
+    result["status"] = status
+    result["partial"] = (status == "partial")
     result["pass"] = (result["analyses_count"] > 0
                       and not result["schema_errors"]
-                      and not result["uncovered_personas"])
+                      and (not result["uncovered_personas"] or result["partial"]))
     return result
 
 
@@ -156,7 +162,7 @@ def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
 
 def summarize(results_dir):
     runs = sorted(Path(results_dir).glob("run-*/"))
-    total = failures = collapses = passes = 0
+    total = failures = collapses = passes = partials = 0
     lines = ["# Baseline Summary", "",
              "| Run | Agents | Failures | Collapses | Harness |",
              "|-----|-------:|---------:|----------:|:-------:|"]
@@ -172,12 +178,15 @@ def summarize(results_dir):
         failures += n_fail
         collapses += n_collapse
         passes += int(passed)
+        if harness.get("checks", {}).get("package", {}).get("partial"):
+            partials += 1
         lines.append(f"| {run.name} | {len(agents)} | {n_fail} | {n_collapse} | {'PASS' if passed else 'FAIL'} |")
     rate = (failures / total * 100) if total else 0.0
     lines += ["",
               f"**Agent failure rate:** {rate:.1f}% ({failures}/{total})",
               f"**Persona collapses:** {collapses}",
-              f"**Harness pass rate:** {passes}/{len(runs)}"]
+              f"**Harness pass rate:** {passes}/{len(runs)}",
+              f"**Partial packages:** {partials}"]
     return "\n".join(lines)
 
 
