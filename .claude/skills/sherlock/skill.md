@@ -66,6 +66,20 @@ If the user says "no" or wants changes, adjust and re-confirm. Then proceed to P
 
 If `--auto` is set: skip the dialogue entirely. Dispatch the scout. Proceed to Phase 1 immediately with default depth and auto-selected personas. Include the scout's output in the research brief.
 
+## Agent Timeout Budgets (v0.5.1)
+
+Wall-clock budgets per agent role (baseline-informed: successful research agents averaged ~330s, personas 38-151s, quant 252-371s, scout/demand/rebuttal 17-57s):
+
+| Role | Budget |
+|------|-------:|
+| research agent | 600s |
+| quantitative agent | 600s |
+| persona agent | 360s |
+| baseline agent | 300s |
+| scout / demand collection / rebuttal | 240s |
+
+An agent exceeding its budget or producing zero output is treated as failed — record the outcome in run-log.json and apply that phase's degradation policy. Do NOT wait indefinitely. Never auto-restart beyond the single quant-agent retry defined in Phase 1.6.
+
 ## Phase 1: Research Layer
 
 ### Step 1.1: Define Research Scope
@@ -99,7 +113,7 @@ Research agents have access to: web_search, run_command, read_file.
 
 **Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target.
 
-**Timeout handling:** If a research agent is unresponsive for >120 seconds or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (network timeout)`.
+**Timeout handling:** If a research agent exceeds its budget (600s — see Agent Timeout Budgets) or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (network timeout)`.
 
 If `--no-research` is set: skip this phase entirely. Proceed with empty fact base.
 
@@ -214,7 +228,7 @@ Run ALL agents in a single parallel batch. Each persona is a full agent — it m
 {"test_case": "{short slug of the query}", "date": "YYYY-MM-DD", "agents": [{"name": "{agent name}", "role": "persona|quantitative|research|baseline", "outcome": "success|timeout|empty|error", "duration_s": 0}]}
 ```
 
-`outcome`: `success` = returned usable output; `timeout` = unresponsive >120s; `empty` = returned zero output; `error` = explicit error. Record failures honestly — this log is the reliability baseline data source.
+`outcome`: `success` = returned usable output; `timeout` = exceeded its role budget (see Agent Timeout Budgets); `empty` = returned zero output; `error` = explicit error. Record failures honestly — this log is the reliability baseline data source.
 
 **Token budget: Lean.** Persona agents already have a comprehensive fact base — their job is reasoning, not research. Output should be concise: each section should be 1-3 paragraphs max. Avoid verbose exposition. The value is in the quality of the reasoning, not the quantity of words. If a persona produces more than ~1500 words, it is probably being wasteful.
 
