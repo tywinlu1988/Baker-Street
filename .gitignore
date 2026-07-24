@@ -26,3 +26,5 @@ quant-analysis-package.json
 persona-output-*.md
 run-log.json
 harness-result.json
+__pycache__/
+*.pyc
