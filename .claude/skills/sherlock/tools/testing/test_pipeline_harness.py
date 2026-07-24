@@ -69,5 +69,43 @@ class DemandsCheckTest(unittest.TestCase):
         self.assertEqual(r["malformed"], ["holmes"])
 
 
+class PackageCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def test_missing_package_fails(self):
+        r = ph.check_package(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+        self.assertFalse(r["exists"])
+
+    def test_analysis_missing_results_is_schema_error(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend"},
+        ]}))
+        r = ph.check_package(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+        self.assertTrue(any("results" in e for e in r["schema_errors"]))
+
+    def test_uncovered_persona_fails(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}},
+        ]}))
+        r = ph.check_package(self.run, ["holmes", "moriarty"])
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["uncovered_personas"], ["moriarty"])
+
+    def test_full_coverage_passes(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}},
+            {"requested_by": "moriarty", "type": "monte_carlo_simulation", "parameters": {}, "results": {"p_loss": 0.32}},
+        ]}))
+        r = ph.check_package(self.run, ["holmes", "moriarty"])
+        self.assertTrue(r["pass"])
+        self.assertEqual(r["analyses_count"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -46,13 +46,48 @@ def check_demands(run_dir, personas):
     return result
 
 
+REQUIRED_ANALYSIS_KEYS = ("requested_by", "type", "results")
+
+
+def check_package(run_dir, demand_personas):
+    path = Path(run_dir) / "quant-analysis-package.json"
+    data = load_json(path)
+    result = {"pass": False, "exists": path.exists(), "valid_json": data is not None,
+              "analyses_count": 0, "schema_errors": [], "uncovered_personas": []}
+    if data is None:
+        return result
+    analyses = data.get("analyses", []) if isinstance(data, dict) else []
+    result["analyses_count"] = len(analyses)
+    covered = set()
+    for i, a in enumerate(analyses):
+        if not isinstance(a, dict):
+            result["schema_errors"].append(f"analyses[{i}] is not an object")
+            continue
+        for k in REQUIRED_ANALYSIS_KEYS:
+            if k not in a or a[k] in (None, "", {}, []):
+                result["schema_errors"].append(f"analyses[{i}] missing/empty '{k}'")
+        if a.get("requested_by"):
+            covered.add(a["requested_by"])
+    result["uncovered_personas"] = [p for p in demand_personas if p not in covered]
+    result["pass"] = (result["analyses_count"] > 0
+                      and not result["schema_errors"]
+                      and not result["uncovered_personas"])
+    return result
+
+
+def demand_personas(run_dir):
+    data = load_json(Path(run_dir) / "quant-demands.json") or {}
+    return sorted({d.get("persona") for d in data.get("demands", []) if d.get("persona")})
+
+
 def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     personas = expected_personas(run_dir)
     demands = check_demands(run_dir, personas)
+    package = check_package(run_dir, demand_personas(run_dir))
     result = {
         "run_dir": str(run_dir),
-        "checks": {"demands": demands},
-        "pass": demands["pass"] and bool(personas),
+        "checks": {"demands": demands, "package": package},
+        "pass": demands["pass"] and package["pass"] and bool(personas),
     }
     Path(run_dir, "harness-result.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
