@@ -107,5 +107,66 @@ class PackageCheckTest(unittest.TestCase):
         self.assertEqual(r["analyses_count"], 2)
 
 
+class PersonaCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+        self.skill = Path(self.tmp.name) / "skill"
+        write(self.skill / "personas" / "holmes.md", FAKE_PERSONA_MD)
+
+    def test_persona_sections_parsed_from_file(self):
+        self.assertEqual(ph.persona_sections(self.skill, "holmes"),
+                         ["Core Argument", "Key Observations", "Blind Spot Acknowledgment"])
+
+    def test_output_with_all_sections_passes(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nx\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertTrue(r["exists"])
+        self.assertEqual(r["sections_missing"], [])
+        self.assertFalse(r["collapsed"])
+
+    def test_missing_two_sections_is_collapse(self):
+        write(self.run / "persona-output-holmes.md", "### Core Argument\nonly one section\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertTrue(r["collapsed"])
+        self.assertEqual(len(r["sections_missing"]), 2)
+
+    def test_intake_marker_is_collapse(self):
+        write(self.run / "persona-output-holmes.md",
+              "🔍 **Sherlock Analysis — Intake**\nProceed with this configuration?\n"
+              "### Core Argument\nx\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertTrue(r["collapsed"])
+
+    def test_references_package_via_result_number(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nthe p_loss of 0.32 shows\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", ["0.32"], True)
+        self.assertTrue(r["references_package"])
+
+    def test_no_reference_detected(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nno numbers here\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", ["0.32"], True)
+        self.assertFalse(r["references_package"])
+
+    def test_package_reference_skipped_when_no_package(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nx\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertIsNone(r["references_package"])
+
+    def test_package_numbers_extracted(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5, "p_value": 0.042}},
+        ]}))
+        nums = ph.package_numbers(self.run)
+        self.assertIn("1.5", nums)
+        self.assertIn("0.042", nums)
+
+
 if __name__ == "__main__":
     unittest.main()

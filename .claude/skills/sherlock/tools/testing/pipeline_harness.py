@@ -80,14 +80,69 @@ def demand_personas(run_dir):
     return sorted({d.get("persona") for d in data.get("demands", []) if d.get("persona")})
 
 
+COLLAPSE_MARKERS = (
+    "Sherlock Analysis — Intake",
+    "Proceed with this configuration",
+    "Problem Map",
+)
+PACKAGE_REF_HINTS = ("quantitative analysis package", "requested_by", "analyses")
+
+
+def persona_sections(skill_dir, persona):
+    path = Path(skill_dir) / "personas" / f"{persona}.md"
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    m = re.search(r"^## Output Format\s*$", text, re.MULTILINE)
+    if not m:
+        return []
+    return re.findall(r"^### (.+)$", text[m.end():], re.MULTILINE)
+
+
+def package_numbers(run_dir):
+    data = load_json(Path(run_dir) / "quant-analysis-package.json")
+    if not isinstance(data, dict):
+        return []
+    nums = set()
+    for a in data.get("analyses", []):
+        blob = json.dumps(a.get("results", {}))
+        nums.update(re.findall(r"-?\d+\.\d+|-?\d{2,}", blob))
+    return sorted(nums)
+
+
+def check_persona(run_dir, skill_dir, persona, ref_numbers, package_available):
+    path = Path(run_dir) / f"persona-output-{persona}.md"
+    result = {"persona": persona, "exists": path.exists(),
+              "sections_missing": [], "collapsed": False, "references_package": None}
+    if not path.exists():
+        result["collapsed"] = True
+        return result
+    text = path.read_text(encoding="utf-8")
+    result["sections_missing"] = [s for s in persona_sections(skill_dir, persona) if s not in text]
+    markers = [m for m in COLLAPSE_MARKERS if m in text]
+    result["collapsed"] = len(result["sections_missing"]) >= 2 or bool(markers)
+    if package_available:
+        low = text.lower()
+        result["references_package"] = (any(n in text for n in ref_numbers)
+                                        or any(h in low for h in PACKAGE_REF_HINTS))
+    return result
+
+
 def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     personas = expected_personas(run_dir)
     demands = check_demands(run_dir, personas)
     package = check_package(run_dir, demand_personas(run_dir))
+    ref_numbers = package_numbers(run_dir)
+    persona_results = [check_persona(run_dir, skill_dir, p, ref_numbers, package["valid_json"])
+                       for p in personas]
+    personas_pass = all(r["exists"] and not r["collapsed"] and not r["sections_missing"]
+                        for r in persona_results)
     result = {
         "run_dir": str(run_dir),
-        "checks": {"demands": demands, "package": package},
-        "pass": demands["pass"] and package["pass"] and bool(personas),
+        "checks": {"demands": demands, "package": package,
+                   "personas": {"pass": personas_pass, "results": persona_results}},
+        "pass": demands["pass"] and package["pass"] and personas_pass and bool(personas),
     }
     Path(run_dir, "harness-result.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
