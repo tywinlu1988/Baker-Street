@@ -5,6 +5,7 @@ Usage: python pipeline_harness.py <command> [args]
 
 Commands:
   check [run_dir] [--skill-dir DIR] — validate one run's artifacts, write harness-result.json into run_dir
+  summarize <results_dir>           — aggregate archived runs (run-*/), print markdown baseline
 """
 import sys, json, re
 from pathlib import Path
@@ -149,6 +150,33 @@ def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     return result
 
 
+def summarize(results_dir):
+    runs = sorted(Path(results_dir).glob("run-*/"))
+    total = failures = collapses = passes = 0
+    lines = ["# Baseline Summary", "",
+             "| Run | Agents | Failures | Collapses | Harness |",
+             "|-----|-------:|---------:|----------:|:-------:|"]
+    for run in runs:
+        log = load_json(run / "run-log.json") or {}
+        harness = load_json(run / "harness-result.json") or {}
+        agents = log.get("agents", [])
+        n_fail = sum(1 for a in agents if a.get("outcome") in ("timeout", "empty", "error"))
+        persona_results = harness.get("checks", {}).get("personas", {}).get("results", [])
+        n_collapse = sum(1 for r in persona_results if r.get("collapsed"))
+        passed = bool(harness.get("pass"))
+        total += len(agents)
+        failures += n_fail
+        collapses += n_collapse
+        passes += int(passed)
+        lines.append(f"| {run.name} | {len(agents)} | {n_fail} | {n_collapse} | {'PASS' if passed else 'FAIL'} |")
+    rate = (failures / total * 100) if total else 0.0
+    lines += ["",
+              f"**Agent failure rate:** {rate:.1f}% ({failures}/{total})",
+              f"**Persona collapses:** {collapses}",
+              f"**Harness pass rate:** {passes}/{len(runs)}"]
+    return "\n".join(lines)
+
+
 def main(argv):
     if len(argv) < 2:
         print(__doc__)
@@ -162,6 +190,12 @@ def main(argv):
         result = check_run(run_dir, skill_dir)
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result["pass"] else 1
+    if cmd == "summarize":
+        if len(argv) < 3:
+            print("usage: pipeline_harness.py summarize <results_dir>")
+            return 2
+        print(summarize(argv[2]))
+        return 0
     print(f"unknown command: {cmd}")
     return 2
 

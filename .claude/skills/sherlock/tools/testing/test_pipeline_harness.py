@@ -168,5 +168,32 @@ class PersonaCheckTest(unittest.TestCase):
         self.assertIn("0.042", nums)
 
 
+class SummarizeTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        for i, (fails, collapsed, passed) in enumerate([(1, 0, True), (1, 1, False)], start=1):
+            run = self.root / f"run-{i}"
+            run.mkdir(parents=True)
+            agents = [{"name": f"a{j}", "role": "persona",
+                       "outcome": "timeout" if j < fails else "success", "duration_s": 60}
+                      for j in range(4)]
+            write(run / "run-log.json", json.dumps({"agents": agents}))
+            write(run / "harness-result.json", json.dumps({
+                "pass": passed,
+                "checks": {"personas": {"results": [
+                    {"persona": "a0", "collapsed": bool(collapsed)}]}},
+            }))
+
+    def test_summarize_aggregates_rates(self):
+        md = ph.summarize(self.root)
+        self.assertIn("25.0% (2/8)", md)   # 2 failures / 8 agents
+        self.assertIn("**Persona collapses:** 1", md)
+        self.assertIn("**Harness pass rate:** 1/2", md)
+        self.assertIn("| run-1 |", md)
+        self.assertIn("| run-2 |", md)
+
+
 if __name__ == "__main__":
     unittest.main()
