@@ -23,6 +23,29 @@ Run `/sherlock --depth standard "{problem_statement}"`
 ### Group D: Full Pipeline (deep research)
 Run `/sherlock --depth deep --research-depth deep "{problem_statement}"`
 
+### Group E: Quantitative Pipeline Behavioral Checks (v0.5.1+)
+
+After EACH Group C or Group D pipeline run, before judge scoring:
+
+1. Archive the run artifacts:
+   ```bash
+   mkdir -p docs/evaluation/<session>/run-<N>
+   cp .claude/skills/sherlock/quant-demands.json \
+      .claude/skills/sherlock/quant-analysis-package.json \
+      .claude/skills/sherlock/run-log.json \
+      .claude/skills/sherlock/persona-output-*.md \
+      docs/evaluation/<session>/run-<N>/
+   ```
+   (If the package file does not exist, note `⚠️ Phase 1.6 did not produce a package` — that is a finding, not a skip.)
+2. Run the harness:
+   ```bash
+   python .claude/skills/sherlock/tools/testing/pipeline_harness.py check docs/evaluation/<session>/run-<N> --skill-dir .claude/skills/sherlock
+   ```
+3. Record in the run's metadata: harness pass/fail per check (demands / package / personas), collapse count, agent failure count from run-log.json.
+4. A pipeline run that fails harness checks is still scored by the judge — harness failure is reported alongside, never hidden.
+
+**Group E pass criteria:** `"pass": true` in harness-result.json (demands complete, package valid + covering all demanders, no persona collapses).
+
 ### Scoring
 After each test case, feed all four group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`). Score on all 7 v0.3.x dimensions: FG, PD, BSC, CUR, Anti-Sycophancy Score, Tool Usage Effectiveness, Persona Distinctiveness.
 
