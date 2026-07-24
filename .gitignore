@@ -20,3 +20,9 @@ research-output*.json
 saas_fact_base.json
 tmp/
 docs/
+# Sherlock pipeline run artifacts (v0.5.1 harness)
+quant-demands.json
+quant-analysis-package.json
+persona-output-*.md
+run-log.json
+harness-result.json
