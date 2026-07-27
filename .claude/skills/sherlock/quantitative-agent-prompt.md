@@ -33,6 +33,7 @@ You MUST output valid JSON:
     {
       "id": "Q001",
       "requested_by": "moriarty",
+      "type": "monte_carlo_simulation",
       "demand": "Run Monte Carlo simulation on worst-case revenue scenario",
       "method": "Monte Carlo simulation, 10,000 iterations",
       "parameters": {
