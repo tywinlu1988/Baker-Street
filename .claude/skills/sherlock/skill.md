@@ -167,6 +167,8 @@ Before persona agents begin reasoning, collect quantitative analysis demands fro
 
 ### Phase 1.6: Quantitative Analysis Execution
 
+**Dispatch timing (v0.6):** The quantitative agent is dispatched IN THE SAME BATCH as the Phase 2a persona draft agents (see Step 2.3a) — not before, not after. Personas reason independently while the package is being built.
+
 Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantitative-agent-prompt.md`. The agent receives:
 - The **Demand List** (from Phase 1.5)
 - The **Shared Fact Base** (from Phase 1.4)
@@ -209,31 +211,51 @@ For each selected persona, read the corresponding file:
 
 **CRITICAL — Full prompts only.** You MUST pass the COMPLETE persona file content to each agent. Never truncate, summarize, or shorten. Shortened prompts cause persona collapse — the agent reverts to generic behavior.
 
-### Step 2.3: Dispatch Persona Agents
+### Step 2.3a: Independent Draft Round (parallel with Phase 1.6)
 
-Dispatch each selected persona as a full agent. Every persona receives:
+Dispatch each selected persona as a full agent IN THE SAME BATCH as the Phase 1.6 quantitative agent. Every persona receives:
 
 1. **The persona's full prompt** (from file)
 2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
-3. **The Quantitative Analysis Package** (from Phase 1.6) — numeric results, shared with ALL personas
-4. **The user's original query**
-5. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. Additionally, a shared tool library is available at `.claude/skills/sherlock/tools/` — load and adapt any scripts that are relevant to your analysis task."
+3. **The user's original query**
+4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. You will NOT receive the Quantitative Analysis Package in this round — reason independently from the facts. A data revision round follows."
 5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
-6. **Output persistence:** Each persona MUST save its complete output to `.claude/skills/sherlock/persona-output-{name}.md` using write_file (e.g., `persona-output-moriarty.md`).
+6. **Output persistence:** Each persona MUST save its complete output to `.claude/skills/sherlock/persona-output-{name}-draft.md` using write_file.
 
-Also dispatch ONE baseline agent in parallel: receives the user query + Shared Fact Base + instruction to analyze directly without any persona framework.
+Also dispatch ONE baseline agent in the same batch (user query + Shared Fact Base + instruction to analyze directly without any persona framework).
 
-Run ALL agents in a single parallel batch. Each persona is a full agent — it may choose to use tools or not. Tool usage is observed and recorded (which persona used which tools) for post-hoc behavior analysis.
+Do NOT give personas the Quantitative Analysis Package in this round. Independent drafts are the CUR measurement anchor — sharing the package now would homogenize them (measured: CUR 0.52 → 0.45).
+
+### Step 2.3b: Data Revision Round
+
+When the quantitative agent has returned (or its degradation protocol completed) AND all persona drafts exist, dispatch for EACH persona ONE FRESH agent (fresh context — not a continuation) receiving:
+
+1. **The persona's full prompt** (from file)
+2. **The persona's own draft** (full contents of `persona-output-{name}-draft.md`)
+3. **The Quantitative Analysis Package** (complete or partial; for partial packages, conclusions touching `missing_demands` MUST be annotated UNSUPPORTED)
+4. **The user's original query**
+5. **Revision instruction:** "For every key conclusion in your draft, append exactly one annotation line:
+   - `[DATA: CONFIRMED] — {which analysis entry confirmed what}`
+   - `[DATA: REVISED] — {old judgment → new judgment, citing analysis entry id}`
+   - `[DATA: UNSUPPORTED] — {why no data covers this; it remains a qualitative judgment}`
+   Revise ONLY what the data challenges; keep everything else. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you."
+6. **Output persistence:** Save the revised final to `.claude/skills/sherlock/persona-output-{name}.md` using write_file.
+
+Log each revision agent in run-log.json as `{"name": "2b-{name}", "role": "revision", "outcome": ..., "duration_s": ...}`.
+
+**Degradation:** If the package is entirely unavailable, skip 2b: copy each draft to its final path (`persona-output-{name}.md`), flag in metadata: `⚠️ Data revision skipped — no package`. If a 2b agent times out or returns empty: use that persona's draft as its final output, flag in metadata. Never retry a 2b agent.
+
+**Single-round mode:** If `--depth quick`, skip the 2a/2b split: personas receive the package directly in one round and write `persona-output-{name}.md` (legacy v0.5.x flow, no draft files).
+
+**Token budget: Lean.** Drafts: each section 1-3 paragraphs max. Revision round: annotations + targeted edits, NOT a full rewrite — if a 2b output exceeds the draft's length by >50%, it is probably being wasteful.
 
 **Run logging:** After ALL agents (research, quantitative, persona, baseline) have returned or timed out, write `.claude/skills/sherlock/run-log.json` recording EVERY agent dispatched this run:
 
 ```json
-{"test_case": "{short slug of the query}", "date": "YYYY-MM-DD", "agents": [{"name": "{agent name}", "role": "persona|quantitative|research|baseline", "outcome": "success|timeout|empty|error", "duration_s": 0}]}
+{"test_case": "{short slug of the query}", "date": "YYYY-MM-DD", "agents": [{"name": "{agent name}", "role": "persona|revision|quantitative|research|baseline", "outcome": "success|timeout|empty|error", "duration_s": 0}]}
 ```
 
 `outcome`: `success` = returned usable output; `timeout` = exceeded its role budget (see Agent Timeout Budgets); `empty` = returned zero output; `error` = explicit error. Record failures honestly — this log is the reliability baseline data source.
-
-**Token budget: Lean.** Persona agents already have a comprehensive fact base — their job is reasoning, not research. Output should be concise: each section should be 1-3 paragraphs max. Avoid verbose exposition. The value is in the quality of the reasoning, not the quantity of words. If a persona produces more than ~1500 words, it is probably being wasteful.
 
 ### Step 2.4: Completeness Gate
 
@@ -287,7 +309,7 @@ When rebuttal agents return:
 
 This step measures whether personas are producing **substantively distinct insights** or overlapping. It uses a constrained semantic equivalence check — not a quality judgment.
 
-**Step 1: Extract.** From each persona's `### Key Observations` section, gather all bullet points. This is mechanical — no LLM needed.
+**Step 1: Extract.** From each persona's DRAFT file (`persona-output-{name}-draft.md`; in single-round mode, the final output), gather all bullet points from the `### Key Observations` section. CUR is anchored to pre-data drafts — this is mechanical, no LLM needed.
 
 **Step 2: Compare.** For each pair of personas (e.g., Holmes vs Moriarty), compare every bullet from persona A against every bullet from persona B. For each pair of bullets, ask ONE question:
 
@@ -459,6 +481,8 @@ Generate three tiers of next steps:
 | Conflicts detected | {N} |
 | Conflicts rebutted | {N attempted, M succeeded} |
 | Silent dimensions found | {N} |
+| Two-round mode | {enabled / disabled (quick) / degraded (no package)} |
+| Data annotations (C/R/U) | {confirmed count} / {revised count} / {unsupported count} |
 | Claim Uniqueness Ratio (CUR) | {value} — {Low/Moderate/High} overlap |
 | Framework Gain | {Low/Medium/High} |
 
