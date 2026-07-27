@@ -276,5 +276,58 @@ class PartialPackageTest(unittest.TestCase):
         self.assertFalse(r["pass"])
 
 
+class DraftsCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def test_missing_draft_reported(self):
+        r = ph.check_drafts(self.run, ["holmes", "moriarty"])
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["missing_drafts"], ["holmes", "moriarty"])
+
+    def test_present_drafts_pass(self):
+        write(self.run / "persona-output-holmes-draft.md", "### Core Argument\nx\n")
+        write(self.run / "persona-output-moriarty-draft.md", "### Core Argument\ny\n")
+        r = ph.check_drafts(self.run, ["holmes", "moriarty"])
+        self.assertTrue(r["pass"])
+        self.assertEqual(r["missing_drafts"], [])
+
+    def test_empty_draft_is_missing(self):
+        write(self.run / "persona-output-holmes-draft.md", "   \n")
+        r = ph.check_drafts(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+
+
+class AnnotationsCheckTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def test_counts_annotations(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nx\n[DATA: CONFIRMED] — Q001 slope confirms\n"
+              "[DATA: REVISED] — thought growth stalled, Q002 shows decline\n"
+              "### Data Revision Summary\n2 confirmed 1 revised\n")
+        r = ph.check_annotations(self.run, ["holmes"])
+        self.assertTrue(r["pass"])
+        self.assertEqual(r["counts"], {"confirmed": 1, "revised": 1, "unsupported": 0})
+
+    def test_unannotated_persona_fails(self):
+        write(self.run / "persona-output-holmes.md", "### Core Argument\nno annotations\n")
+        r = ph.check_annotations(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["unannotated"], ["holmes"])
+
+    def test_missing_final_is_unannotated(self):
+        r = ph.check_annotations(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["unannotated"], ["holmes"])
+
+
 if __name__ == "__main__":
     unittest.main()

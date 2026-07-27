@@ -140,6 +140,42 @@ def check_persona(run_dir, skill_dir, persona, ref_numbers, package_available):
     return result
 
 
+ANNOTATION_RE = re.compile(r"\[DATA: (CONFIRMED|REVISED|UNSUPPORTED)\]")
+
+
+def check_drafts(run_dir, personas):
+    result = {"pass": True, "missing_drafts": []}
+    for p in personas:
+        path = Path(run_dir) / f"persona-output-{p}-draft.md"
+        try:
+            empty = not path.read_text(encoding="utf-8").strip()
+        except OSError:
+            empty = True
+        if empty:
+            result["missing_drafts"].append(p)
+    result["pass"] = not result["missing_drafts"]
+    return result
+
+
+def check_annotations(run_dir, personas):
+    result = {"pass": True,
+              "counts": {"confirmed": 0, "revised": 0, "unsupported": 0},
+              "unannotated": []}
+    for p in personas:
+        path = Path(run_dir) / f"persona-output-{p}.md"
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError:
+            text = ""
+        found = ANNOTATION_RE.findall(text)
+        if not found:
+            result["unannotated"].append(p)
+        for f in found:
+            result["counts"][f.lower()] += 1
+    result["pass"] = not result["unannotated"]
+    return result
+
+
 def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     personas = expected_personas(run_dir)
     demands = check_demands(run_dir, personas)
