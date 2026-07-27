@@ -75,6 +75,7 @@ Wall-clock budgets per agent role (baseline-informed: successful research agents
 | research agent | 600s |
 | quantitative agent | 600s |
 | persona agent | 360s |
+| revision agent | 300s |
 | baseline agent | 300s |
 | scout / demand collection / rebuttal | 240s |
 
@@ -213,7 +214,7 @@ For each selected persona, read the corresponding file:
 
 ### Step 2.3a: Independent Draft Round (parallel with Phase 1.6)
 
-Dispatch each selected persona as a full agent IN THE SAME BATCH as the Phase 1.6 quantitative agent. Every persona receives:
+Dispatch each selected persona as a full agent IN THE SAME BATCH as the Phase 1.6 quantitative agent. (standard/deep; quick mode dispatches personas after the package — see Single-round mode below.) Every persona receives:
 
 1. **The persona's full prompt** (from file)
 2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
@@ -228,7 +229,7 @@ Do NOT give personas the Quantitative Analysis Package in this round. Independen
 
 ### Step 2.3b: Data Revision Round
 
-When the quantitative agent has returned (or its degradation protocol completed) AND all persona drafts exist, dispatch for EACH persona ONE FRESH agent (fresh context — not a continuation) receiving:
+When the quantitative agent has returned (or its degradation protocol completed) AND all persona draft agents have returned or timed out, dispatch ONE FRESH agent (fresh context — not a continuation) for EACH persona that has a non-empty draft file, receiving:
 
 1. **The persona's full prompt** (from file)
 2. **The persona's own draft** (full contents of `persona-output-{name}-draft.md`)
@@ -243,7 +244,7 @@ When the quantitative agent has returned (or its degradation protocol completed)
 
 Log each revision agent in run-log.json as `{"name": "2b-{name}", "role": "revision", "outcome": ..., "duration_s": ...}`.
 
-**Degradation:** If the package is entirely unavailable, skip 2b: copy each draft to its final path (`persona-output-{name}.md`), flag in metadata: `⚠️ Data revision skipped — no package`. If a 2b agent times out or returns empty: use that persona's draft as its final output, flag in metadata. Never retry a 2b agent.
+**Degradation:** If the package is entirely unavailable, skip 2b: copy each draft to its final path (`persona-output-{name}.md`), flag in metadata: `⚠️ Data revision skipped — no package`. If a 2b agent times out or returns empty: use that persona's draft as its final output, flag in metadata. Never retry a 2b agent. A persona whose 2a draft agent failed has no draft — it skips 2b entirely and is handled by the Step 2.4 completeness gate.
 
 **Single-round mode:** If `--depth quick`, skip the 2a/2b split: personas receive the package directly in one round and write `persona-output-{name}.md` (legacy v0.5.x flow, no draft files).
 

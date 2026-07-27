@@ -89,5 +89,5 @@ After your independent draft, you may receive your draft back together with a Qu
 - `[DATA: REVISED] — {old judgment → new judgment, citing analysis entry id}`
 - `[DATA: UNSUPPORTED] — {why no data covers this; it remains a qualitative judgment}`
 
-Revise only what the data challenges. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you.
+Revise ONLY what the data challenges; keep everything else. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you.
 

@@ -382,5 +382,43 @@ class AnnotationExemptionTest(unittest.TestCase):
         self.assertIn("**Annotations (C/R/U):** 3/1/2", md)
 
 
+class TwoRoundIntegrationTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+        self.skill = Path(self.tmp.name) / "skill"
+        write(self.skill / "personas" / "holmes.md", FAKE_PERSONA_MD)
+        write(self.run / "run-log.json", json.dumps({"agents": [
+            {"name": "holmes", "role": "persona", "outcome": "success", "duration_s": 60},
+            {"name": "2b-holmes", "role": "revision", "outcome": "success", "duration_s": 90},
+        ]}))
+        write(self.run / "quant-demands.json", json.dumps({"demands": [
+            {"persona": "holmes", "computation": "trend", "rationale": "sig", "raw": "QUANT_DEMAND: trend — sig"}]}))
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}}],
+            "status": "complete"}))
+        write(self.run / "persona-output-holmes-draft.md",
+              "### Core Argument\nx\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nx\n[DATA: CONFIRMED] — slope 1.5 confirms\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n### Data Revision Summary\n1 confirmed\n")
+
+    def test_two_round_run_passes_with_drafts_and_annotations(self):
+        r = ph.check_run(self.run, self.skill)
+        self.assertTrue(r["pass"])
+        self.assertIn("drafts", r["checks"])
+        self.assertIn("annotations", r["checks"])
+
+    def test_single_round_run_skips_two_round_checks(self):
+        log = load = json.loads((self.run / "run-log.json").read_text(encoding="utf-8"))
+        log["agents"] = [a for a in log["agents"] if a["role"] != "revision"]
+        (self.run / "run-log.json").write_text(json.dumps(log), encoding="utf-8")
+        (self.run / "persona-output-holmes-draft.md").unlink()
+        r = ph.check_run(self.run, self.skill)
+        self.assertNotIn("drafts", r["checks"])
+        self.assertNotIn("annotations", r["checks"])
+
+
 if __name__ == "__main__":
     unittest.main()
