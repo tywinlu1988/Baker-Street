@@ -24,6 +24,7 @@ docs/
 quant-demands.json
 quant-analysis-package.json
 persona-output-*.md
+persona-output-*-draft.md
 run-log.json
 harness-result.json
 __pycache__/
