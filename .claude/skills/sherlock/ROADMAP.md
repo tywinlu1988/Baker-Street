@@ -70,8 +70,17 @@ Phase 2: Reasoning Layer (unchanged)
 
 ## v0.6: Quantitative Reasoning Layer
 
+### Input from v0.5.1 measurements (2026-07, 10 pipeline runs)
+
+v0.5.1 established a behavioral test harness and measured the quant layer in production. Two findings reshape v0.6:
+
+1. **Package homogenization (confirmed across 2 test cases).** When personas receive the quant package before reasoning, they converge on the same numbers and recommendations — CUR dropped from 0.52 (baseline) to 0.45, with individual runs at 0.33. The shared package trades perspective divergence (a core framework value) for evidentiary discipline.
+2. **Candidate fix: two-round persona reasoning.** Personas reason independently from the fact base first (draft → CUR computed here), THEN receive the package for a revision round with three-state annotations (CONFIRMED / REVISED / UNSUPPORTED). This preserves diversity while gaining data discipline, and produces a "what did the data change" signal — a better value metric for the quant layer than citation counts. Estimated cost: +30-40% persona tokens, near-zero wall-clock increase (draft round runs parallel to quant analysis).
+
+Also observed: research agents can true-hang (zero output at full 600s, 2/10 agents) — distinct from budget-boundary timeouts; mitigation candidate is periodic progress output with early termination. The v0.5.1 partial-package degradation and single-retry mechanisms were never triggered in anger (5/5 quant agents succeeded first-try) — they remain field-untested.
+
 ### Goal
-Constrain persona outputs to be supported by quantitative evidence.
+Constrain persona outputs to be supported by quantitative evidence — without sacrificing perspective divergence.
 
 ### Changes
 1. **Evidence Chain** must cite specific entries from the Quantitative Analysis Package
