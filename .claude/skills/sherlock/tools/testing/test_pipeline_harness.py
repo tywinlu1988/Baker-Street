@@ -329,5 +329,58 @@ class AnnotationsCheckTest(unittest.TestCase):
         self.assertEqual(r["unannotated"], ["holmes"])
 
 
+class AnnotationExemptionTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def make_log(self, agents):
+        write(self.run / "run-log.json", json.dumps({"agents": agents}))
+
+    def test_is_two_round_detects_revision_role(self):
+        self.make_log([{"name": "2b-holmes", "role": "revision", "outcome": "success", "duration_s": 60}])
+        self.assertTrue(ph.is_two_round(self.run))
+
+    def test_single_round_detected(self):
+        self.make_log([{"name": "holmes", "role": "persona", "outcome": "success", "duration_s": 60}])
+        self.assertFalse(ph.is_two_round(self.run))
+
+    def test_no_package_exempts_all(self):
+        r = ph.check_annotations_exempt(self.run, ["holmes", "moriarty"], package_available=False)
+        self.assertTrue(r["pass"])
+        self.assertEqual(len(r["exempted"]), 2)
+        self.assertEqual(r["exempted"][0]["reason"], "no package")
+
+    def test_failed_2b_exempts_that_persona(self):
+        self.make_log([
+            {"name": "2b-holmes", "role": "revision", "outcome": "timeout", "duration_s": 360},
+            {"name": "2b-moriarty", "role": "revision", "outcome": "success", "duration_s": 200},
+        ])
+        write(self.run / "persona-output-moriarty.md", "[DATA: CONFIRMED] — ok\n")
+        r = ph.check_annotations_exempt(self.run, ["holmes", "moriarty"], package_available=True)
+        self.assertTrue(r["pass"])
+        self.assertEqual([e["persona"] for e in r["exempted"]], ["holmes"])
+
+    def test_successful_2b_without_annotations_fails(self):
+        self.make_log([{"name": "2b-holmes", "role": "revision", "outcome": "success", "duration_s": 200}])
+        write(self.run / "persona-output-holmes.md", "### Core Argument\nnothing\n")
+        r = ph.check_annotations_exempt(self.run, ["holmes"], package_available=True)
+        self.assertFalse(r["pass"])
+        self.assertEqual(r["unannotated"], ["holmes"])
+
+    def test_summarize_annotations_aggregate(self):
+        root = self.run.parent
+        self.make_log([{"name": "a0", "role": "persona", "outcome": "success", "duration_s": 60}])
+        write(self.run / "harness-result.json", json.dumps({
+            "pass": True,
+            "checks": {"package": {"partial": False},
+                       "personas": {"results": []},
+                       "annotations": {"counts": {"confirmed": 3, "revised": 1, "unsupported": 2}}}}))
+        md = ph.summarize(root)
+        self.assertIn("**Annotations (C/R/U):** 3/1/2", md)
+
+
 if __name__ == "__main__":
     unittest.main()

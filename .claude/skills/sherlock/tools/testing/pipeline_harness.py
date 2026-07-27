@@ -176,6 +176,39 @@ def check_annotations(run_dir, personas):
     return result
 
 
+def revision_outcomes(run_dir):
+    log = load_json(Path(run_dir) / "run-log.json")
+    if not isinstance(log, dict):
+        return {}
+    return {a["name"]: a.get("outcome") for a in log.get("agents", [])
+            if isinstance(a, dict) and a.get("role") == "revision" and a.get("name")}
+
+
+def is_two_round(run_dir):
+    return bool(revision_outcomes(run_dir))
+
+
+def check_annotations_exempt(run_dir, personas, package_available):
+    base = check_annotations(run_dir, personas)
+    base["exempted"] = []
+    if not package_available:
+        base["exempted"] = [{"persona": p, "reason": "no package"} for p in personas]
+        base["unannotated"] = []
+        base["pass"] = True
+        return base
+    outcomes = revision_outcomes(run_dir)
+    still_un = []
+    for p in base["unannotated"]:
+        outcome = outcomes.get(f"2b-{p}")
+        if outcome is not None and outcome != "success":
+            base["exempted"].append({"persona": p, "reason": f"2b {outcome}"})
+        else:
+            still_un.append(p)
+    base["unannotated"] = still_un
+    base["pass"] = not still_un
+    return base
+
+
 def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     personas = expected_personas(run_dir)
     demands = check_demands(run_dir, personas)
@@ -185,11 +218,21 @@ def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
                        for p in personas]
     personas_pass = all(r["exists"] and not r["collapsed"] and not r["sections_missing"]
                         for r in persona_results)
+    checks = {"demands": demands, "package": package,
+              "personas": {"pass": personas_pass, "results": persona_results}}
+    overall = demands["pass"] and package["pass"] and personas_pass and bool(personas)
+    if is_two_round(run_dir):
+        drafts = check_drafts(run_dir, personas)
+        annotations = check_annotations_exempt(
+            run_dir, personas,
+            package_available=package["valid_json"] and package["analyses_count"] > 0)
+        checks["drafts"] = drafts
+        checks["annotations"] = annotations
+        overall = overall and drafts["pass"] and annotations["pass"]
     result = {
         "run_dir": str(run_dir),
-        "checks": {"demands": demands, "package": package,
-                   "personas": {"pass": personas_pass, "results": persona_results}},
-        "pass": demands["pass"] and package["pass"] and personas_pass and bool(personas),
+        "checks": checks,
+        "pass": overall,
     }
     Path(run_dir, "harness-result.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -199,6 +242,7 @@ def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
 def summarize(results_dir):
     runs = sorted(Path(results_dir).glob("run-*/"))
     total = failures = collapses = passes = partials = 0
+    ann = {"confirmed": 0, "revised": 0, "unsupported": 0}
     lines = ["# Baseline Summary", "",
              "| Run | Agents | Failures | Collapses | Harness |",
              "|-----|-------:|---------:|----------:|:-------:|"]
@@ -216,13 +260,16 @@ def summarize(results_dir):
         passes += int(passed)
         if harness.get("checks", {}).get("package", {}).get("partial"):
             partials += 1
+        for k in ann:
+            ann[k] += harness.get("checks", {}).get("annotations", {}).get("counts", {}).get(k, 0)
         lines.append(f"| {run.name} | {len(agents)} | {n_fail} | {n_collapse} | {'PASS' if passed else 'FAIL'} |")
     rate = (failures / total * 100) if total else 0.0
     lines += ["",
               f"**Agent failure rate:** {rate:.1f}% ({failures}/{total})",
               f"**Persona collapses:** {collapses}",
               f"**Harness pass rate:** {passes}/{len(runs)}",
-              f"**Partial packages:** {partials}"]
+              f"**Partial packages:** {partials}",
+              f"**Annotations (C/R/U):** {ann['confirmed']}/{ann['revised']}/{ann['unsupported']}"]
     return "\n".join(lines)
 
 
