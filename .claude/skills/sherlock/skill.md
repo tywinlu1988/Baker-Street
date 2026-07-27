@@ -218,7 +218,7 @@ Dispatch each selected persona as a full agent IN THE SAME BATCH as the Phase 1.
 1. **The persona's full prompt** (from file)
 2. **The Shared Fact Base** (from Phase 1.4) — compact JSON
 3. **The user's original query**
-4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. You will NOT receive the Quantitative Analysis Package in this round — reason independently from the facts. A data revision round follows."
+4. **Constraint:** "You may ONLY use facts from the Shared Fact Base as evidence for your claims. If the fact base lacks a needed fact, flag it in your Blind Spot Acknowledgment — do NOT invent facts from your training data. You HAVE access to tools (web_search, run_command, read_file, write_file) — use them to verify claims, generate supporting data, or produce artifacts that strengthen your analysis. Additionally, a shared tool library is available at `.claude/skills/sherlock/tools/` — load and adapt any scripts that are relevant to your analysis task. You will NOT receive the Quantitative Analysis Package in this round — reason independently from the facts. A data revision round follows."
 5. **Output requirement:** All 6 persona output sections as defined in the persona prompt.
 6. **Output persistence:** Each persona MUST save its complete output to `.claude/skills/sherlock/persona-output-{name}-draft.md` using write_file.
 
@@ -249,7 +249,7 @@ Log each revision agent in run-log.json as `{"name": "2b-{name}", "role": "revis
 
 **Token budget: Lean.** Drafts: each section 1-3 paragraphs max. Revision round: annotations + targeted edits, NOT a full rewrite — if a 2b output exceeds the draft's length by >50%, it is probably being wasteful.
 
-**Run logging:** After ALL agents (research, quantitative, persona, baseline) have returned or timed out, write `.claude/skills/sherlock/run-log.json` recording EVERY agent dispatched this run:
+**Run logging:** After ALL agents (research, quantitative, persona, revision, baseline) have returned or timed out, write `.claude/skills/sherlock/run-log.json` recording EVERY agent dispatched this run:
 
 ```json
 {"test_case": "{short slug of the query}", "date": "YYYY-MM-DD", "agents": [{"name": "{agent name}", "role": "persona|revision|quantitative|research|baseline", "outcome": "success|timeout|empty|error", "duration_s": 0}]}
