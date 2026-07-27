@@ -246,6 +246,8 @@ Log each revision agent in run-log.json as `{"name": "2b-{name}", "role": "revis
 
 **Degradation:** If the package is entirely unavailable, skip 2b: copy each draft to its final path (`persona-output-{name}.md`), flag in metadata: `⚠️ Data revision skipped — no package`. If a 2b agent times out or returns empty: use that persona's draft as its final output, flag in metadata. Never retry a 2b agent. A persona whose 2a draft agent failed has no draft — it skips 2b entirely and is handled by the Step 2.4 completeness gate.
 
+**Environment degradation (quant agent):** If `run_command` is unavailable to the quantitative agent (e.g., headless dispatch environments), use the design/execute split: the quant agent writes self-contained Python scripts (stdlib only) and declares them in the package; the orchestrator executes them verbatim and returns the outputs for the agent to interpret. The package's `limitations` field must state when results were produced this way.
+
 **Single-round mode:** If `--depth quick`, skip the 2a/2b split: personas receive the package directly in one round and write `persona-output-{name}.md` (legacy v0.5.x flow, no draft files).
 
 **Token budget: Lean.** Drafts: each section 1-3 paragraphs max. Revision round: annotations + targeted edits, NOT a full rewrite — if a 2b output exceeds the draft's length by >50%, it is probably being wasteful.
