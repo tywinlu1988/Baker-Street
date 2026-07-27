@@ -355,6 +355,16 @@ v0.5.0 shipped its quantitative layer code-complete but behaviorally untested. v
 4. **Rebuttals are the highest-value phase.** 20/20 succeeded, and the strongest insights per run came from rebuttal rounds, not first-pass outputs.
 5. **Degradation beats absence.** The quant agent now saves its package incrementally; on timeout the orchestrator recovers a partial package (`"status": "partial"`) and personas proceed with what's computed, instead of losing the entire quantitative layer. One narrowed retry (missing demands only) is the pipeline's single quant retry — honest degradation over silent loss or auto-restart loops.
 
+### Two-Round Persona Reasoning (v0.6.0, 2026-07)
+
+v0.5.1's measurements showed the shared quant package homogenizing personas (CUR 0.52 → 0.45). v0.6 fixes this structurally: personas now reason **twice**.
+
+- **Round 2a — Independent draft.** Personas reason from the fact base only, in the same dispatch batch as the quant agent (near-zero wall-clock cost). Drafts are persisted and become the CUR anchor — the diversity measurement can no longer be diluted by the package.
+- **Round 2b — Data revision.** Each persona's draft goes to a FRESH agent with the quant package. Every key conclusion gets one annotation: `[DATA: CONFIRMED]`, `[DATA: REVISED]`, or `[DATA: UNSUPPORTED]` — revise only what the data challenges. The output is not just better reasoning; it is an explicit record of **what the data changed**.
+- **Degradation:** no package → finals = drafts (flagged); partial package → missing demands forced UNSUPPORTED; 2b failure → that persona's draft stands. 2b is never retried. `--depth quick` keeps the legacy single round.
+
+**Measured (3 E2E runs, 50 agent dispatches):** CUR 0.667 / 0.583 / 0.615 (mean 0.622, vs 0.45 single-round — homogenization fixed); 9/9 personas annotated (50 CONFIRMED / 39 REVISED / 42 UNSUPPORTED); REVISED mean 4.3 per persona — the data is substantively changing conclusions, not decorating them. Harness 3/3, anti-sycophancy 16.7-22%, zero collapses. Known cost: two rounds ran +55-75% persona tokens over single-round (above the +30-40% estimate — revision outputs averaged 1.9x draft length, brevity guidance needs strengthening).
+
 ---
 
 ## 6. Installation & Usage
@@ -446,7 +456,7 @@ baker-street/
 | **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
 | **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, platform-agnostic tool names, cross-platform installer | ✅ Released |
 | **v0.5.x** | Quantitative Research Layer — shared analysis package, persona data demands, statistical analysis agent. v0.5.1: measured reliability — behavioral test harness, per-role timeout budgets, partial-package degradation | ✅ Released |
-| **v0.6.x** | Quantitative Reasoning — evidence-backed claims, p-value constraint, Quantitative Support Ratio, two-round persona reasoning (see ROADMAP) | 📅 Planned |
+| **v0.6.x** | Two-Round Persona Reasoning — independent draft round, then data revision round with three-state annotations; CUR anchored to drafts (homogenization fix, measured CUR 0.45 → 0.62) | ✅ Released |
 | **v0.7.x** | Champion Mode — winning persona deep investigation, persona-specific deep capabilities | 📅 Planned |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
 

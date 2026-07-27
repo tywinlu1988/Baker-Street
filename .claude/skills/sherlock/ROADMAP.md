@@ -70,6 +70,8 @@ Phase 2: Reasoning Layer (unchanged)
 
 ## v0.6: Quantitative Reasoning Layer
 
+> **Status: RELEASED (v0.6.0, 2026-07-27).** Scope was narrowed to the two-round reasoning fix (the homogenization problem, confirmed by v0.5.1 measurements). The original v0.6 items below (claim→p-value, Quantitative Support Ratio, judge dimension) were deferred and are now candidates for a future version. Measured results: CUR 0.45 → 0.622 mean, REVISED mean 4.3/persona, 9/9 annotated, zero collapses.
+
 ### Input from v0.5.1 measurements (2026-07, 10 pipeline runs)
 
 v0.5.1 established a behavioral test harness and measured the quant layer in production. Two findings reshape v0.6:
