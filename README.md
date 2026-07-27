@@ -332,6 +332,29 @@ Each test case runs three groups: **A** (raw model, no framework), **B** (framew
 
 The framework is validated against 5 standardized test cases. Release gate: ≥ 4/5 cases must pass all metrics.
 
+### Measured Reliability (v0.5.1, 2026-07)
+
+v0.5.0 shipped its quantitative layer code-complete but behaviorally untested. v0.5.1 closed that gap: we built a **behavioral test harness** (`tools/testing/pipeline_harness.py`, 27 unit tests), ran the full pipeline 10 times (130 agent dispatches) across two test cases, and fixed what the data — not intuition — said was broken.
+
+**The pipeline now persists its own telemetry.** Every run writes `run-log.json` (per-agent outcome and duration), the demand list, the analysis package, and per-persona outputs. The harness validates each run: demand format and per-persona coverage, package schema and demander coverage, persona output completeness, and **persona collapse detection** (missing sections or intake-dialogue leakage). `validate.md` Group E makes these checks part of the standard validation suite.
+
+**Baseline → fixed → re-measured:**
+
+| Metric | v0.5.0 baseline (measured) | v0.5.1 (measured) |
+|--------|---------------------------|-------------------|
+| Agent failure rate | 7.7% (5/65, all budget-boundary timeouts) | **3.1%** (2/65) |
+| Quant package availability | 3/5 | **5/5** |
+| Persona collapse | 0% (0/15) — earlier ad-hoc ~40% failure did not reproduce | 0% (0/15) |
+| Anti-sycophancy ratio | 11-20% (threshold: 8%) | maintained |
+
+**What the data actually showed** (and changed our plans):
+
+1. **The reported "~40% agent failure rate" was misdiagnosed.** Persona agents are the most reliable layer (20/20 across both rounds, 0 collapses). Failures concentrated in long-horizon research/quant agents hitting a miscalibrated 120s-420s timeout budget. Fix: baseline-calibrated per-role budgets (research/quant 600s, persona 360s, scout/rebuttal 240s).
+2. **Timeout ≠ one failure mode.** After budget recalibration, a rarer mode surfaced: research agents that true-hang (zero output at full 600s). Documented for v0.6 mitigation (periodic progress output + early termination).
+3. **The quant package homogenizes personas.** With a complete package, personas converge on the same numbers and CUR drops (0.52 → 0.45, worst run 0.33) — the v0.5.0 headline feature trades away perspective divergence, a core framework value. Rather than rush a fix into a reliability release, v0.6 will address this with two-round persona reasoning (independent draft first, then data revision — see ROADMAP).
+4. **Rebuttals are the highest-value phase.** 20/20 succeeded, and the strongest insights per run came from rebuttal rounds, not first-pass outputs.
+5. **Degradation beats absence.** The quant agent now saves its package incrementally; on timeout the orchestrator recovers a partial package (`"status": "partial"`) and personas proceed with what's computed, instead of losing the entire quantitative layer. One narrowed retry (missing demands only) is the pipeline's single quant retry — honest degradation over silent loss or auto-restart loops.
+
 ---
 
 ## 6. Installation & Usage
@@ -405,6 +428,7 @@ baker-street/
     ├── tool-map.json         # Cross-platform tool names
     ├── personas/             # 7 character prompt files
     ├── tools/analysis/       # Shared tool library (stats, simulation)
+    ├── tools/testing/        # Behavioral test harness (pipeline_harness.py)
     ├── platforms/            # Platform manifests (codex, antigravity, cursor)
     ├── test-cases/           # 5 validation test cases
     ├── judge.md              # LLM-as-Judge scoring
