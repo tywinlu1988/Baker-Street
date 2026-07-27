@@ -78,7 +78,7 @@ Wall-clock budgets per agent role (baseline-informed: successful research agents
 | baseline agent | 300s |
 | scout / demand collection / rebuttal | 240s |
 
-An agent exceeding its budget or producing zero output is treated as failed — record the outcome in run-log.json and apply that phase's degradation policy. Do NOT wait indefinitely. Never auto-restart beyond the single quant-agent retry defined in Phase 1.6.
+An agent exceeding its budget or producing zero output is treated as failed — record the outcome in run-log.json and apply that phase's degradation policy. Do NOT wait indefinitely. Apart from the Step 1.3 research re-dispatch (quality-gate, max 1), never auto-restart beyond the single quant-agent retry defined in Phase 1.6.
 
 ## Phase 1: Research Layer
 
@@ -113,7 +113,7 @@ Research agents have access to: web_search, run_command, read_file.
 
 **Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target.
 
-**Timeout handling:** If a research agent exceeds its budget (600s — see Agent Timeout Budgets) or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (network timeout)`.
+**Timeout handling:** If a research agent exceeds its budget (600s — see Agent Timeout Budgets) or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (timeout — budget exceeded)`.
 
 If `--no-research` is set: skip this phase entirely. Proceed with empty fact base.
 
@@ -179,10 +179,10 @@ Wait for the agent to return (budget: 600s — see Agent Timeout Budgets). The a
 
 1. **Read `.claude/skills/sherlock/quant-analysis-package.json`.**
 2. **Valid JSON, analyses cover ALL demands?** → Set `"status": "complete"`. Proceed.
-3. **Valid JSON but incomplete (timeout or partial coverage)?** → Dispatch ONE retry agent with ONLY the missing demands (narrowed prompt: missing demands + Shared Fact Base + instruction to APPEND new analyses to the existing package file). Retry succeeded → `"status": "complete"`. Retry failed → keep the partial package, set `"status": "partial"` and `"missing_demands": [{"persona": "...", "computation": "...", "reason": "quant agent timeout"}]`. Flag in metadata: `⚠️ Quantitative package partial — {N}/{M} demands completed`. Personas proceed with the partial package. This is the ONLY retry in the entire pipeline — never more than one.
+3. **Valid JSON but incomplete (timeout or partial coverage)?** → Dispatch ONE retry agent with ONLY the missing demands (narrowed prompt: missing demands + Shared Fact Base + instruction to APPEND new analyses to the existing package file). Retry succeeded → `"status": "complete"`. Retry failed → keep the partial package, set `"status": "partial"` and `"missing_demands": [{"persona": "...", "computation": "...", "reason": "quant agent timeout"}]`. Flag in metadata: `⚠️ Quantitative package partial — {N}/{M} demands completed`. Personas proceed with the partial package. This is the only retry in Phase 1.6 — never more than one, and never for any other agent role (the Step 1.3 research quality-gate re-dispatch is a separate, pre-existing mechanism, also max 1).
 4. **No file / invalid JSON / zero analyses?** → Proceed without quantitative analysis. Flag in metadata: `⚠️ Quantitative analysis unavailable — agent failed`.
 
-The output is the **Quantitative Analysis Package** — a JSON object with `analyses[]` array. This is shared with ALL persona agents in Phase 2.
+The output is the **Quantitative Analysis Package** — a JSON object with `analyses[]`, `status`, and `missing_demands` fields. This is shared with ALL persona agents in Phase 2.
 
 **Token budget: Moderate.** Quantitative execution is compute, not prose. The agent should produce analysis results, not essays.
 

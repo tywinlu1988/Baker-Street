@@ -261,6 +261,20 @@ class PartialPackageTest(unittest.TestCase):
         md = ph.summarize(root)
         self.assertIn("**Partial packages:** 1", md)
 
+    def test_unknown_status_normalized_to_complete(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({
+            "analyses": [{"requested_by": "holmes", "type": "trend", "parameters": {}, "results": {"slope": 1.5}}],
+            "status": "weird",
+        }))
+        r = ph.check_package(self.run, ["holmes"])
+        self.assertEqual(r["status"], "complete")
+        self.assertTrue(r["pass"])
+
+    def test_non_dict_package_fails_without_crash(self):
+        write(self.run / "quant-analysis-package.json", json.dumps([1, 2, 3]))
+        r = ph.check_package(self.run, ["holmes"])
+        self.assertFalse(r["pass"])
+
 
 if __name__ == "__main__":
     unittest.main()

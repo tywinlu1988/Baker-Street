@@ -44,7 +44,7 @@ After EACH Group C or Group D pipeline run, before judge scoring:
 3. Record in the run's metadata: harness pass/fail per check (demands / package / personas), collapse count, agent failure count from run-log.json.
 4. A pipeline run that fails harness checks is still scored by the judge — harness failure is reported alongside, never hidden.
 
-**Group E pass criteria:** `"pass": true` in harness-result.json (demands complete, package valid + covering all demanders, no persona collapses).
+**Group E pass criteria:** `"pass": true` in harness-result.json (demands complete; package valid with full coverage OR status=partial — partial packages are counted separately in the summarize aggregate; no persona collapses).
 
 ### Scoring
 After each test case, feed all five group outputs to the judge prompt (`.claude/skills/sherlock/judge.md`). Score on all 7 v0.3.x dimensions: FG, PD, BSC, CUR, Anti-Sycophancy Score, Tool Usage Effectiveness, Persona Distinctiveness.

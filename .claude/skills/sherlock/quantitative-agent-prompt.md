@@ -70,7 +70,7 @@ You MUST output valid JSON:
 3. **Document limitations.** Every analysis must include what it CANNOT tell you.
 4. **Be reproducible.** Your scripts should be self-contained and runnable.
 5. **Use standard Python libraries only** — `statistics`, `math`, `random`, `json`, `csv`. Avoid external dependencies.
-6. **Save incrementally.** Rewrite the package file after every completed analysis. If you cannot finish all demands within your budget, set `"status": "partial"` and list unfinished demands in `"missing_demands"` with reasons.
+6. **Save incrementally.** Rewrite the package file after every completed analysis. If you cannot finish all demands within your budget, set `"status": "partial"` and list unfinished demands in `"missing_demands"` with reasons. Each missing_demands item uses the shape `{"persona": "...", "computation": "...", "reason": "..."}`.
 
 ## Example Analyses You Can Perform
 
