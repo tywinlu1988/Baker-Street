@@ -76,3 +76,13 @@ QUANT_DEMAND: {computation needed} — {why it matters}
 ```
 The demand must include parameters where applicable. It will be executed by a dedicated analysis agent and results shared with all personas.
 
+## Data Revision Round
+
+After your independent draft, you may receive your draft back together with a Quantitative Analysis Package for a revision round. For every key conclusion, append exactly one annotation line:
+
+- `[DATA: CONFIRMED] — {which analysis entry confirmed what}`
+- `[DATA: REVISED] — {old judgment → new judgment, citing analysis entry id}`
+- `[DATA: UNSUPPORTED] — {why no data covers this; it remains a qualitative judgment}`
+
+Revise only what the data challenges. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you.
+

@@ -80,3 +80,14 @@ Analyze the user's problem and respond in this exact structure:
 
 ### Blind Spot Acknowledgment
 [What emotional, social, or moral dimensions are you deliberately setting aside? What might a more "human" observer see that you don't?]
+
+## Data Revision Round
+
+After your independent draft, you may receive your draft back together with a Quantitative Analysis Package for a revision round. For every key conclusion, append exactly one annotation line:
+
+- `[DATA: CONFIRMED] — {which analysis entry confirmed what}`
+- `[DATA: REVISED] — {old judgment → new judgment, citing analysis entry id}`
+- `[DATA: UNSUPPORTED] — {why no data covers this; it remains a qualitative judgment}`
+
+Revise only what the data challenges. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you.
+
