@@ -207,7 +207,7 @@ The framework doesn't deploy all 7 personas by default. Cost controls:
 
 ## 4. How It Works
 
-### Three-Phase Architecture
+### Pipeline Architecture
 
 ```
 User query
@@ -233,12 +233,25 @@ User query
                │ Shared Fact Base
                ▼
 ┌──────────────────────────────────────────┐
-│ Phase 2: Reasoning Layer                 │
+│ Phase 1.5/1.6: Quantitative Layer        │
 │                                          │
-│ Selected personas + baseline (parallel)  │
-│ Full tool access: WebFetch, Bash, Write  │
+│ Personas submit data demands → ONE       │
+│ quant agent builds a shared analysis     │
+│ package (JSON, partial-tolerant)         │
+└──────────────┬───────────────────────────┘
+               │
+               ▼
+┌──────────────────────────────────────────┐
+│ Phase 2: Two-Round Reasoning (v0.6)      │
+│                                          │
+│ 2a: personas draft independently (NO     │
+│   package, parallel with quant agent)    │
+│   → CUR anchored to these drafts         │
+│ 2b: fresh agents revise drafts with the  │
+│   package → [DATA: CONFIRMED/REVISED/    │
+│   UNSUPPORTED] annotations               │
+│ + baseline agent (parallel)              │
 │ Constrained to fact base (no invention)  │
-│ → 6-section structured output            │
 └──────────────┬───────────────────────────┘
                │
                ▼
@@ -291,7 +304,7 @@ Personas are constrained to reason from a shared JSON fact base (`{claim, source
 
 ### Output
 
-The report includes **Core Findings** (discoveries, not conclusions), **Framework Delta** (what the framework added over the raw model baseline), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. Every report also includes a **Claim Uniqueness Ratio (CUR)** — a quantitative measure of whether personas produced distinct insights or overlapped. A baseline comparison runs automatically on every analysis. Use `--tldr` for core findings + delta + actions only (one screen).
+The report includes **Core Findings** (discoveries, not conclusions), **Framework Delta** (what the framework added over the raw model baseline), **Key Divergences** (substantive disagreements and what they mean), **Silent Dimensions** (what nobody covered), a **Multi-Perspective Panorama** (each persona's thesis, conflicts annotated), and **Action Recommendations** at three time horizons. Every report also includes a **Claim Uniqueness Ratio (CUR)** — a quantitative measure of whether personas produced distinct insights or overlapped (anchored to pre-data drafts since v0.6). A baseline comparison runs automatically on every analysis. Use `--tldr` for core findings + delta + actions only (one screen).
 
 ---
 
@@ -322,15 +335,16 @@ The framework isn't just asserted to work — it's tested.
 
 Each test case runs three groups: **A** (raw model, no framework), **B** (framework, single persona), **C** (framework, full pipeline). Comparisons: C vs A (total gain), C vs B (multi-perspective increment), B vs A (persona value alone).
 
-### 5 Standardized Test Cases
+### Standardized Test Cases
 
 1. **Tech Decision**: Rust vs Go for real-time data (Python team)
 2. **Business Strategy**: SaaS growth stall with team dynamics
 3. **Knowledge Building**: Quantum computing for non-experts
 4. **Ethical Dilemma**: Co-founder concealed legal risk during fundraising
 5. **Meta-Analysis**: Framework critiques its own design
+6. **Quant-Dense** (v0.6): Pricing decision with concrete numbers — forces breakeven/simulation demands
 
-The framework is validated against 5 standardized test cases. Release gate: ≥ 4/5 cases must pass all metrics.
+The framework is validated against standardized test cases. Release gate: ≥ 4/5 cases must pass all metrics.
 
 ### Measured Reliability (v0.5.1, 2026-07)
 
@@ -350,8 +364,8 @@ v0.5.0 shipped its quantitative layer code-complete but behaviorally untested. v
 **What the data actually showed** (and changed our plans):
 
 1. **The reported "~40% agent failure rate" was misdiagnosed.** Persona agents are the most reliable layer (20/20 across both rounds, 0 collapses). Failures concentrated in long-horizon research/quant agents hitting a miscalibrated 120s-420s timeout budget. Fix: baseline-calibrated per-role budgets (research/quant 600s, persona 360s, scout/rebuttal 240s).
-2. **Timeout ≠ one failure mode.** After budget recalibration, a rarer mode surfaced: research agents that true-hang (zero output at full 600s). Documented for v0.6 mitigation (periodic progress output + early termination).
-3. **The quant package homogenizes personas.** With a complete package, personas converge on the same numbers and CUR drops (0.52 → 0.45, worst run 0.33) — the v0.5.0 headline feature trades away perspective divergence, a core framework value. Rather than rush a fix into a reliability release, v0.6 will address this with two-round persona reasoning (independent draft first, then data revision — see ROADMAP).
+2. **Timeout ≠ one failure mode.** After budget recalibration, a rarer mode surfaced: research agents that true-hang (zero output at full 600s). Deferred to a future version (periodic progress output + early termination).
+3. **The quant package homogenizes personas.** With a complete package, personas converge on the same numbers and CUR drops (0.52 → 0.45, worst run 0.33) — the v0.5.0 headline feature trades away perspective divergence, a core framework value. v0.6.0 fixed this with two-round persona reasoning (see next section).
 4. **Rebuttals are the highest-value phase.** 20/20 succeeded, and the strongest insights per run came from rebuttal rounds, not first-pass outputs.
 5. **Degradation beats absence.** The quant agent now saves its package incrementally; on timeout the orchestrator recovers a partial package (`"status": "partial"`) and personas proceed with what's computed, instead of losing the entire quantitative layer. One narrowed retry (missing demands only) is the pipeline's single quant retry — honest degradation over silent loss or auto-restart loops.
 
@@ -440,7 +454,7 @@ baker-street/
     ├── tools/analysis/       # Shared tool library (stats, simulation)
     ├── tools/testing/        # Behavioral test harness (pipeline_harness.py)
     ├── platforms/            # Platform manifests (codex, antigravity, cursor)
-    ├── test-cases/           # 5 validation test cases
+    ├── test-cases/           # 6 validation test cases
     ├── judge.md              # LLM-as-Judge scoring
     └── validate.md           # Validation suite runner
 ```
