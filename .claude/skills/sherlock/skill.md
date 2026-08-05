@@ -250,7 +250,7 @@ Log each revision agent in run-log.json as `{"name": "2b-{name}", "role": "revis
 
 **Single-round mode:** If `--depth quick`, skip the 2a/2b split: personas receive the package directly in one round and write `persona-output-{name}.md` (legacy v0.5.x flow, no draft files).
 
-**Token budget: Lean.** Drafts: each section 1-3 paragraphs max. Revision round: annotations + targeted edits, NOT a full rewrite — if a 2b output exceeds the draft's length by >50%, it is probably being wasteful.
+**Token budget: Lean — hard constraints (v0.6.1).** Drafts: each section 1-3 paragraphs max. Revision round output MUST NOT exceed 130% of the draft's word count. Annotations replace prose, they do not add to it: for every annotation line added, condense or delete equivalent draft text. Sections untouched by data must be copied verbatim, not rewritten. The harness measures the final/draft ratio and flags anything over 1.5x — staying under 1.3x keeps you safely clear.
 
 **Run logging:** After ALL agents (research, quantitative, persona, revision, baseline) have returned or timed out, write `.claude/skills/sherlock/run-log.json` recording EVERY agent dispatched this run:
 

@@ -89,3 +89,5 @@ After your independent draft, you may receive your draft back together with a Qu
 
 Revise ONLY what the data challenges; keep everything else. End with a `### Data Revision Summary` section: counts of each annotation type + one sentence on what the data changed. Honesty first — UNSUPPORTED is always better than pretending the data supports you.
 
+
+File outputs: you may ONLY write `persona-output-{name}.md`, `persona-output-{name}-draft.md`, or helper scripts under `.claude/skills/sherlock/tools/`. Never write to the repository root or any other path. In the revision round, your final output MUST NOT exceed 130% of your draft's word count.

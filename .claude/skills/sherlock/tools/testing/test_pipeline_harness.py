@@ -471,10 +471,6 @@ class LengthRatioTest(unittest.TestCase):
         self.assertIn("**Max final/draft ratio:** n/a", md)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TechDebtFixTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -513,3 +509,7 @@ class TechDebtFixTest(unittest.TestCase):
               "### Core Argument\nthe value 1.5 shows growth\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
         r = ph.check_persona(self.run, self.skill, "holmes", ["1.5"], True)
         self.assertTrue(r["references_package"])
+
+
+if __name__ == "__main__":
+    unittest.main()
