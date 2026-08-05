@@ -8,7 +8,7 @@
 这不是一个"列出优缺点"的提示词模板，而是一个**思维引擎** —— 它的价值不在于输出格式有多漂亮，而在于能否让用户看到自己（以及模型）原本看不到的东西。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.6.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.6.1-blue.svg)](package.json)
 
 [English](README.md) | 中文
 
@@ -594,7 +594,7 @@ baker-street/
 | **v0.3.x** | 反迎合引擎、可配置研究深度、自动反证 agent、Bash 工具指引、Scout 覆盖率验证、Agent 超时处理 | ✅ 已发布 |
 | **v0.4.x** | 跨平台适配（Codex、Antigravity、Cursor）、共享工具库、平台无关工具名、跨平台安装器 | ✅ 已发布 |
 | **v0.5.x** | 定量研究层——共享分析包、角色数据需求、统计分析 Agent。v0.5.1：实测可靠性——行为测试 harness、按角色超时预算、部分包降级 | ✅ 已发布 |
-| **v0.6.x** | 两轮角色推理——独立初稿轮 + 数据修正轮三态标注；CUR 锚定初稿（同质化修复，实测 CUR 0.45 → 0.62） | ✅ 已发布 |
+| **v0.6.x** | 两轮角色推理——独立初稿轮 + 数据修正轮三态标注；CUR 锚定初稿（同质化修复，实测 CUR 0.45 → 0.62）。v0.6.1：成本与稳定——2b 简洁硬约束（终稿 ≤130% 初稿，实测 max 1.37x，token 溢价从 +55-75% 降到 +14-23%）、research 挂起提前终止与部分结果回收、角色写路径白名单 | ✅ 已发布 |
 | **v0.7.x** | 冠军模式——获胜角色深度调研、角色专属深度能力 | 📅 计划 |
 | **v1.0** | 生产级可靠性——SLA 保障分析、流式输出、企业集成模式 | 📅 计划 |
 

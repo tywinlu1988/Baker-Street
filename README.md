@@ -6,7 +6,7 @@
 **Baker Street** is a Claude Code skill that applies **7 distinct cognitive archetypes** — each inspired by a character from the Sherlock Holmes canon — to analyze any problem, decision, or topic. It works as a **thinking engine**, not a templated answer generator: independent persona agents analyze in parallel, then a synthesis layer mines their conflicts and blind spots to produce insights no single model response can achieve.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.6.0-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.6.1-blue.svg)](package.json)
 
 English | [中文](README_CN.md)
 
@@ -470,7 +470,7 @@ baker-street/
 | **v0.3.x** | Anti-sycophancy engine (mandatory counter-evidence), configurable research depth (light/standard/deep), auto counter-evidence agent, Bash tool guidance, scout coverage verification, research agent timeout handling | ✅ Released |
 | **v0.4.x** | Cross-platform adaptation (Codex, Antigravity, Cursor), shared tool library, platform-agnostic tool names, cross-platform installer | ✅ Released |
 | **v0.5.x** | Quantitative Research Layer — shared analysis package, persona data demands, statistical analysis agent. v0.5.1: measured reliability — behavioral test harness, per-role timeout budgets, partial-package degradation | ✅ Released |
-| **v0.6.x** | Two-Round Persona Reasoning — independent draft round, then data revision round with three-state annotations; CUR anchored to drafts (homogenization fix, measured CUR 0.45 → 0.62) | ✅ Released |
+| **v0.6.x** | Two-Round Persona Reasoning — independent draft round, then data revision round with three-state annotations; CUR anchored to drafts (homogenization fix, measured CUR 0.45 → 0.62). v0.6.1: cost & stability — 2b brevity hard constraint (final ≤130% of draft, measured max 1.37x, token premium cut from +55-75% to +14-23%), research stall early-termination with partial-result recovery, persona write-path whitelist | ✅ Released |
 | **v0.7.x** | Champion Mode — winning persona deep investigation, persona-specific deep capabilities | 📅 Planned |
 | **v1.0** | Production-grade reliability — SLA-backed analysis, streaming output, enterprise integration patterns | 📅 Planned |
 
