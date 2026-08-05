@@ -419,6 +419,17 @@ class TwoRoundIntegrationTest(unittest.TestCase):
         self.assertNotIn("drafts", r["checks"])
         self.assertNotIn("annotations", r["checks"])
 
+    def test_length_warning_does_not_fail_run(self):
+        draft = self.run / "persona-output-holmes-draft.md"
+        final = self.run / "persona-output-holmes.md"
+        draft_text = draft.read_text(encoding="utf-8")
+        # inflate the final to ~2x the draft's word count (well over the 1.5 warning line)
+        final.write_text(final.read_text(encoding="utf-8") + "\n" + " ".join(["padding"] * 3 * len(draft_text.split())), encoding="utf-8")
+        r = ph.check_run(self.run, self.skill)
+        self.assertIn("length_ratio", r["checks"])
+        self.assertEqual(r["checks"]["length_ratio"]["length_warnings"], ["holmes"])
+        self.assertTrue(r["pass"])
+
 
 class LengthRatioTest(unittest.TestCase):
     def setUp(self):
