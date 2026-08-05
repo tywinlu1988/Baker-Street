@@ -420,6 +420,57 @@ class TwoRoundIntegrationTest(unittest.TestCase):
         self.assertNotIn("annotations", r["checks"])
 
 
+class LengthRatioTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+
+    def test_ratio_computed_and_warnings(self):
+        write(self.run / "persona-output-holmes-draft.md", " ".join(["word"] * 100))
+        write(self.run / "persona-output-holmes.md", " ".join(["word"] * 190))
+        write(self.run / "persona-output-moriarty-draft.md", " ".join(["word"] * 100))
+        write(self.run / "persona-output-moriarty.md", " ".join(["word"] * 110))
+        r = ph.check_length_ratio(self.run, ["holmes", "moriarty"])
+        self.assertAlmostEqual(r["ratios"]["holmes"], 1.9, places=2)
+        self.assertAlmostEqual(r["ratios"]["moriarty"], 1.1, places=2)
+        self.assertEqual(r["length_warnings"], ["holmes"])
+        self.assertAlmostEqual(r["max_ratio"], 1.9, places=2)
+
+    def test_missing_draft_skips_persona(self):
+        write(self.run / "persona-output-holmes.md", "some final")
+        r = ph.check_length_ratio(self.run, ["holmes"])
+        self.assertEqual(r["ratios"], {})
+        self.assertEqual(r["length_warnings"], [])
+        self.assertIsNone(r["max_ratio"])
+
+    def test_exactly_1_5_is_not_a_warning(self):
+        write(self.run / "persona-output-holmes-draft.md", " ".join(["word"] * 100))
+        write(self.run / "persona-output-holmes.md", " ".join(["word"] * 150))
+        r = ph.check_length_ratio(self.run, ["holmes"])
+        self.assertEqual(r["length_warnings"], [])
+
+    def test_summarize_shows_max_ratio(self):
+        root = self.run.parent
+        write(self.run / "run-log.json", json.dumps({"agents": [
+            {"name": "a0", "role": "persona", "outcome": "success", "duration_s": 60}]}))
+        write(self.run / "harness-result.json", json.dumps({
+            "pass": True, "checks": {"package": {"partial": False}, "personas": {"results": []},
+                                     "length_ratio": {"max_ratio": 1.9}}}))
+        md = ph.summarize(root)
+        self.assertIn("**Max final/draft ratio:** 1.9x", md)
+
+    def test_summarize_ratio_na_when_absent(self):
+        root = self.run.parent
+        write(self.run / "run-log.json", json.dumps({"agents": [
+            {"name": "a0", "role": "persona", "outcome": "success", "duration_s": 60}]}))
+        write(self.run / "harness-result.json", json.dumps({
+            "pass": True, "checks": {"package": {"partial": False}, "personas": {"results": []}}}))
+        md = ph.summarize(root)
+        self.assertIn("**Max final/draft ratio:** n/a", md)
+
+
 if __name__ == "__main__":
     unittest.main()
 

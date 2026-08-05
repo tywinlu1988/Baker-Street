@@ -215,6 +215,29 @@ def check_annotations_exempt(run_dir, personas, package_available):
     return base
 
 
+LENGTH_WARN_THRESHOLD = 1.5
+
+
+def _word_count(path):
+    try:
+        return len(Path(path).read_text(encoding="utf-8").split())
+    except OSError:
+        return None
+
+
+def check_length_ratio(run_dir, personas):
+    ratios = {}
+    for p in personas:
+        draft = _word_count(Path(run_dir) / f"persona-output-{p}-draft.md")
+        final = _word_count(Path(run_dir) / f"persona-output-{p}.md")
+        if draft and final:
+            ratios[p] = round(final / draft, 2)
+    warnings = [p for p, r in ratios.items() if r > LENGTH_WARN_THRESHOLD]
+    return {"ratios": ratios,
+            "max_ratio": max(ratios.values()) if ratios else None,
+            "length_warnings": warnings}
+
+
 def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
     personas = expected_personas(run_dir)
     demands = check_demands(run_dir, personas)
@@ -234,6 +257,7 @@ def check_run(run_dir, skill_dir=SKILL_DIR_DEFAULT):
             package_available=package["valid_json"] and package["analyses_count"] > 0)
         checks["drafts"] = drafts
         checks["annotations"] = annotations
+        checks["length_ratio"] = check_length_ratio(run_dir, personas)
         overall = overall and drafts["pass"] and annotations["pass"]
     result = {
         "run_dir": str(run_dir),
@@ -249,6 +273,7 @@ def summarize(results_dir):
     runs = sorted(Path(results_dir).glob("run-*/"))
     total = failures = collapses = passes = partials = 0
     ann = {"confirmed": 0, "revised": 0, "unsupported": 0}
+    max_ratio = None
     lines = ["# Baseline Summary", "",
              "| Run | Agents | Failures | Collapses | Harness |",
              "|-----|-------:|---------:|----------:|:-------:|"]
@@ -268,6 +293,9 @@ def summarize(results_dir):
             partials += 1
         for k in ann:
             ann[k] += harness.get("checks", {}).get("annotations", {}).get("counts", {}).get(k, 0)
+        mr = harness.get("checks", {}).get("length_ratio", {}).get("max_ratio")
+        if mr is not None:
+            max_ratio = mr if max_ratio is None else max(max_ratio, mr)
         lines.append(f"| {run.name} | {len(agents)} | {n_fail} | {n_collapse} | {'PASS' if passed else 'FAIL'} |")
     rate = (failures / total * 100) if total else 0.0
     lines += ["",
@@ -275,7 +303,8 @@ def summarize(results_dir):
               f"**Persona collapses:** {collapses}",
               f"**Harness pass rate:** {passes}/{len(runs)}",
               f"**Partial packages:** {partials}",
-              f"**Annotations (C/R/U):** {ann['confirmed']}/{ann['revised']}/{ann['unsupported']}"]
+              f"**Annotations (C/R/U):** {ann['confirmed']}/{ann['revised']}/{ann['unsupported']}",
+              f"**Max final/draft ratio:** {f'{max_ratio}x' if max_ratio is not None else 'n/a'}"]
     return "\n".join(lines)
 
 
