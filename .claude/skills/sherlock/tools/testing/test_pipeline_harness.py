@@ -422,3 +422,43 @@ class TwoRoundIntegrationTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TechDebtFixTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.run.mkdir(parents=True)
+        self.skill = Path(self.tmp.name) / "skill"
+        write(self.skill / "personas" / "holmes.md", FAKE_PERSONA_MD)
+
+    def test_prose_analyses_does_not_count_as_package_reference(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nour analyses show concerns\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], True)
+        self.assertFalse(r["references_package"])
+
+    def test_section_mentioned_in_prose_is_still_missing(self):
+        write(self.run / "persona-output-holmes.md",
+              "I will give my Core Argument now, plus Key Observations and a Blind Spot Acknowledgment.\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertEqual(len(r["sections_missing"]), 3)
+
+    def test_single_digit_result_number_extracted(self):
+        write(self.run / "quant-analysis-package.json", json.dumps({"analyses": [
+            {"requested_by": "holmes", "type": "compare", "parameters": {}, "results": {"count": 5, "slope": 1.5}},
+        ]}))
+        nums = ph.package_numbers(self.run)
+        self.assertIn("5", nums)
+        self.assertIn("1.5", nums)
+
+    def test_number_matches_only_as_token(self):
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nthe value 11.5 shows growth\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", ["1.5"], True)
+        self.assertFalse(r["references_package"])
+        write(self.run / "persona-output-holmes.md",
+              "### Core Argument\nthe value 1.5 shows growth\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+        r = ph.check_persona(self.run, self.skill, "holmes", ["1.5"], True)
+        self.assertTrue(r["references_package"])

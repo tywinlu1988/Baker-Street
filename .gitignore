@@ -29,3 +29,6 @@ run-log.json
 harness-result.json
 __pycache__/
 *.pyc
+
+# underscore variants that evade dash patterns
+*_day_week_*.md

@@ -52,7 +52,7 @@ def check_demands(run_dir, personas):
 REQUIRED_ANALYSIS_KEYS = ("requested_by", "type", "results")
 
 
-def check_package(run_dir, demand_personas):
+def check_package(run_dir, demander_names):
     path = Path(run_dir) / "quant-analysis-package.json"
     data = load_json(path)
     result = {"pass": False, "exists": path.exists(), "valid_json": data is not None,
@@ -72,7 +72,7 @@ def check_package(run_dir, demand_personas):
                 result["schema_errors"].append(f"analyses[{i}] missing/empty '{k}'")
         if a.get("requested_by"):
             covered.add(a["requested_by"])
-    result["uncovered_personas"] = [p for p in demand_personas if p not in covered]
+    result["uncovered_personas"] = [p for p in demander_names if p not in covered]
     status = data.get("status", "complete") if isinstance(data, dict) else "complete"
     if status not in ("complete", "partial"):
         status = "complete"
@@ -96,7 +96,7 @@ COLLAPSE_MARKERS = (
     "Proceed with this configuration",
     "Problem Map",
 )
-PACKAGE_REF_HINTS = ("quantitative analysis package", "requested_by", "analyses")
+PACKAGE_REF_HINTS = ("quantitative analysis package", "requested_by")
 
 
 def persona_sections(skill_dir, persona):
@@ -118,7 +118,7 @@ def package_numbers(run_dir):
     nums = set()
     for a in data.get("analyses", []):
         blob = json.dumps(a.get("results", {}))
-        nums.update(re.findall(r"-?\d+\.\d+|-?\d{2,}", blob))
+        nums.update(re.findall(r"-?\d+\.\d+|-?\d+", blob))
     return sorted(nums)
 
 
@@ -130,13 +130,16 @@ def check_persona(run_dir, skill_dir, persona, ref_numbers, package_available):
         result["collapsed"] = True
         return result
     text = path.read_text(encoding="utf-8")
-    result["sections_missing"] = [s for s in persona_sections(skill_dir, persona) if s not in text]
+    result["sections_missing"] = [
+        s for s in persona_sections(skill_dir, persona)
+        if not re.search(rf"^###\s+{re.escape(s)}\s*$", text, re.MULTILINE)]
     markers = [m for m in COLLAPSE_MARKERS if m in text]
     result["collapsed"] = len(result["sections_missing"]) >= 2 or bool(markers)
     if package_available:
         low = text.lower()
-        result["references_package"] = (any(n in text for n in ref_numbers)
-                                        or any(h in low for h in PACKAGE_REF_HINTS))
+        result["references_package"] = (
+            any(re.search(rf"(?<![\d.]){re.escape(n)}(?![\d.])", text) for n in ref_numbers)
+            or any(h in low for h in PACKAGE_REF_HINTS))
     return result
 
 
@@ -177,6 +180,8 @@ def check_annotations(run_dir, personas):
 
 
 def revision_outcomes(run_dir):
+    # Names are unique per run by design (2b agents are never retried — 教训 7),
+    # so the dict comprehension cannot silently collapse duplicates in practice.
     log = load_json(Path(run_dir) / "run-log.json")
     if not isinstance(log, dict):
         return {}
@@ -190,20 +195,21 @@ def is_two_round(run_dir):
 
 def check_annotations_exempt(run_dir, personas, package_available):
     base = check_annotations(run_dir, personas)
-    base["exempted"] = []
     if not package_available:
         base["exempted"] = [{"persona": p, "reason": "no package"} for p in personas]
         base["unannotated"] = []
         base["pass"] = True
         return base
     outcomes = revision_outcomes(run_dir)
+    exempted = []
     still_un = []
     for p in base["unannotated"]:
         outcome = outcomes.get(f"2b-{p}")
         if outcome is not None and outcome != "success":
-            base["exempted"].append({"persona": p, "reason": f"2b {outcome}"})
+            exempted.append({"persona": p, "reason": f"2b {outcome}"})
         else:
             still_un.append(p)
+    base["exempted"] = exempted
     base["unannotated"] = still_un
     base["pass"] = not still_un
     return base
