@@ -114,7 +114,7 @@ Research agents have access to: web_search, run_command, read_file.
 
 **Token budget: Generous.** Research is fact-gathering — spend tokens to get comprehensive coverage. 15-30 facts with proper sourcing is the target.
 
-**Timeout handling:** If a research agent exceeds its budget (600s — see Agent Timeout Budgets) or produces zero output, treat it as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (timeout — budget exceeded)`.
+**Timeout handling:** Research agents save their output file incrementally. If a research agent's output file has not been updated for 240 seconds, you MAY terminate it early and recover whatever partial results are on disk — do not wait for the full 600s budget when the agent has clearly stalled. An agent that exceeds its 600s budget or produces zero output is treated as failed. Do NOT wait indefinitely. Proceed with whatever valid output exists from other agents. If ALL research agents fail, fall back to `--no-research` mode and proceed to Phase 2 with an empty fact base. Note in metadata: `⚠️ Research degraded — {N}/{total} agents failed (timeout — budget exceeded)`.
 
 If `--no-research` is set: skip this phase entirely. Proceed with empty fact base.
 
