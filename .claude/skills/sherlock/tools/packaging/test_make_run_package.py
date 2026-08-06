@@ -49,5 +49,46 @@ class SourcesTest(unittest.TestCase):
         self.assertIn("无研究产物", out.read_text(encoding="utf-8"))
 
 
+class AssembleTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.skill = Path(self.tmp.name) / "skill"
+        self.skill.mkdir(parents=True)
+        self.run = Path(self.tmp.name) / "sherlock-runs" / "20260806-120000"
+        write(self.skill / "research-output-1.json", json.dumps([
+            {"claim": "fact A", "source": "s1", "confidence": 0.9}]))
+        write(self.skill / "quant-demands.json", json.dumps({"demands": []}))
+        write(self.skill / "quant-analysis-package.json", json.dumps({
+            "analyses": [{"requested_by": "holmes", "type": "mc",
+                          "results": {}, "script": str(self.skill / "tools" / "analysis" / "mc_engine.py")}]}))
+        write(self.skill / "tools" / "analysis" / "mc_engine.py", "# script")
+        write(self.skill / "persona-output-holmes-draft.md", "draft")
+        write(self.skill / "persona-output-holmes.md", "final")
+        write(self.skill / "run-log.json", json.dumps({"agents": []}))
+
+    def test_assemble_moves_and_cleans(self):
+        r = mrp.cmd_assemble(self.skill, self.run)
+        self.assertTrue((self.run / "fact-base.json").exists())
+        self.assertTrue((self.run / "sources.md").exists())
+        self.assertTrue((self.run / "personas" / "persona-output-holmes-draft.md").exists())
+        self.assertTrue((self.run / "personas" / "persona-output-holmes.md").exists())
+        self.assertTrue((self.run / "quant-analysis-package.json").exists())
+        self.assertTrue((self.run / "scripts" / "mc_engine.py").exists())
+        # skill dir cleaned
+        self.assertFalse((self.skill / "research-output-1.json").exists())
+        self.assertFalse((self.skill / "persona-output-holmes.md").exists())
+        self.assertFalse((self.skill / "run-log.json").exists())
+        # shared script NOT moved (copied only)
+        self.assertTrue((self.skill / "tools" / "analysis" / "mc_engine.py").exists())
+
+    def test_assemble_tolerates_missing(self):
+        (self.skill / "quant-demands.json").unlink()
+        (self.skill / "run-log.json").unlink()
+        r = mrp.cmd_assemble(self.skill, self.run)
+        self.assertIn("quant-demands.json", r["missing"])
+        self.assertTrue((self.run / "fact-base.json").exists())
+
+
 if __name__ == "__main__":
     unittest.main()
