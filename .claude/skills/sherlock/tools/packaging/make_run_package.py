@@ -61,10 +61,15 @@ def cmd_factbase(skill_dir, merged_path=None):
     """Build canonical fact-base.json (stable F-ids, confidence-sorted) + sources.md
     where row number == F-id number. Returns fact count."""
     skill_dir = Path(skill_dir)
+    facts = None
     if merged_path is not None and Path(merged_path).exists():
-        facts = [x for x in json.loads(Path(merged_path).read_text(encoding="utf-8"))
-                 if isinstance(x, dict)]
-    else:
+        try:
+            data = json.loads(Path(merged_path).read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                facts = [x for x in data if isinstance(x, dict)]
+        except (OSError, json.JSONDecodeError):
+            facts = None  # corrupt merged file: fall back to research-output-*.json
+    if facts is None:
         facts = _load_facts(skill_dir)
     facts = sorted(facts, key=_conf, reverse=True)
     for i, f in enumerate(facts, 1):
@@ -108,6 +113,7 @@ def cmd_assemble(skill_dir, run_dir):
             missing.append(name)
 
     move("fact-base.json")
+    move("fact-base-merged.json")
     move("sources.md")
     # raw per-agent research outputs: preserved in run dir (provenance), not deleted
     for f in glob.glob(str(skill_dir / "research-output-*.json")):

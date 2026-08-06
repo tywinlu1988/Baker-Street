@@ -117,6 +117,11 @@ class FactbaseTest(unittest.TestCase):
         self.assertIn("F001", row1)
         self.assertIn("high conf fact", row1)
 
+    def test_factbase_corrupt_merged_falls_back(self):
+        write(self.skill / "merged.json", "{corrupt")
+        n = mrp.cmd_factbase(self.skill, merged_path=self.skill / "merged.json")
+        self.assertEqual(n, 2)  # fell back to research-output-1.json's 2 facts
+
     def test_factbase_uses_merged_file(self):
         write(self.skill / "merged.json", json.dumps([
             {"claim": "deduped fact", "source": "s9", "confidence": 0.8}]))

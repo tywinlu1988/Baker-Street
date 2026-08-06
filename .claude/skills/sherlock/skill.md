@@ -150,7 +150,7 @@ If it fails:
 4. Sort by confidence (highest first).
 5. Count counter-evidence facts (those with `"type": "counter-evidence"`). Compute: `anti_sycophancy_ratio = counter_evidence_count / total_facts`.
    - If ratio ≥ 0.08: Proceed normally.
-   - If ratio < 0.08: **Dispatch ONE additional research agent** with an explicit instruction: "Your sole task is to find counter-evidence. Produce 5-10 facts that challenge or contradict the assumptions in: {user query}. Label ALL facts with \"type\": \"counter-evidence\"." This is a single agent dispatch — do NOT re-run the entire research phase. Merge the new facts into the fact base before proceeding.
+   - If ratio < 0.08: **Dispatch ONE additional research agent** with an explicit instruction: "Your sole task is to find counter-evidence. Produce 5-10 facts that challenge or contradict the assumptions in: {user query}. Label ALL facts with \"type\": \"counter-evidence\"." This is a single agent dispatch — do NOT re-run the entire research phase. Merge the new facts into `fact-base-merged.json` and RE-RUN the factbase command (step 3.5) to renumber the canonical fact base before proceeding.
    - If after the additional agent the ratio is STILL < 0.08: Proceed anyway and flag in metadata: `⚠️ Low counter-evidence even after dedicated agent — this topic may genuinely lack contrary evidence.`
 6. This is the **Shared Fact Base** — the only factual source persona agents may use in Phase 2.
 7. Pass the COMPLETE fact base (all claims) to every persona agent. Do not truncate.
@@ -181,7 +181,7 @@ Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantita
 - The **user's original query**
 - Access to tools: `run_command`, `web_search`, `read_file`, `write_file`
 - Instruction: "Execute every valid demand. Use `python3 .claude/skills/sherlock/tools/analysis/stats.py` and `simulation.py` where applicable. Produce a Quantitative Analysis Package as JSON."
-- Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file. Each analysis must carry a sequential "id" field ("Q001", "Q002", ...)."
+- Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file. Each analysis must carry a sequential 'id' field ('Q001', 'Q002', ...)."
 
 Wait for the agent to return (budget: 600s — see Agent Timeout Budgets). The agent saves the package file incrementally, so it may exist even after a timeout. Then:
 
