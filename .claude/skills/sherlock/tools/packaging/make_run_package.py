@@ -49,10 +49,11 @@ def cmd_assemble(skill_dir, run_dir):
     (run_dir / "scripts").mkdir(parents=True, exist_ok=True)
     moved, missing = [], []
 
-    # fact base: merge then move
+    # fact base: merge, generate provenance, THEN delete research outputs
     facts = _load_facts(skill_dir)
     (run_dir / "fact-base.json").write_text(
         json.dumps(facts, indent=2, ensure_ascii=False), encoding="utf-8")
+    cmd_sources(skill_dir, run_dir / "sources.md")
     for f in glob.glob(str(skill_dir / "research-output-*.json")):
         Path(f).unlink()
         moved.append(Path(f).name)
@@ -88,7 +89,6 @@ def cmd_assemble(skill_dir, run_dir):
         except (OSError, json.JSONDecodeError):
             pass
 
-    cmd_sources(skill_dir, run_dir / "sources.md")
     return {"moved": moved, "missing": missing}
 
 

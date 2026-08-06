@@ -71,6 +71,8 @@ class AssembleTest(unittest.TestCase):
         r = mrp.cmd_assemble(self.skill, self.run)
         self.assertTrue((self.run / "fact-base.json").exists())
         self.assertTrue((self.run / "sources.md").exists())
+        # provenance generated before research outputs were deleted
+        self.assertIn("fact A", (self.run / "sources.md").read_text(encoding="utf-8"))
         self.assertTrue((self.run / "personas" / "persona-output-holmes-draft.md").exists())
         self.assertTrue((self.run / "personas" / "persona-output-holmes.md").exists())
         self.assertTrue((self.run / "quant-analysis-package.json").exists())
