@@ -522,5 +522,22 @@ class TechDebtFixTest(unittest.TestCase):
         self.assertTrue(r["references_package"])
 
 
+class PersonasSubdirTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.run = Path(self.tmp.name) / "run-1"
+        self.skill = Path(self.tmp.name) / "skill"
+        write(self.skill / "personas" / "holmes.md", FAKE_PERSONA_MD)
+        write(self.run / "personas" / "persona-output-holmes.md",
+              "### Core Argument\nx\n### Key Observations\n- a\n### Blind Spot Acknowledgment\ny\n")
+
+    def test_persona_found_in_subdir(self):
+        r = ph.check_persona(self.run, self.skill, "holmes", [], False)
+        self.assertTrue(r["exists"])
+        self.assertFalse(r["collapsed"])
+        self.assertEqual(r["sections_missing"], [])
+
+
 if __name__ == "__main__":
     unittest.main()

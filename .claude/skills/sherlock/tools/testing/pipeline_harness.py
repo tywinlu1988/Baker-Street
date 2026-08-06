@@ -122,8 +122,18 @@ def package_numbers(run_dir):
     return sorted(nums)
 
 
+def _persona_file(run_dir, name, draft=False):
+    suffix = "-draft" if draft else ""
+    fname = f"persona-output-{name}{suffix}.md"
+    for base in (Path(run_dir), Path(run_dir) / "personas"):
+        p = base / fname
+        if p.exists():
+            return p
+    return Path(run_dir) / fname  # default path for not-found reporting
+
+
 def check_persona(run_dir, skill_dir, persona, ref_numbers, package_available):
-    path = Path(run_dir) / f"persona-output-{persona}.md"
+    path = _persona_file(run_dir, persona)
     result = {"persona": persona, "exists": path.exists(),
               "sections_missing": [], "collapsed": False, "references_package": None}
     if not path.exists():
@@ -149,7 +159,7 @@ ANNOTATION_RE = re.compile(r"\[DATA: (CONFIRMED|REVISED|UNSUPPORTED)\]")
 def check_drafts(run_dir, personas):
     result = {"pass": True, "missing_drafts": []}
     for p in personas:
-        path = Path(run_dir) / f"persona-output-{p}-draft.md"
+        path = _persona_file(run_dir, p, draft=True)
         try:
             empty = not path.read_text(encoding="utf-8").strip()
         except OSError:
@@ -165,7 +175,7 @@ def check_annotations(run_dir, personas):
               "counts": {"confirmed": 0, "revised": 0, "unsupported": 0},
               "unannotated": []}
     for p in personas:
-        path = Path(run_dir) / f"persona-output-{p}.md"
+        path = _persona_file(run_dir, p)
         try:
             text = path.read_text(encoding="utf-8")
         except OSError:

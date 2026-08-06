@@ -142,6 +142,11 @@ If it fails:
 1. Read all research output files (`.claude/skills/sherlock/research-output-*.json`).
 2. Merge into a single JSON array — concatenate all arrays.
 3. Deduplicate claims using the same semantic equivalence check as CUR (if two claims say substantively the same thing, keep the one with higher confidence).
+3.5. **Canonical numbering (v0.6.2):** Write the deduplicated facts to `.claude/skills/sherlock/fact-base-merged.json` (JSON array), then run:
+     ```bash
+     python .claude/skills/sherlock/tools/packaging/make_run_package.py factbase --skill-dir .claude/skills/sherlock --merged .claude/skills/sherlock/fact-base-merged.json
+     ```
+     This produces the canonical `fact-base.json` (confidence-sorted, ids F001, F002, ...) and `sources.md` (row # == id). **From this point on, every reference to a fact — in persona prompts, QUANT_DEMANDs, and the report's Evidence Appendix — MUST use its F-id.**
 4. Sort by confidence (highest first).
 5. Count counter-evidence facts (those with `"type": "counter-evidence"`). Compute: `anti_sycophancy_ratio = counter_evidence_count / total_facts`.
    - If ratio ≥ 0.08: Proceed normally.
@@ -176,7 +181,7 @@ Dispatch ONE quantitative analysis agent using `.claude/skills/sherlock/quantita
 - The **user's original query**
 - Access to tools: `run_command`, `web_search`, `read_file`, `write_file`
 - Instruction: "Execute every valid demand. Use `python3 .claude/skills/sherlock/tools/analysis/stats.py` and `simulation.py` where applicable. Produce a Quantitative Analysis Package as JSON."
-- Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file."
+- Output instruction: "Save the Quantitative Analysis Package to `.claude/skills/sherlock/quant-analysis-package.json` using write_file. Each analysis must carry a sequential "id" field ("Q001", "Q002", ...)."
 
 Wait for the agent to return (budget: 600s — see Agent Timeout Budgets). The agent saves the package file incrementally, so it may exist even after a timeout. Then:
 
@@ -470,11 +475,11 @@ Generate three tiers of next steps:
 
 ## 📎 Evidence Appendix（证据清单）
 
-| 核心结论 | 支撑事实（fact-base #编号） | 量化依据（analysis id） | 来源 |
-|----------|----------------------------|-------------------------|------|
-| {每条 Core Finding 一行} | {#3, #17} | {Q001 或 —} | {见 sources.md #编号} |
+| 核心结论 | 支撑事实（F-id） | 量化依据（Q-id） | 来源 |
+|----------|------------------|-------------------|------|
+| {每条 Core Finding 一行} | {F003, F017} | {Q001 或 —} | {sources.md 同号行} |
 
-{每条 Core Finding 必须能沿此表溯源到具体事实和来源；无法溯源的结论必须在这里显式标注"模型推断，无事实库支撑"。}
+{F-id 与 Q-id 在 Step 1.4 / Phase 1.6 已分配——直接引用，不要自创编号。无法溯源的结论必须显式标注"模型推断，无事实库支撑"。}
 
 ## 📊 Analysis Metadata
 
@@ -551,7 +556,7 @@ Recommendations:
    ```bash
    python .claude/skills/sherlock/tools/packaging/make_run_package.py assemble sherlock-runs/YYYYMMDD-HHMMSS --skill-dir .claude/skills/sherlock
    ```
-4. 验证 skill 目录零残留：`research-output-*.json`、`quant-*.json`、`persona-output-*.md`、`run-log.json`、`baseline-output.md`、`rebuttal-*.md`、`scout-output.md` 应全部不存在于 skill 目录。
+4. 验证 skill 目录零残留：`research-output-*.json`、`quant-*.json`、`persona-output-*.md`、`run-log.json`、`baseline-output.md`、`rebuttal-*.md`、`scout-output.md`、`fact-base.json`、`sources.md`、`fact-base-merged.json` 应全部不存在于 skill 目录。
 5. 在对话中告知用户 run 目录路径，说明 sources.md 是证据溯源入口。
 
 打包失败（脚本错误、目录不可写）不阻塞——报告已交付；在对话中说明打包失败原因。

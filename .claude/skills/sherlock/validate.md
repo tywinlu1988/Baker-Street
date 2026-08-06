@@ -27,20 +27,16 @@ Run `/sherlock --depth deep --research-depth deep "{problem_statement}"`
 
 After EACH Group C or Group D pipeline run, before judge scoring:
 
-1. Archive the run artifacts:
+1. After the pipeline run completes (including Phase 5 packaging), archive the run package:
    ```bash
-   mkdir -p docs/evaluation/<session>/run-<N>
-   cp .claude/skills/sherlock/quant-demands.json \
-      .claude/skills/sherlock/quant-analysis-package.json \
-      .claude/skills/sherlock/run-log.json \
-      .claude/skills/sherlock/persona-output-*.md \
-      docs/evaluation/<session>/run-<N>/
+   mkdir -p docs/evaluation/<session>
+   cp -r sherlock-runs/<timestamp> docs/evaluation/<session>/run-<N>
    ```
-   (If the package file does not exist, note `⚠️ Phase 1.6 did not produce a package` — that is a finding, not a skip.)
-2. Run the harness:
+2. Run the harness against the archived package:
    ```bash
    python .claude/skills/sherlock/tools/testing/pipeline_harness.py check docs/evaluation/<session>/run-<N> --skill-dir .claude/skills/sherlock
    ```
+   (The harness resolves persona files in both the run root and the personas/ subdirectory.)
 3. Record in the run's metadata: harness pass/fail per check (demands / package / personas), collapse count, agent failure count from run-log.json.
 4. A pipeline run that fails harness checks is still scored by the judge — harness failure is reported alongside, never hidden.
 
