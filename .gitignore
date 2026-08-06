@@ -35,3 +35,6 @@ __pycache__/
 
 # local release tooling — never publish
 tools/bump-version.py
+
+# sherlock run packages (user-side artifacts)
+sherlock-runs/

@@ -468,6 +468,14 @@ Generate three tiers of next steps:
 
 ---
 
+## 📎 Evidence Appendix（证据清单）
+
+| 核心结论 | 支撑事实（fact-base #编号） | 量化依据（analysis id） | 来源 |
+|----------|----------------------------|-------------------------|------|
+| {每条 Core Finding 一行} | {#3, #17} | {Q001 或 —} | {见 sources.md #编号} |
+
+{每条 Core Finding 必须能沿此表溯源到具体事实和来源；无法溯源的结论必须在这里显式标注"模型推断，无事实库支撑"。}
+
 ## 📊 Analysis Metadata
 
 | Field | Value |
@@ -532,6 +540,21 @@ Recommendations:
 ```markdown
 💡 **Not satisfied?** Reply **deep** for all 7 personas, **quick** for a fast rescan, or name specific personas to add. Reply **reframe** if I misunderstood your question.
 ```
+
+## Phase 5: Run Packaging（运行打包，v0.6.2）
+
+报告输出给用户后，立即打包本次运行的全部产物：
+
+1. 创建 run 目录：`sherlock-runs/YYYYMMDD-HHMMSS/`（在用户当前工作目录，用当前时间戳）。
+2. 把最终报告写入 `{run_dir}/report.md`。
+3. 执行打包（移动产物 + 生成溯源清单 + 清理 skill 目录）：
+   ```bash
+   python .claude/skills/sherlock/tools/packaging/make_run_package.py assemble sherlock-runs/YYYYMMDD-HHMMSS --skill-dir .claude/skills/sherlock
+   ```
+4. 验证 skill 目录零残留：`research-output-*.json`、`quant-*.json`、`persona-output-*.md`、`run-log.json`、`baseline-output.md`、`rebuttal-*.md`、`scout-output.md` 应全部不存在于 skill 目录。
+5. 在对话中告知用户 run 目录路径，说明 sources.md 是证据溯源入口。
+
+打包失败（脚本错误、目录不可写）不阻塞——报告已交付；在对话中说明打包失败原因。
 
 ## Operating Principles
 
